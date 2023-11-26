@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af854f3e-21de-448c-be4a-e0f78760eba8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/lexer/TokenType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/lexer/LexerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/lexer/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lexer/Lexer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/lexer/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lexer/Token.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +54,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "onboarding.tips.debug.path": "/Users/fbuedding/Documents/GitHub/faul-lang/src/main/java/org/example/Main.java",
-    "settings.editor.selected.configurable": "configurable.group.build",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -129,6 +125,7 @@
       <updated>1700923023884</updated>
       <workItem from="1700923024953" duration="8436000" />
       <workItem from="1700933562504" duration="1960000" />
+      <workItem from="1700945166593" duration="2405000" />
     </task>
     <servers />
   </component>
