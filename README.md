@@ -6,6 +6,8 @@
       * [Basic](#basic)
       * [Keywords](#keywords)
       * [Operatoren](#operatoren)
+  * [Finite State Machines](#finite-state-machines)
+  * [Integer](#integer)
   * [Todo](#todo)
 <!-- TOC -->
 # Faul-Lang compiler
@@ -68,6 +70,7 @@ Tokens der Faul-Lang.
 
 ## Finite State Machines
 
+## Integer
 
 ```mermaid
 ---
@@ -75,8 +78,8 @@ Title: Interger Parser
 ---
 stateDiagram-v2
     [*] --> s0
-    s0 --> s0: 0,1,2,3,4,5,6,7,8,9 
-    s0 --> s1: +,-.*,/,<,>,!,),;
+    s0 --> s0:0,1,2,3,4,5,6,7,8,9 
+    s0 --> s1: +,-.*,/,<,>,!,),#semi;
     s1 --> [*]
 ```
 
