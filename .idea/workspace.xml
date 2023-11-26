@@ -9,6 +9,8 @@
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fsm/Fsm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fsm/Fsm.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/lexer/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lexer/Lexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lexer/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lexer/Token.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lexer/TokenType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lexer/TokenType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/lexer/LexerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/lexer/LexerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -145,7 +147,7 @@
       <updated>1700923023884</updated>
       <workItem from="1700923024953" duration="8436000" />
       <workItem from="1700933562504" duration="1960000" />
-      <workItem from="1700945166593" duration="7143000" />
+      <workItem from="1700945166593" duration="8434000" />
     </task>
     <servers />
   </component>

@@ -24,6 +24,6 @@ public class Token {
   }
   @Override
   public String toString() {
-    return "Kind: " + this.kind + " Lexem: " + this.lexem;
+    return "Token {Kind: " + this.kind + ", Lexem: " + this.lexem+"}";
   }
 }

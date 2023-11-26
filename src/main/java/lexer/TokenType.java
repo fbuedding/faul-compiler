@@ -101,5 +101,5 @@ public enum TokenType {
   /**
    * !
    */
-  NOT
+  NOT,
 }
