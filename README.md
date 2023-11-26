@@ -74,8 +74,9 @@ Tokens der Faul-Lang.
 Title: Interger Parser
 ---
 stateDiagram-v2
+    [*] --> s0
     s0 --> s0: 0,1,2,3,4,5,6,7,8,9 
-    s0 --> s1: +,-.*,/,<,>,!
+    s0 --> s1: +,-.*,/,<,>,!,),;
     s1 --> [*]
 ```
 
