@@ -8,6 +8,7 @@
       * [Operatoren](#operatoren)
   * [Finite State Machines](#finite-state-machines)
     * [Integer](#integer)
+    * [Word](#word)
   * [Todo](#todo)
 <!-- TOC -->
 # Faul-Lang compiler
