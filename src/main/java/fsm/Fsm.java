@@ -53,10 +53,13 @@ public class Fsm<T> {
   }
 
   public static Fsm<Character> integerFsm() {
-    return new Fsm.Builder<Character>(0, 1)
+    return new Fsm.Builder<Character>(0, 2)
         .addState(new State.Builder<Character>()
-            .addTransition(new Character[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 0)
-            .addTransition(new Character[] { '-', '+', '*', '/', '<', '>', '!', ')', ';' }, 1)
+            .addTransition(new Character[] { '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 1)
+            .build())
+        .addState(new State.Builder<Character>()
+            .addTransition(new Character[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 1)
+            .addTransition(new Character[] { '-', '+', '*', '/', '<', '>', '!', ')', ';' }, 2)
             .build())
         .addState(new State.Builder<Character>()
             .build())

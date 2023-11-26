@@ -102,6 +102,8 @@ public class Lexer {
         currentLine++;
         currentLinePosition = -1;
         nextCharacter();
+      } else if (Character.isWhitespace(currentCharacter)) {
+        nextCharacter();
       }
     }
   }
@@ -116,7 +118,14 @@ public class Lexer {
   private Token matchInt() throws LexerError {
     Token t = new Token(TokenType.V_INT, "");
     try {
-      t.lexem = t.lexem.concat(String.valueOf(currentCharacter));
+      intFsm.nextState(currentCharacter);
+    } catch (NoTransitionError e) {
+      throw new LexerError("Invalid character in int: <" + String.valueOf(currentCharacter) + ">",
+          currentLine,
+          currentLinePosition);
+    }
+    t.lexem = t.lexem.concat(String.valueOf(currentCharacter));
+    try {
 
       while (intFsm.isNotEndstate()) {
         nextCharacter();
@@ -125,10 +134,10 @@ public class Lexer {
       }
 
     } catch (NoTransitionError e) {
-      throw new LexerError("Invalid character in int: " + String.valueOf(currentCharacter), 
+      throw new LexerError("Invalid character in int: <" + String.valueOf(lookAhead()) + ">",
           currentLine,
           currentLinePosition);
-    }finally {
+    } finally {
       intFsm.reset();
     }
 

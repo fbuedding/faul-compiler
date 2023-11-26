@@ -70,7 +70,7 @@ class LexerTest {
     Lexer l = new Lexer(expected.lexem + "+");
     Token is = l.getToken();
     assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
-    l = new Lexer(expected.lexem + "/");
+    l = new Lexer(expected.lexem + "-");
     is = l.getToken();
     assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
     l = new Lexer(expected.lexem + "*");
@@ -79,5 +79,38 @@ class LexerTest {
     l = new Lexer(expected.lexem + "/");
     is = l.getToken();
     assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
+    l = new Lexer(expected.lexem + "<");
+    is = l.getToken();
+    assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
+    l = new Lexer(expected.lexem + ">");
+    is = l.getToken();
+    assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
+    l = new Lexer(expected.lexem + "!");
+    is = l.getToken();
+    assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
+    l = new Lexer(expected.lexem + ")");
+    is = l.getToken();
+    assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
+    l = new Lexer(expected.lexem + ";");
+    is = l.getToken();
+    assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
+    l = new Lexer("  " + expected.lexem + ";");
+    is = l.getToken();
+    assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
+  }
+  @Test
+  public void shouldErrorV_INT() throws LexerError {
+    String[] inputs = new String[] {
+      "01234",
+      "12a34",
+      "12(34",
+    };
+    for(String input : inputs) {
+      LexerError thrown = assertThrows(LexerError.class, () -> {
+        Lexer l = new Lexer(input);
+        l.getToken();
+      });
+      System.out.println(thrown.toString());
+    }
   }
 }
