@@ -7,7 +7,7 @@
       * [Keywords](#keywords)
       * [Operatoren](#operatoren)
   * [Finite State Machines](#finite-state-machines)
-  * [Integer](#integer)
+    * [Integer](#integer)
   * [Todo](#todo)
 <!-- TOC -->
 # Faul-Lang compiler
@@ -53,24 +53,26 @@ Tokens der Faul-Lang.
 
 #### Operatoren
 
-| Name     | Beschreibung |
-|:---------|:------------:|
-| EQ       |      =       |
-| PLUS     |      +       |
-| MINUS    |      -       |
-| ASTERISK |      *       |
-| SLASH    |      /       |
-| EQEQ     |      ==      | 
-| NOTEQ    |      !=      |
-| GT       |      >       |
-| GTEQ     |      >=      |
-| LT       |      <       |
-| LTEQ     |      <=      |
-| NOT      |      !       |
+| Name          | Beschreibung |
+|:--------------|:------------:|
+| EQ            |      =       |
+| PLUS          |      +       |
+| MINUS         |      -       |
+| ASTERISK      |      *       |
+| SLASH         |      /       |
+| EQEQ          |      ==      | 
+| NOTEQ         |      !=      |
+| GT            |      >       |
+| GTEQ          |      >=      |
+| LT            |      <       |
+| LTEQ          |      <=      |
+| NOT           |      !       |
+| OPEN_BRACKET  |      (       |
+| CLOSE_BRACKET |      )       |
 
 ## Finite State Machines
 
-## Integer
+### Integer
 
 ```mermaid
 ---
