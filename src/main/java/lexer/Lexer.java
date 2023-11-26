@@ -1,21 +1,26 @@
 package lexer;
 
+import fsm.*;
+
 public class Lexer {
 
   private char[] input;
   private char currentCharacter;
 
-  public char getCurrentCharacter() {
-    return currentCharacter;
-  }
-
   private int currentPosition = -1;
+
   private int currentLine = 0;
   private int currentLinePosition = -1;
+  private Fsm<Character> intFsm;
 
   Lexer(String input) {
     this.input = (input + "\n").toCharArray();
+    intFsm = Fsm.integerFsm();
     nextCharacter();
+  }
+
+  public char getCurrentCharacter() {
+    return currentCharacter;
   }
 
   public Token getToken() throws LexerError {
@@ -71,10 +76,10 @@ public class Lexer {
       } else
         t = new Token(TokenType.GT, currentCharacter);
     }
-    
-    // Integer
-    else if(isDigit(currentCharacter)){
 
+    // Integer
+    else if (isDigit(currentCharacter)) {
+      t = matchInt();
     }
 
     // End of file
@@ -86,11 +91,7 @@ public class Lexer {
     return t;
   }
 
-  private boolean isDigit(char currChar) {
-   return Character.isDigit(currChar);
-}
-
-public void nextCharacter() {
+  public void nextCharacter() {
     currentPosition++;
     currentLinePosition++;
     if (currentPosition >= input.length)
@@ -111,10 +112,30 @@ public void nextCharacter() {
     else
       return '\0';
   }
-}
 
-class LexerError extends Exception {
-  public LexerError(String errorMessage, int line, int linePos) {
-    super(String.format("Lexical error: %s, at line %d, position %d", errorMessage, line, linePos));
+  private Token matchInt() throws LexerError {
+    Token t = new Token(TokenType.V_INT, "");
+    try {
+      t.lexem = t.lexem.concat(String.valueOf(currentCharacter));
+
+      while (intFsm.isNotEndstate()) {
+        nextCharacter();
+        intFsm.nextState(lookAhead());
+        t.lexem = t.lexem.concat(String.valueOf(currentCharacter));
+      }
+
+    } catch (NoTransitionError e) {
+      throw new LexerError("Invalid character in int: " + String.valueOf(currentCharacter), 
+          currentLine,
+          currentLinePosition);
+    }finally {
+      intFsm.reset();
+    }
+
+    return t;
+  }
+
+  private boolean isDigit(char currChar) {
+    return Character.isDigit(currChar);
   }
 }

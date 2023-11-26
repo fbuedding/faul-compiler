@@ -14,4 +14,16 @@ public class Token {
     this.kind = token;
     this.lexem = String.valueOf(lexem);
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if(obj == this) return true;
+    if(!(obj instanceof Token)) return false;
+    Token t = (Token) obj;
+    return t.lexem.equals(this.lexem) && t.kind == this.kind;
+  }
+  @Override
+  public String toString() {
+    return "Kind: " + this.kind + " Lexem: " + this.lexem;
+  }
 }

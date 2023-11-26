@@ -1,0 +1,65 @@
+package fsm;
+
+import java.util.Vector;
+
+/**
+ * FSM
+ * 
+ * @todo Implement
+ */
+public class Fsm<T> {
+  public static class Builder<T> {
+    Vector<State<T>> states = new Vector<State<T>>();
+    private int startState;
+    private int endState;
+
+    public Builder(int startState, int endState) {
+      this.startState = startState;
+      this.endState = endState;
+    }
+
+    public Builder<T> addState(State<T> s) {
+      states.add(s);
+      return this;
+    }
+
+    public Fsm<T> build() {
+      return new Fsm<T>(states, startState, endState);
+    }
+  }
+
+  private Vector<State<T>> states;
+  private int currentState;
+  private int startState;
+  private int endState;
+
+  private Fsm(Vector<State<T>> states, int startState, int endState) {
+    this.startState = startState;
+    this.currentState = this.startState;
+    this.endState = endState;
+    this.states = states;
+  }
+
+  public void reset() {
+    this.currentState = this.startState;
+  }
+
+  public void nextState(T t) throws NoTransitionError {
+    currentState = states.get(currentState).nextState(t);
+  }
+
+  public boolean isNotEndstate() {
+    return currentState != endState;
+  }
+
+  public static Fsm<Character> integerFsm() {
+    return new Fsm.Builder<Character>(0, 1)
+        .addState(new State.Builder<Character>()
+            .addTransition(new Character[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 0)
+            .addTransition(new Character[] { '-', '+', '*', '/', '<', '>', '!', ')', ';' }, 1)
+            .build())
+        .addState(new State.Builder<Character>()
+            .build())
+        .build();
+  }
+}

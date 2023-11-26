@@ -5,8 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af854f3e-21de-448c-be4a-e0f78760eba8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/fsm/Fsm.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fsm/NoTransitionError.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fsm/State.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fsm/Transition.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/lexer/LexerError.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/fsm/FsmTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lexer/FSM.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lexer/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lexer/Lexer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,11 +73,27 @@
       <recent name="lexer" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.LexerTest.testCharacterReading">
+  <component name="RunManager" selected="JUnit.LexerTest.testCharacterReading (1)">
     <configuration name="All in faul-lang" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="faul-lang" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="FsmTest.shouldNotError" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="faul-lang" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="fsm.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="fsm" />
+      <option name="MAIN_CLASS_NAME" value="fsm.FsmTest" />
+      <option name="METHOD_NAME" value="shouldNotError" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -109,9 +132,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.LexerTest.testCharacterReading (1)" />
+        <item itemvalue="JUnit.FsmTest.shouldNotError" />
         <item itemvalue="JUnit.LexerTest.testCharacterReading" />
         <item itemvalue="JUnit.All in faul-lang" />
-        <item itemvalue="JUnit.LexerTest.testCharacterReading (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -125,7 +149,7 @@
       <updated>1700923023884</updated>
       <workItem from="1700923024953" duration="8436000" />
       <workItem from="1700933562504" duration="1960000" />
-      <workItem from="1700945166593" duration="3628000" />
+      <workItem from="1700945166593" duration="5145000" />
     </task>
     <servers />
   </component>

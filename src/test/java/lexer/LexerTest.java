@@ -3,6 +3,7 @@ package lexer;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,5 +62,22 @@ class LexerTest {
       Lexer l = new Lexer(test.getKey());
       assertEquals(l.getToken().kind, test.getValue());
     }
+  }
+
+  @Test
+  public void shouldBeV_INT() throws LexerError {
+    Token expected = new Token(TokenType.V_INT, "123456");
+    Lexer l = new Lexer(expected.lexem + "+");
+    Token is = l.getToken();
+    assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
+    l = new Lexer(expected.lexem + "/");
+    is = l.getToken();
+    assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
+    l = new Lexer(expected.lexem + "*");
+    is = l.getToken();
+    assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
+    l = new Lexer(expected.lexem + "/");
+    is = l.getToken();
+    assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
   }
 }
