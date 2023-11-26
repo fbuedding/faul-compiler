@@ -18,8 +18,8 @@ public class Fsm<T> {
       this.endState = endState;
     }
 
-    public Builder<T> addState(State<T> s) {
-      states.add(s);
+    public Builder<T> addState(State.Builder<T> s) {
+      states.add(s.build());
       return this;
     }
 
@@ -55,14 +55,11 @@ public class Fsm<T> {
   public static Fsm<Character> integerFsm() {
     return new Fsm.Builder<Character>(0, 2)
         .addState(new State.Builder<Character>()
-            .addTransition(new Character[] { '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 1)
-            .build())
+            .addTransition(new Character[] { '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 1))
         .addState(new State.Builder<Character>()
             .addTransition(new Character[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 1)
-            .addTransition(new Character[] { '-', '+', '*', '/', '<', '>', '!', ')', ';','=' }, 2)
-            .build())
-        .addState(new State.Builder<Character>()
-            .build())
+            .addTransition(new Character[] { '-', '+', '*', '/', '<', '>', '!', ')', ';', '=' }, 2))
+        .addState(new State.Builder<Character>())
         .build();
   }
 
@@ -71,16 +68,16 @@ public class Fsm<T> {
         .addState(new State.Builder<Character>()
             .addTransition("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_".chars().mapToObj(c -> (char) c)
                 .toArray(Character[]::new), 1)
-            .build())
+            )
         .addState(new State.Builder<Character>()
             .addTransition(
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890".chars().mapToObj(c -> (char) c)
                     .toArray(Character[]::new),
                 1)
-            .addTransition(new Character[] {' ', '-', '+', '*', '/', '<', '>', '!', ')','(', ';','=' }, 2)
-            .build())
+            .addTransition(new Character[] { ' ', '-', '+', '*', '/', '<', '>', '!', ')', '(', ';', '=' }, 2)
+            )
         .addState(new State.Builder<Character>()
-            .build())
+            )
         .build();
   }
 }

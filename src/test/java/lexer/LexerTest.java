@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -112,7 +113,6 @@ class LexerTest {
         Lexer l = new Lexer(input);
         l.getToken();
       });
-      System.out.println(thrown.toString());
     }
   }
 
@@ -135,58 +135,89 @@ class LexerTest {
   @Test
   public void testVaraibleAssignment() throws LexerError {
     String input = "int testInt = 123;";
-    Token[] expected = new Token[] { 
-      new Token(TokenType.INT, "int"),
-      new Token(TokenType.IDENT, "testInt"),
-      new Token(TokenType.EQ, "="),
-      new Token(TokenType.V_INT, "123"),
-      new Token(TokenType.SEMICOLON, ";"),
+    Token[] expected = new Token[] {
+        new Token(TokenType.INT, "int"),
+        new Token(TokenType.IDENT, "testInt"),
+        new Token(TokenType.EQ, "="),
+        new Token(TokenType.V_INT, "123"),
+        new Token(TokenType.SEMICOLON, ";"),
     };
     Lexer l = new Lexer(input);
     Token t = l.getToken();
     Vector<Token> tokens = new Vector<Token>();
     while (t.kind != TokenType.EOF) {
-     tokens.add(t);
-     t = l.getToken();
+      tokens.add(t);
+      t = l.getToken();
     }
-    for(int i = 0; i< expected.length; i++ ){
-      assertTrue(expected[i].equals(tokens.get(i)), String.format("Expected: %s but is %s", expected[i], tokens.get(i)));
+    for (int i = 0; i < expected.length; i++) {
+      assertTrue(expected[i].equals(tokens.get(i)),
+          String.format("Expected: %s but is %s", expected[i], tokens.get(i)));
     }
-    System.out.println(tokens.toString());
   }
+
   @Test
   public void testIfBlock() throws LexerError {
-    String input = "if( a == bc){\nint testInt=12 3 ;\nint a=123;\n}";
-    Token[] expected = new Token[] { 
-      new Token(TokenType.IF, "if"),
-      new Token(TokenType.OPEN_BRACKET, "("),
-      new Token(TokenType.IDENT, "a"),
-      new Token(TokenType.EQEQ, "=="),
-      new Token(TokenType.IDENT, "bc"),
-      new Token(TokenType.CLOSE_BRACKET, ")"),
-      new Token(TokenType.OPEN_PARANTHESES, "{"),
-      new Token(TokenType.INT, "int"),
-      new Token(TokenType.IDENT, "testInt"),
-      new Token(TokenType.EQ, "="),
-      new Token(TokenType.V_INT, "123"),
-      new Token(TokenType.SEMICOLON, ";"),
-      new Token(TokenType.INT, "int"),
-      new Token(TokenType.IDENT, "a"),
-      new Token(TokenType.EQ, "="),
-      new Token(TokenType.V_INT, "123"),
-      new Token(TokenType.SEMICOLON, ";"),
-      new Token(TokenType.CLOSE_PARANTHESES, "}"),
+    String input = "if( a == bc){\nint testInt= 1 2 3 ;\nint a=12 3 ;\nbool testBool =true;\n}";
+    Token[] expected = new Token[] {
+        new Token(TokenType.IF, "if"),
+        new Token(TokenType.OPEN_BRACKET, "("),
+        new Token(TokenType.IDENT, "a"),
+        new Token(TokenType.EQEQ, "=="),
+        new Token(TokenType.IDENT, "bc"),
+        new Token(TokenType.CLOSE_BRACKET, ")"),
+        new Token(TokenType.OPEN_PARANTHESES, "{"),
+        new Token(TokenType.INT, "int"),
+        new Token(TokenType.IDENT, "testInt"),
+        new Token(TokenType.EQ, "="),
+        new Token(TokenType.V_INT, "123"),
+        new Token(TokenType.SEMICOLON, ";"),
+        new Token(TokenType.INT, "int"),
+        new Token(TokenType.IDENT, "a"),
+        new Token(TokenType.EQ, "="),
+        new Token(TokenType.V_INT, "123"),
+        new Token(TokenType.SEMICOLON, ";"),
+        new Token(TokenType.BOOL, "bool"),
+        new Token(TokenType.IDENT, "testBool"),
+        new Token(TokenType.EQ, "="),
+        new Token(TokenType.V_BOOL, "true"),
+        new Token(TokenType.SEMICOLON, ";"),
+        new Token(TokenType.CLOSE_PARANTHESES, "}"),
     };
     Lexer l = new Lexer(input);
     Token t = l.getToken();
     Vector<Token> tokens = new Vector<Token>();
     while (t.kind != TokenType.EOF) {
-     tokens.add(t);
-     t = l.getToken();
+      tokens.add(t);
+      t = l.getToken();
     }
-    System.out.println(tokens.toString());
-    for(int i = 0; i< expected.length; i++ ){
-      assertTrue(expected[i].equals(tokens.get(i)), String.format("Expected: %s but is %s", expected[i], tokens.get(i)));
+    for (int i = 0; i < expected.length; i++) {
+      assertTrue(expected[i].equals(tokens.get(i)),
+          String.format("Expected: %s but is %s", expected[i], tokens.get(i)));
     }
+  }
+
+  @Test
+  public void norErrorFile() throws FileNotFoundException {
+    String input = file.Reader.readFile("src/test/resources/simpleNoError.faul");
+    assertDoesNotThrow(() -> {
+      Lexer l = new Lexer(input);
+      Token token = l.getToken();
+      while (token.kind != TokenType.EOF) {
+        token = l.getToken();
+      }
+    });
+  }
+  @Test
+  public void shouldErrorOnLine3Pos10() throws FileNotFoundException {
+    String input = file.Reader.readFile("src/test/resources/lexerErrorOnLine3Pos10.faul");
+    LexerError thrown = assertThrows(LexerError.class, () -> {
+      Lexer l = new Lexer(input);
+      Token token = l.getToken();
+      while (token.kind != TokenType.EOF) {
+        token = l.getToken();
+      }
+    });
+    assertEquals(3, thrown.line);
+    assertEquals(10, thrown.linePos);
   }
 }

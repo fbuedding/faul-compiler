@@ -10,8 +10,8 @@ public class Lexer {
 
   private int currentPosition = -1;
 
-  private int currentLine = 0;
-  private int currentLinePosition = -1;
+  private int currentLine = 1;
+  private int currentLinePosition = 0;
   private Fsm<Character> intFsm;
   private Fsm<Character> wordFsm;
 
@@ -28,7 +28,6 @@ public class Lexer {
 
   public Token getToken() throws LexerError {
     Token t;
-    // Single character operator
     if (currentCharacter == '+')
       t = new Token(TokenType.PLUS, currentCharacter);
 
@@ -80,25 +79,28 @@ public class Lexer {
         t = new Token(TokenType.GT, currentCharacter);
     }
 
-    // Integer
-    else if (isDigit(currentCharacter)) {
-      // return early
-      return matchInt();
-    }
-    // This is matching words, it's gonna be either a Keyword, literal bool
-    else if (isWordStart(currentCharacter)) {
-      // early return
-      return matchWord();
-    } else if (currentCharacter == ';') {
+    else if (currentCharacter == ';') {
       t = new Token(TokenType.SEMICOLON, currentCharacter);
-    } else if (currentCharacter == '{') {
+    } 
+
+    else if (currentCharacter == '{') {
       t = new Token(TokenType.OPEN_PARANTHESES, currentCharacter);
-    } else if (currentCharacter == '}') {
+    } 
+
+    else if (currentCharacter == '}') {
       t = new Token(TokenType.CLOSE_PARANTHESES, currentCharacter);
     }
-    // End of file
+
     else if (currentCharacter == '\0')
       t = new Token(TokenType.EOF, currentCharacter);
+    // Integer and word match returns early, because
+    else if (isDigit(currentCharacter)) {
+      return matchInt();
+    }
+
+    else if (isWordStart(currentCharacter)) {
+      return matchWord();
+    } 
     else
       throw new LexerError("Unknown Token", currentLine, currentLinePosition);
     nextCharacter();
@@ -114,7 +116,7 @@ public class Lexer {
       currentCharacter = input[currentPosition];
       if (currentCharacter == '\n') {
         currentLine++;
-        currentLinePosition = -1;
+        currentLinePosition = 0;
         nextCharacter();
       } else if (Character.isWhitespace(currentCharacter)) {
         nextCharacter();
