@@ -91,15 +91,13 @@ public class Lexer {
         nextCharacter();
       } else
         t = new Token(TokenType.GT, currentCharacter, currentLine, currentLinePosition);
-    }
-    else if (currentCharacter == '|') {
+    } else if (currentCharacter == '|') {
       if (lookAhead() == '|') {
         t = new Token(TokenType.LOR, currentCharacter + "|", currentLine, currentLinePosition);
         nextCharacter();
       } else
         t = new Token(TokenType.OR, currentCharacter, currentLine, currentLinePosition);
-    }
-    else if (currentCharacter == '&') {
+    } else if (currentCharacter == '&') {
       if (lookAhead() == '&') {
         t = new Token(TokenType.LAND, currentCharacter + "&", currentLine, currentLinePosition);
         nextCharacter();
@@ -122,6 +120,14 @@ public class Lexer {
     else if (currentCharacter == '\0')
       t = new Token(TokenType.EOF, currentCharacter, currentLine, currentLinePosition);
     // Integer and word match returns early, because
+
+    else if (currentCharacter == '0') {
+      if (isDigit(lookAhead())) {
+        throw new LexerError("Numberscannot start with 0", currentLine, currentPosition);
+      }
+      t = new Token(TokenType.V_INT,currentCharacter, currentLine, currentLinePosition);
+    }
+
     else if (isDigit(currentCharacter)) {
       return matchInt();
     }

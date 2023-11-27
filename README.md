@@ -95,13 +95,14 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
                       | <conditionalExpr>
 <conditionalExpr>  ::= <conditionalExpr> ("==" | "!=" | ">" | ">=" | "<" | "<=") <arithmeticExpr>
                       | <arithmeticExpr>
-<arithmeticExpr>    ::= <term> (( "+" | "-") <term>)*
-<term>              ::= <unary> (("*" | "/") <unary>)*
+<arithmeticExpr>    ::= <term> (( "+" | "-") <arithmeticExpr>)*
+<term>              ::= <unary> (("*" | "/") <term>)*
 <unary>             ::= "(" <arithmeticExpr> ")"
                       | ("+" | "-")? <primary>
 <primary>           ::= <vbool> | <vint> | <ident>
 <vbool>             ::= "true" | "false"
 <vint>              ::= [1-9] [0-9]*
+                      | "0"
 <ident>             ::= ("_" | [a-z]) ("_" | [a-z] | [0-9])*
 <semi>              ::= ";"+
 ```

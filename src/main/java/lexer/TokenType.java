@@ -118,4 +118,14 @@ public enum TokenType {
    * logical AND
    */
   LAND,
+  // ######## Token types for AST
+  PROGRAM,
+  STATEMENT,
+  CONDITION,
+  LOGICAL_EXPR,
+  CONDITIONAL_EXPR,
+  ARITHMETIC_EXPR,
+  TERM,
+  UNARY,
+  PRIMARY
 }

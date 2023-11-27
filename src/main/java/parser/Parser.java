@@ -17,21 +17,17 @@ public class Parser {
       throw new Error("Empty File!");
   }
 
-  public boolean checkToken(Token t) {
-    return tokens[currentToken].kind == t.kind;
-  }
-
-  public boolean checkToken(TokenType tt) {
+  private boolean checkToken(TokenType tt) {
     return tokens[currentToken].kind == tt;
   }
 
-  public boolean checkPeekToken(Token t) {
-    return tokens[nextToken].kind == t.kind;
+  private boolean checkPeekToken(TokenType tt) {
+    return tokens[nextToken].kind == tt;
   }
 
-  public void matchToken(Token t) throws SyntaxError {
-    if (!checkToken(t)) {
-      throw new SyntaxError(t);
+  private void matchToken(TokenType tt) throws SyntaxError {
+    if (!checkToken(tt)) {
+      throw new SyntaxError(currentToken());
     }
     nextToken();
   }
@@ -48,26 +44,36 @@ public class Parser {
 
   /**
    * <program>::= <statement>
- * @throws SyntaxError*
+   * 
+   * @throws SyntaxError*
    */
-  public void program() throws SyntaxError {
-    System.out.println("PROGRAMM");
-    while (!checkToken(TokenType.EQ)) {
-      this.statement();
+  public void program(SyntaxTree st) throws SyntaxError {
+
+    while (!checkToken(TokenType.EOF)) {
+      this.statement(st.insertSubtree(new Token(TokenType.STATEMENT, "")));
     }
   }
 
   /**
    * <statement>::= "int" <ident> "=" <arithmeticExpr> <semi>
-   *            | "bool" <ident> "=" <logicalExpr> <semi>
-   *            | "if" "(" <condition> ")" "{" <statement>* "}"
-   *            | <ident> "=" (<logicalExpr> | <arithmeticExpr>) <semi>
- * @throws SyntaxError
+   * | "bool" <ident> "=" <logicalExpr> <semi>
+   * | "if" "(" <condition> ")" "{" <statement>* "}"
+   * | <ident> "=" (<logicalExpr> | <arithmeticExpr>) <semi>
+   * 
+   * @param st
+   * @throws SyntaxError
    */
-  private void statement() throws SyntaxError {
-    TokenType[] expected = new TokenType[]{TokenType.INT, TokenType.BOOL, TokenType.IF, TokenType.IDENT};
-    switch (currentToken().kind){
+  private void statement(SyntaxTree st) throws SyntaxError {
+    TokenType[] expected = new TokenType[] { TokenType.INT, TokenType.BOOL, TokenType.IF, TokenType.IDENT };
+    switch (currentToken().kind) {
       case INT:
+        st.insertSubtree(currentToken());
+        nextToken();
+        st.insertSubtree(currentToken());
+        matchToken(TokenType.IDENT);
+        st.insertSubtree(currentToken());
+        matchToken(TokenType.EQ);
+        arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
         break;
       case BOOL:
         break;
@@ -76,6 +82,36 @@ public class Parser {
       default:
         throw new SyntaxError(currentToken(), expected);
     }
+    return;
+  }
+
+  private void arithmeticExpr(SyntaxTree st) throws SyntaxError {
+    term(st.insertSubtree(new Token(TokenType.TERM, "")));
+    if (checkPeekToken(TokenType.PLUS)) {
+      st.insertSubtree(currentToken());
+      matchToken(TokenType.PLUS);
+      arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
+    } else if (checkPeekToken(TokenType.PLUS)) {
+      st.insertSubtree(currentToken());
+      matchToken(TokenType.PLUS);
+      arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
+    }
+  }
+
+  private void term(SyntaxTree st) throws SyntaxError {
+    unary(st.insertSubtree(new Token(TokenType.UNARY, "")));
+    if (checkPeekToken(TokenType.PLUS)) {
+      st.insertSubtree(currentToken());
+      matchToken(TokenType.PLUS);
+      arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
+    } else if (checkPeekToken(TokenType.PLUS)) {
+      st.insertSubtree(currentToken());
+      matchToken(TokenType.PLUS);
+      arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
+    }
+  }
+
+  private void unary(SyntaxTree insertSubtree) {
   }
 
 }
