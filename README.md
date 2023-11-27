@@ -82,7 +82,7 @@ Es wird zu bezeichnung der Regeln die Backus-Naur-Form genutzt.
 
 Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground](https://bnfplayground.pauliankline.com/).
 
-```bnf
+```
 <program>           ::= <statement>*
 <statement>         ::= "int" <ident> "=" <arithmeticExpr> <semi>
                       | "bool" <ident> "=" <logicalExpr> <semi>
@@ -99,6 +99,31 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
 <unary>             ::= "(" <arithmeticExpr> ")"
                       | ("+" | "-")? <primary>
 <primary>           ::= <vbool> | <vint> | <ident>
+<vbool>             ::= "true" | "false"
+<vint>              ::= [1-9] [0-9]*
+                      | "0"
+<ident>             ::= ("_" | [a-z]) ("_" | [a-z] | [0-9])*
+<semi>              ::= ";"+
+```
+
+Vielleicht besser so (so können booleans nicht als zahlen genutzt werden:
+```
+<program>           ::= <statement>*
+<statement>         ::= "int" <ident> "=" <arithmeticExpr> <semi>
+                      | "bool" <ident> "=" <logicalExpr> <semi>
+                      | "if" "(" <logicalExpr> ")" "{" <statement>* "}"
+                      | <ident> "=" (<logicalExpr> | <arithmeticExpr>) <semi>
+<logicalExpr>       ::= "(" <logicalExpr> ")"
+                      | "!" <logicalExpr>
+                      | <logicalExpr> ("&&" | "||") <logicalExpr>
+                      | <conditionalExpr>
+                      | <vbool>
+<conditionalExpr>  ::= <arithmeticExpr> ("==" | "!=" | ">" | ">=" | "<" | "<=") <arithmeticExpr>
+<arithmeticExpr>    ::= <term> (( "+" | "-") <arithmeticExpr>)?
+<term>              ::= <unary> (("*" | "/") <term>)?
+<unary>             ::= "(" <arithmeticExpr> ")"
+                      | ("+" | "-")? <primary>
+<primary>           ::= <vint> | <ident>
 <vbool>             ::= "true" | "false"
 <vint>              ::= [1-9] [0-9]*
                       | "0"

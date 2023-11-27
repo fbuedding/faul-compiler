@@ -18,7 +18,7 @@ public class Lexer {
   private Fsm<Character> intFsm;
   private Fsm<Character> wordFsm;
 
-  Lexer(String input) {
+  public Lexer(String input) {
     this.input = (input + "\n").toCharArray();
     intFsm = Fsm.integerFsm();
     wordFsm = Fsm.wordFsm();

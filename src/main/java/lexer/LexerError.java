@@ -1,6 +1,6 @@
 package lexer;
 
-class LexerError extends Exception {
+public class LexerError extends Exception {
   public int line;
   public int linePos;
 

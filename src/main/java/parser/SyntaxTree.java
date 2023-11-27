@@ -1,6 +1,9 @@
 package parser;
 
+import java.util.Iterator;
 import java.util.LinkedList;
+
+import javax.swing.tree.TreeNode;
 
 import lexer.Token;
 
@@ -9,6 +12,7 @@ public class SyntaxTree {
   LinkedList<SyntaxTree> childNodes;
 
   public SyntaxTree(Token t) {
+    childNodes = new LinkedList<SyntaxTree>();
     this.token = t;
   }
 
@@ -19,6 +23,40 @@ public class SyntaxTree {
     System.out.println(token);
     for (int i = 0; i < this.childNodes.size(); i++) {
       this.childNodes.get(i).printSyntaxTree(tabs + 1);
+    }
+  }
+
+  void buildStringSyntaxTree(int tabs, StringBuilder sb, String indentation) {
+    for (int i = 0; i < tabs; i++) {
+      sb.append(indentation);
+    }
+    sb.append(token + "\n");
+    for (int i = 0; i < this.childNodes.size(); i++) {
+      this.childNodes.get(i).buildStringSyntaxTree(tabs + 1, sb, indentation);
+    }
+  }
+
+  public String toString() {
+    StringBuilder buffer = new StringBuilder(50);
+    print(buffer, "", "");
+    return buffer.toString();
+  }
+
+  public void print(StringBuilder buffer, String prefix, String childrenPrefix) {
+    buffer.append(prefix);
+    buffer.append(this.token.kind);
+    if (!this.token.lexem.equals("")) {
+      buffer.append(": " + this.token.lexem);
+
+    }
+    buffer.append('\n');
+    for (Iterator<SyntaxTree> it = childNodes.iterator(); it.hasNext();) {
+      SyntaxTree next = it.next();
+      if (it.hasNext()) {
+        next.print(buffer, childrenPrefix + "├── ", childrenPrefix + "│   ");
+      } else {
+        next.print(buffer, childrenPrefix + "└── ", childrenPrefix + "    ");
+      }
     }
   }
 

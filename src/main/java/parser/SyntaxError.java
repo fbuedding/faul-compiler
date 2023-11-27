@@ -18,4 +18,10 @@ public class SyntaxError extends Exception {
         Arrays.toString(tt)));
     this.t = t;
   }
+
+  public SyntaxError(Token t, TokenType tp) {
+    super(String.format("Syntax error parsing Token: %s, Line: %d, Position: %d\nExpected: %s", t, t.line, t.linePos,
+        tp));
+    this.t = t;
+  }
 }

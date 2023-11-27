@@ -38,7 +38,11 @@ public class Token {
 
   @Override
   public String toString() {
-    return String.format("Kind: <%s%s%s>, Lexem: '%s%s%s'", ANSI_RED, this.kind, ANSI_RESET, ANSI_GREEN, this.lexem, ANSI_RESET);
+    if (!this.lexem.equals(""))
+      return String.format("Kind: <%s%s%s>, Lexem: '%s%s%s'", ANSI_RED, this.kind, ANSI_RESET, ANSI_GREEN, this.lexem,
+          ANSI_RESET);
+    else
+      return String.format("Kind: <%s%s%s>", ANSI_RED, this.kind, ANSI_RESET);
   }
 
   public static final String ANSI_RESET = "\u001B[0m";

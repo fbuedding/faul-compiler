@@ -1,0 +1,66 @@
+PROGRAM
+├── STATEMENT
+│   ├── INT: int
+│   ├── IDENT: a
+│   ├── EQ: =
+│   ├── ARITHMETIC_EXPR
+│   │   ├── TERM
+│   │   │   └── UNARY
+│   │   │       └── PRIMARY
+│   │   │           └── V_INT: 3
+│   │   ├── PLUS: +
+│   │   └── ARITHMETIC_EXPR
+│   │       └── TERM
+│   │           └── UNARY
+│   │               └── PRIMARY
+│   │                   └── V_INT: 5
+│   └── SEMICOLON: ;
+├── STATEMENT
+│   ├── INT: int
+│   ├── IDENT: b
+│   ├── EQ: =
+│   ├── ARITHMETIC_EXPR
+│   │   ├── TERM
+│   │   │   └── UNARY
+│   │   │       └── PRIMARY
+│   │   │           └── V_INT: 4
+│   │   ├── MINUS: -
+│   │   └── ARITHMETIC_EXPR
+│   │       └── TERM
+│   │           └── UNARY
+│   │               └── PRIMARY
+│   │                   └── V_INT: 6
+│   └── SEMICOLON: ;
+└── STATEMENT
+    ├── INT: int
+    ├── IDENT: c
+    ├── EQ: =
+    ├── ARITHMETIC_EXPR
+    │   └── TERM
+    │       ├── UNARY
+    │       │   └── PRIMARY
+    │       │       └── V_INT: 5
+    │       ├── ASTERISK: *
+    │       └── ARITHMETIC_EXPR
+    │           └── TERM
+    │               └── UNARY
+    │                   ├── OPEN_BRACKET: (
+    │                   ├── ARITHMETIC_EXPR
+    │                   │   ├── TERM
+    │                   │   │   └── UNARY
+    │                   │   │       └── PRIMARY
+    │                   │   │           └── V_INT: 5
+    │                   │   ├── PLUS: +
+    │                   │   └── ARITHMETIC_EXPR
+    │                   │       └── TERM
+    │                   │           ├── UNARY
+    │                   │           │   └── PRIMARY
+    │                   │           │       └── V_INT: 6
+    │                   │           ├── ASTERISK: *
+    │                   │           └── ARITHMETIC_EXPR
+    │                   │               └── TERM
+    │                   │                   └── UNARY
+    │                   │                       └── PRIMARY
+    │                   │                           └── V_INT: 3
+    │                   └── CLOSE_BRACKET: )
+    └── SEMICOLON: ;

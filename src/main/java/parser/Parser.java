@@ -1,5 +1,7 @@
 package parser;
 
+import java.util.Vector;
+
 import lexer.Token;
 import lexer.TokenType;
 
@@ -10,6 +12,8 @@ public class Parser {
   private Token[] tokens;
   private int currentToken = 0;
   private int nextToken = 1;
+
+  private Vector<String> declaredIdentifier = new Vector<String>();
 
   public Parser(Token[] tokens) {
     this.tokens = tokens;
@@ -27,7 +31,7 @@ public class Parser {
 
   private void matchToken(TokenType tt) throws SyntaxError {
     if (!checkToken(tt)) {
-      throw new SyntaxError(currentToken());
+      throw new SyntaxError(currentToken(), tt);
     }
     nextToken();
   }
@@ -43,11 +47,13 @@ public class Parser {
   // ################# Begin parsing methods #################
 
   /**
-   * <program>::= <statement>
+   * {@summary}<program>::= <statement>
    * 
-   * @throws SyntaxError*
+   * @throws SyntaxError
+   * @throws UnknownIdentifierError
+   * @throws IndentifierAlreadyDeclaredError*
    */
-  public void program(SyntaxTree st) throws SyntaxError {
+  public void program(SyntaxTree st) throws SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError {
 
     while (!checkToken(TokenType.EOF)) {
       this.statement(st.insertSubtree(new Token(TokenType.STATEMENT, "")));
@@ -62,18 +68,27 @@ public class Parser {
    * 
    * @param st
    * @throws SyntaxError
+   * @throws UnknownIdentifierError
+   * @throws IndentifierAlreadyDeclaredError
    */
-  private void statement(SyntaxTree st) throws SyntaxError {
+  private void statement(SyntaxTree st) throws SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError {
     TokenType[] expected = new TokenType[] { TokenType.INT, TokenType.BOOL, TokenType.IF, TokenType.IDENT };
     switch (currentToken().kind) {
       case INT:
         st.insertSubtree(currentToken());
         nextToken();
         st.insertSubtree(currentToken());
+        String ident = currentToken().lexem;
+        if (declaredIdentifier.contains(ident)) {
+          throw new IndentifierAlreadyDeclaredError(currentToken());
+        }
         matchToken(TokenType.IDENT);
         st.insertSubtree(currentToken());
         matchToken(TokenType.EQ);
         arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
+        st.insertSubtree(currentToken()); 
+        matchToken(TokenType.SEMICOLON);
+        declaredIdentifier.add(ident);
         break;
       case BOOL:
         break;
@@ -85,43 +100,108 @@ public class Parser {
     return;
   }
 
-  private void arithmeticExpr(SyntaxTree st) throws SyntaxError {
+  /**
+   * <arithmeticExpr> ::= <term> (( "+" | "-") <arithmeticExpr>)*
+   * 
+   * @param st
+   * @throws SyntaxError
+   * @throws UnknownIdentifierError
+   */
+  private void arithmeticExpr(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
     term(st.insertSubtree(new Token(TokenType.TERM, "")));
-    if (checkPeekToken(TokenType.PLUS)) {
+    if (checkToken(TokenType.PLUS)) {
       st.insertSubtree(currentToken());
       matchToken(TokenType.PLUS);
       arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
-    } else if (checkPeekToken(TokenType.PLUS)) {
+    } else if (checkToken(TokenType.MINUS)) {
       st.insertSubtree(currentToken());
-      matchToken(TokenType.PLUS);
+      matchToken(TokenType.MINUS);
       arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
     }
   }
 
-  private void term(SyntaxTree st) throws SyntaxError {
+  /**
+   * <term> ::= <unary> (("*" | "/") <term>)*
+   * 
+   * @param st
+   * @throws SyntaxError
+   * @throws UnknownIdentifierError
+   */
+  private void term(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
     unary(st.insertSubtree(new Token(TokenType.UNARY, "")));
-    if (checkPeekToken(TokenType.ASTERISK)) {
+    if (checkToken(TokenType.ASTERISK)) {
       st.insertSubtree(currentToken());
       matchToken(TokenType.ASTERISK);
       arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
-    } else if (checkPeekToken(TokenType.SLASH)) {
+    } else if (checkToken(TokenType.SLASH)) {
       st.insertSubtree(currentToken());
       matchToken(TokenType.SLASH);
       arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
     }
   }
 
-  private void unary(SyntaxTree st) throws SyntaxError {
+  /**
+   * <unary>::= "(" <arithmeticExpr> ")"
+   * | ("+" | "-")? <primary>
+   * 
+   * @param st
+   * @throws SyntaxError
+   * @throws UnknownIdentifierError
+   */
+  private void unary(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
     switch (currentToken().kind) {
       case OPEN_BRACKET:
         st.insertSubtree(currentToken());
-        nextToken();
+        matchToken(TokenType.OPEN_BRACKET);
         arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
+        st.insertSubtree(currentToken());
         matchToken(TokenType.CLOSE_BRACKET);
         break;
 
-      default:
+      case PLUS:
+        st.insertSubtree(currentToken());
+        matchToken(TokenType.PLUS);
+        primary(st.insertSubtree(new Token(TokenType.PRIMARY, "")));
         break;
+
+      case MINUS:
+        st.insertSubtree(currentToken());
+        matchToken(TokenType.MINUS);
+        primary(st.insertSubtree(new Token(TokenType.PRIMARY, "")));
+        break;
+
+      default:
+        primary(st.insertSubtree(new Token(TokenType.PRIMARY, "")));
+        break;
+    }
+  }
+
+  /**
+   * {@summary} <primary> ::= <vbool> | <vint> | <ident>
+   * 
+   * @param st
+   * @throws SyntaxError
+   * @throws UnknownIdentifierError
+   */
+  private void primary(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
+    switch (currentToken().kind) {
+      case V_INT:
+        st.insertSubtree(currentToken());
+        nextToken();
+        break;
+      case V_BOOL:
+        st.insertSubtree(currentToken());
+        nextToken();
+        break;
+      case IDENT:
+        if (!declaredIdentifier.contains(currentToken().lexem)) {
+          throw new UnknownIdentifierError(currentToken());
+        }
+        st.insertSubtree(currentToken());
+        break;
+
+      default:
+        throw new SyntaxError(currentToken());
     }
   }
 
