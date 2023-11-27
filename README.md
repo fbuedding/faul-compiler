@@ -93,7 +93,7 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
 					  | "!" <logicalExpr>
                       | <logicalExpr> ("&&" | "||") <logicalExpr>
                       | <conditionalExpr>
-<conditionalExpr>  ::= <conditionalExpr> ("==" | "!=" | ">" | ">=" | "<" | "<=") <arithmeticExpr>
+<conditionalExpr>  ::= <conditionalExpr> ("==" | "!=" | ">" | ">=" | "<" | "<=") <conditionalExpr>
                       | <arithmeticExpr>
 <arithmeticExpr>    ::= <term> (( "+" | "-") <term>)*
 <term>              ::= <unary> (("*" | "/") <unary>)*

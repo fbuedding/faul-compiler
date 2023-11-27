@@ -1,7 +1,11 @@
 package parser;
 
 import lexer.Token;
+import lexer.TokenType;
 
+/**
+ * 
+ */
 public class Parser {
   private Token[] tokens;
   private int currentToken = 0;
@@ -17,6 +21,10 @@ public class Parser {
     return tokens[currentToken].kind == t.kind;
   }
 
+  public boolean checkToken(TokenType tt) {
+    return tokens[currentToken].kind == tt;
+  }
+
   public boolean checkPeekToken(Token t) {
     return tokens[nextToken].kind == t.kind;
   }
@@ -28,7 +36,23 @@ public class Parser {
     nextToken();
   }
 
-private void nextToken() {
-  currentToken= nextToken++;
+  private void nextToken() {
+    currentToken = nextToken++;
+  }
+
+  // ################# Begin parsing methods #################
+
+  /**
+   * <program>::= <statement>*
+   */
+  public void program() {
+    System.out.println("PROGRAMM");
+    while (!checkToken(TokenType.EQ)) {
+      this.statement();
+    }
+  }
+
+private void statement() {
 }
+
 }
