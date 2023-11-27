@@ -67,17 +67,14 @@ public class Fsm<T> {
     return new Fsm.Builder<Character>(0, 2)
         .addState(new State.Builder<Character>()
             .addTransition("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_".chars().mapToObj(c -> (char) c)
-                .toArray(Character[]::new), 1)
-            )
+                .toArray(Character[]::new), 1))
         .addState(new State.Builder<Character>()
             .addTransition(
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890".chars().mapToObj(c -> (char) c)
                     .toArray(Character[]::new),
                 1)
-            .addTransition(new Character[] { ' ', '-', '+', '*', '/', '<', '>', '!', ')', '(', ';', '=' }, 2)
-            )
-        .addState(new State.Builder<Character>()
-            )
+            .addTransition(new Character[] { ' ', '-', '+', '*', '/', '<', '>', '!', ')', '(', ';', '=' }, 2))
+        .addState(new State.Builder<Character>())
         .build();
   }
 }

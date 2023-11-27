@@ -36,6 +36,7 @@ public class Lexer {
       tokens.add(token);
       token = getToken();
     }
+    tokens.add(token);
     return Arrays.copyOf(tokens.toArray(), tokens.size(), Token[].class);
   };
 

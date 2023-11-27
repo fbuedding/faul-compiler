@@ -89,19 +89,21 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
                       | "if" "(" <condition> ")" "{" <statement>* "}"
                       | <ident> "=" (<logicalExpr> | <arithmeticExpr>) <semi>
 <condition>         ::= <logicalExpr>
-<logicalExpr>       ::= "!" <logicalExpr>
-                      | <logicalExpr> ("&&" | "||") <conditionalExpr>
+<logicalExpr>       ::= "(" <condition> ")"
+					  | "!" <logicalExpr>
+                      | <logicalExpr> ("&&" | "||") <logicalExpr>
                       | <conditionalExpr>
 <conditionalExpr>  ::= <conditionalExpr> ("==" | "!=" | ">" | ">=" | "<" | "<=") <arithmeticExpr>
                       | <arithmeticExpr>
 <arithmeticExpr>    ::= <term> (( "+" | "-") <term>)*
 <term>              ::= <unary> (("*" | "/") <unary>)*
-<unary>             ::= ("+" | "-")? <primary>
+<unary>             ::= "(" <arithmeticExpr> ")"
+					  | ("+" | "-")? <primary>
 <primary>           ::= <vbool> | <vint> | <ident>
 <vbool>             ::= "true" | "false"
 <vint>              ::= [1-9] [0-9]*
 <ident>             ::= ("_" | [a-z]) ("_" | [a-z] | [0-9])*
-<semi>              ::= ";"+             
+<semi>              ::= ";"+
 ```
 
 ## Finite State Machines
