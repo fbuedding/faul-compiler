@@ -100,18 +100,29 @@ public class Parser {
 
   private void term(SyntaxTree st) throws SyntaxError {
     unary(st.insertSubtree(new Token(TokenType.UNARY, "")));
-    if (checkPeekToken(TokenType.PLUS)) {
+    if (checkPeekToken(TokenType.ASTERISK)) {
       st.insertSubtree(currentToken());
-      matchToken(TokenType.PLUS);
+      matchToken(TokenType.ASTERISK);
       arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
-    } else if (checkPeekToken(TokenType.PLUS)) {
+    } else if (checkPeekToken(TokenType.SLASH)) {
       st.insertSubtree(currentToken());
-      matchToken(TokenType.PLUS);
+      matchToken(TokenType.SLASH);
       arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
     }
   }
 
-  private void unary(SyntaxTree insertSubtree) {
+  private void unary(SyntaxTree st) throws SyntaxError {
+    switch (currentToken().kind) {
+      case OPEN_BRACKET:
+        st.insertSubtree(currentToken());
+        nextToken();
+        arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
+        matchToken(TokenType.CLOSE_BRACKET);
+        break;
+
+      default:
+        break;
+    }
   }
 
 }

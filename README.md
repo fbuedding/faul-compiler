@@ -88,12 +88,11 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
                       | "bool" <ident> "=" <logicalExpr> <semi>
                       | "if" "(" <logicalExpr> ")" "{" <statement>* "}"
                       | <ident> "=" (<logicalExpr> | <arithmeticExpr>) <semi>
-<condition>         ::= <logicalExpr>
-<logicalExpr>       ::= "(" <condition> ")"
+<logicalExpr>       ::= "(" <logicalExpr> ")"
                       | "!" <logicalExpr>
                       | <logicalExpr> ("&&" | "||") <logicalExpr>
                       | <conditionalExpr>
-<conditionalExpr>  ::= <conditionalExpr> ("==" | "!=" | ">" | ">=" | "<" | "<=") <arithmeticExpr>
+<conditionalExpr>  ::= <arithmeticExpr> ("==" | "!=" | ">" | ">=" | "<" | "<=") <arithmeticExpr>
                       | <arithmeticExpr>
 <arithmeticExpr>    ::= <term> (( "+" | "-") <arithmeticExpr>)*
 <term>              ::= <unary> (("*" | "/") <term>)*
