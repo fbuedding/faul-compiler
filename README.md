@@ -6,6 +6,7 @@
       * [Basic](#basic)
       * [Keywords](#keywords)
       * [Operatoren](#operatoren)
+  * [Parser Regeln (Grammatik)](#parser-regeln-grammatik)
   * [Finite State Machines](#finite-state-machines)
     * [Integer](#integer)
     * [Word](#word)
@@ -133,6 +134,6 @@ stateDiagram-v2
 ``` 
 
 ## Todo
-- [ ] Lexer
+- [X] Lexer
 - [ ] Parser
 - [ ] Code generation
