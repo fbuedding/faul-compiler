@@ -102,4 +102,20 @@ public enum TokenType {
    * !
    */
   NOT,
+  /**
+   *  Bitwise or
+   */
+  OR,
+  /**
+   * Bitwise and
+   */
+  AND,
+  /**
+   * logical OR
+   */
+  LOR,
+  /**
+   * logical AND
+   */
+  LAND,
 }

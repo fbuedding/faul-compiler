@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -201,10 +202,8 @@ class LexerTest {
     String input = file.Reader.readFile("src/test/resources/simpleNoError.faul");
     assertDoesNotThrow(() -> {
       Lexer l = new Lexer(input);
-      Token token = l.getToken();
-      while (token.kind != TokenType.EOF) {
-        token = l.getToken();
-      }
+      Token[] ts = l.genTokens();
+      System.out.println(Arrays.toString(ts));
     });
   }
   @Test

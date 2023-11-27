@@ -5,11 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af854f3e-21de-448c-be4a-e0f78760eba8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/file/Reader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/resources/simpleNoError.faul" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/lexer/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lexer/Lexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lexer/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lexer/Token.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lexer/TokenType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lexer/TokenType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/lexer/LexerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/lexer/LexerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/simpleNoError.faul" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/simpleNoError.faul" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,6 +59,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "onboarding.tips.debug.path": "/Users/fbuedding/Documents/GitHub/faul-lang/src/main/java/org/example/Main.java",
+    "run.code.analysis.last.selected.profile": "pProject Default",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
@@ -69,7 +72,7 @@
       <recent name="lexer" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.LexerTest.testCharacterReading (1)">
+  <component name="RunManager" selected="JUnit.All in faul-lang">
     <configuration name="All in faul-lang" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="faul-lang" />
       <option name="PACKAGE_NAME" value="" />
@@ -128,10 +131,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.All in faul-lang" />
         <item itemvalue="JUnit.LexerTest.testCharacterReading (1)" />
         <item itemvalue="JUnit.FsmTest.shouldNotError" />
         <item itemvalue="JUnit.LexerTest.testCharacterReading" />
-        <item itemvalue="JUnit.All in faul-lang" />
       </list>
     </recent_temporary>
   </component>
@@ -145,7 +148,7 @@
       <updated>1700923023884</updated>
       <workItem from="1700923024953" duration="8436000" />
       <workItem from="1700933562504" duration="1960000" />
-      <workItem from="1700945166593" duration="9857000" />
+      <workItem from="1700945166593" duration="17213000" />
     </task>
     <servers />
   </component>

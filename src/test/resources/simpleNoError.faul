@@ -2,3 +2,6 @@ int abc = 456;
 if(abc < 500) {
 a = a+ 4;
 }
+if ( true || false) {
+  int beta = 234;
+}

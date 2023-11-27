@@ -1,5 +1,8 @@
 package lexer;
 
+import java.util.Arrays;
+import java.util.Vector;
+
 import fsm.*;
 
 public class Lexer {
@@ -26,73 +29,97 @@ public class Lexer {
     return currentCharacter;
   }
 
+  public Token[] genTokens() throws LexerError {
+    Vector<Token> tokens = new Vector<Token>();
+    Token token = getToken();
+    while (token.kind != TokenType.EOF) {
+      tokens.add(token);
+      token = getToken();
+    }
+    return Arrays.copyOf(tokens.toArray(), tokens.size(), Token[].class);
+  };
+
   public Token getToken() throws LexerError {
     Token t;
     if (currentCharacter == '+')
-      t = new Token(TokenType.PLUS, currentCharacter);
+      t = new Token(TokenType.PLUS, currentCharacter, currentLine, currentLinePosition);
 
     else if (currentCharacter == '-')
-      t = new Token(TokenType.MINUS, currentCharacter);
+      t = new Token(TokenType.MINUS, currentCharacter, currentLine, currentLinePosition);
 
     else if (currentCharacter == '*')
-      t = new Token(TokenType.ASTERISK, currentCharacter);
+      t = new Token(TokenType.ASTERISK, currentCharacter, currentLine, currentLinePosition);
 
     else if (currentCharacter == '/')
-      t = new Token(TokenType.SLASH, currentCharacter);
+      t = new Token(TokenType.SLASH, currentCharacter, currentLine, currentLinePosition);
 
     else if (currentCharacter == '(')
-      t = new Token(TokenType.OPEN_BRACKET, currentCharacter);
+      t = new Token(TokenType.OPEN_BRACKET, currentCharacter, currentLine, currentLinePosition);
 
     else if (currentCharacter == ')')
-      t = new Token(TokenType.CLOSE_BRACKET, currentCharacter);
+      t = new Token(TokenType.CLOSE_BRACKET, currentCharacter, currentLine, currentLinePosition);
 
     // Multi character operator
     else if (currentCharacter == '=') {
       if (lookAhead() == '=') {
-        t = new Token(TokenType.EQEQ, "=" + currentCharacter);
+        t = new Token(TokenType.EQEQ, "=" + currentCharacter, currentLine, currentLinePosition);
         nextCharacter();
       } else
-        t = new Token(TokenType.EQ, currentCharacter);
+        t = new Token(TokenType.EQ, currentCharacter, currentLine, currentLinePosition);
     }
 
     else if (currentCharacter == '!') {
       if (lookAhead() == '=') {
-        t = new Token(TokenType.NOTEQ, currentCharacter + "=");
+        t = new Token(TokenType.NOTEQ, currentCharacter + "=", currentLine, currentLinePosition);
         nextCharacter();
       } else
-        t = new Token(TokenType.NOT, currentCharacter);
+        t = new Token(TokenType.NOT, currentCharacter, currentLine, currentLinePosition);
     }
 
     else if (currentCharacter == '<') {
       if (lookAhead() == '=') {
-        t = new Token(TokenType.LTEQ, currentCharacter + "=");
+        t = new Token(TokenType.LTEQ, currentCharacter + "=", currentLine, currentLinePosition);
         nextCharacter();
       } else
-        t = new Token(TokenType.LT, currentCharacter);
+        t = new Token(TokenType.LT, currentCharacter, currentLine, currentLinePosition);
     }
 
     else if (currentCharacter == '>') {
       if (lookAhead() == '=') {
-        t = new Token(TokenType.GTEQ, currentCharacter + "=");
+        t = new Token(TokenType.GTEQ, currentCharacter + "=", currentLine, currentLinePosition);
         nextCharacter();
       } else
-        t = new Token(TokenType.GT, currentCharacter);
+        t = new Token(TokenType.GT, currentCharacter, currentLine, currentLinePosition);
+    }
+    else if (currentCharacter == '|') {
+      if (lookAhead() == '|') {
+        t = new Token(TokenType.LOR, currentCharacter + "|", currentLine, currentLinePosition);
+        nextCharacter();
+      } else
+        t = new Token(TokenType.OR, currentCharacter, currentLine, currentLinePosition);
+    }
+    else if (currentCharacter == '&') {
+      if (lookAhead() == '&') {
+        t = new Token(TokenType.LAND, currentCharacter + "&", currentLine, currentLinePosition);
+        nextCharacter();
+      } else
+        t = new Token(TokenType.AND, currentCharacter, currentLine, currentLinePosition);
     }
 
     else if (currentCharacter == ';') {
-      t = new Token(TokenType.SEMICOLON, currentCharacter);
-    } 
+      t = new Token(TokenType.SEMICOLON, currentCharacter, currentLine, currentLinePosition);
+    }
 
     else if (currentCharacter == '{') {
-      t = new Token(TokenType.OPEN_PARANTHESES, currentCharacter);
-    } 
+      t = new Token(TokenType.OPEN_PARANTHESES, currentCharacter, currentLine, currentLinePosition);
+    }
 
     else if (currentCharacter == '}') {
-      t = new Token(TokenType.CLOSE_PARANTHESES, currentCharacter);
+      t = new Token(TokenType.CLOSE_PARANTHESES, currentCharacter, currentLine, currentLinePosition);
     }
 
     else if (currentCharacter == '\0')
-      t = new Token(TokenType.EOF, currentCharacter);
+      t = new Token(TokenType.EOF, currentCharacter, currentLine, currentLinePosition);
     // Integer and word match returns early, because
     else if (isDigit(currentCharacter)) {
       return matchInt();
@@ -100,8 +127,7 @@ public class Lexer {
 
     else if (isWordStart(currentCharacter)) {
       return matchWord();
-    } 
-    else
+    } else
       throw new LexerError("Unknown Token", currentLine, currentLinePosition);
     nextCharacter();
     return t;
@@ -132,7 +158,7 @@ public class Lexer {
   }
 
   private Token matchInt() throws LexerError {
-    Token t = new Token(TokenType.V_INT, "");
+    Token t = new Token(TokenType.V_INT, "", currentLine, currentLinePosition);
     try {
       intFsm.nextState(currentCharacter);
       t.lexem = t.lexem.concat(String.valueOf(currentCharacter));
@@ -155,7 +181,7 @@ public class Lexer {
   }
 
   private Token matchWord() throws LexerError {
-    Token t = new Token(TokenType.IDENT, "");
+    Token t = new Token(TokenType.IDENT, "", currentLine, currentLinePosition);
     try {
       wordFsm.nextState(currentCharacter);
       t.lexem = t.lexem.concat(String.valueOf(currentCharacter));
@@ -166,7 +192,7 @@ public class Lexer {
           break;
         wordFsm.nextState(currentCharacter);
         t.lexem = t.lexem.concat(String.valueOf(currentCharacter));
-      wordFsm.nextState(lookAhead());
+        wordFsm.nextState(lookAhead());
       }
     } catch (NoTransitionError e) {
       throw new LexerError("Invalid character in identifier: <" + String.valueOf(currentCharacter), currentLine,

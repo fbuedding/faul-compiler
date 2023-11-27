@@ -54,22 +54,54 @@ Tokens der Faul-Lang.
 
 #### Operatoren
 
-| Name          | Beschreibung |
-|:--------------|:------------:|
-| EQ            |      =       |
-| PLUS          |      +       |
-| MINUS         |      -       |
-| ASTERISK      |      *       |
-| SLASH         |      /       |
-| EQEQ          |      ==      | 
-| NOTEQ         |      !=      |
-| GT            |      >       |
-| GTEQ          |      >=      |
-| LT            |      <       |
-| LTEQ          |      <=      |
-| NOT           |      !       |
-| OPEN_BRACKET  |      (       |
-| CLOSE_BRACKET |      )       |
+| Name          |     Beschreibung      |
+|:--------------|:---------------------:|
+| EQ            |           =           |
+| PLUS          |           +           |
+| MINUS         |           -           |
+| ASTERISK      |           *           |
+| SLASH         |           /           |
+| OR            |  \| (Bitweises oder)  |
+| AND           |  & (Bitweises  und)   |
+| EQEQ          |          ==           | 
+| NOTEQ         |          !=           |
+| GT            |           >           |
+| GTEQ          |          >=           |
+| LT            |           <           |
+| LTEQ          |          <=           |
+| LOR           | \|\| (logischer oder) |
+| LAND          |  && (logisches und)   |
+| NOT           |           !           |
+| OPEN_BRACKET  |           (           |
+| CLOSE_BRACKET |           )           |
+
+## Parser Regeln (Grammatik)
+
+Es wird zu bezeichnung der Regeln die Backus-Naur-Form genutzt.
+
+Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground](https://bnfplayground.pauliankline.com/).
+
+```bnf
+<program>           ::= <statement>*
+<statement>         ::= "int" <ident> "=" <arithmeticExpr> <semi>
+                      | "bool" <ident> "=" <logicalExpr> <semi>
+                      | "if" "(" <condition> ")" "{" <statement>* "}"
+                      | <ident> "=" (<logicalExpr> | <arithmeticExpr>) <semi>
+<condition>         ::= <logicalExpr>
+<logicalExpr>       ::= "!" <logicalExpr>
+                      | <logicalExpr> ("&&" | "||") <conditionalExpr>
+                      | <conditionalExpr>
+<conditionalExpr>  ::= <conditionalExpr> ("==" | "!=" | ">" | ">=" | "<" | "<=") <arithmeticExpr>
+                      | <arithmeticExpr>
+<arithmeticExpr>    ::= <term> (( "+" | "-") <term>)*
+<term>              ::= <unary> (("*" | "/") <unary>)*
+<unary>             ::= ("+" | "-")? <primary>
+<primary>           ::= <vbool> | <vint> | <ident>
+<vbool>             ::= "true" | "false"
+<vint>              ::= [1-9] [0-9]*
+<ident>             ::= ("_" | [a-z]) ("_" | [a-z] | [0-9])*
+<semi>              ::= ";"+             
+```
 
 ## Finite State Machines
 
