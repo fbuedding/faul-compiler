@@ -40,19 +40,42 @@ public class Parser {
     currentToken = nextToken++;
   }
 
+  private Token currentToken() {
+    return tokens[currentToken];
+  }
+
   // ################# Begin parsing methods #################
 
   /**
-   * <program>::= <statement>*
+   * <program>::= <statement>
+ * @throws SyntaxError*
    */
-  public void program() {
+  public void program() throws SyntaxError {
     System.out.println("PROGRAMM");
     while (!checkToken(TokenType.EQ)) {
       this.statement();
     }
   }
 
-private void statement() {
-}
+  /**
+   * <statement>::= "int" <ident> "=" <arithmeticExpr> <semi>
+   *            | "bool" <ident> "=" <logicalExpr> <semi>
+   *            | "if" "(" <condition> ")" "{" <statement>* "}"
+   *            | <ident> "=" (<logicalExpr> | <arithmeticExpr>) <semi>
+ * @throws SyntaxError
+   */
+  private void statement() throws SyntaxError {
+    TokenType[] expected = new TokenType[]{TokenType.INT, TokenType.BOOL, TokenType.IF, TokenType.IDENT};
+    switch (currentToken().kind){
+      case INT:
+        break;
+      case BOOL:
+        break;
+      case IF:
+        break;
+      default:
+        throw new SyntaxError(currentToken(), expected);
+    }
+  }
 
 }

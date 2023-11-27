@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af854f3e-21de-448c-be4a-e0f78760eba8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/parser/SyntaxTree.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/parser/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/parser/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/parser/SyntaxError.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/parser/SyntaxError.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,7 +146,7 @@
       <updated>1700923023884</updated>
       <workItem from="1700923024953" duration="8436000" />
       <workItem from="1700933562504" duration="1960000" />
-      <workItem from="1700945166593" duration="21867000" />
+      <workItem from="1700945166593" duration="23629000" />
     </task>
     <servers />
   </component>
