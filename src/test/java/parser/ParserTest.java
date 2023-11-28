@@ -14,7 +14,7 @@ public class ParserTest {
 
   @Test
   public void syntaxTree() throws LexerError, SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError, IOException {
-    String i = "int a = 3 + 5; int b = 4 - 6; int c = 5 * ( 5 + 6 * 3);";
+    String i = "int a = 3 + 5; int b = a - 6; int c = 5 * ( 5 + 6 * 3);";
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());
     SyntaxTree st = new SyntaxTree(new Token(TokenType.PROGRAM, ""));

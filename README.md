@@ -84,21 +84,18 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
 
 ```
 <program>           ::= <statement>*
-<statement>         ::= "int" <ident> "=" <arithmeticExpr> <semi>
-                      | "bool" <ident> "=" <logicalExpr> <semi>
-                      | "if" "(" <logicalExpr> ")" "{" <statement>* "}"
-                      | <ident> "=" (<logicalExpr> | <arithmeticExpr>) <semi>
-<logicalExpr>       ::= "(" <logicalExpr> ")"
-                      | "!" <logicalExpr>
-                      | <logicalExpr> ("&&" | "||") <logicalExpr>
-                      | <conditionalExpr>
-<conditionalExpr>  ::= <arithmeticExpr> ("==" | "!=" | ">" | ">=" | "<" | "<=") <arithmeticExpr>
-                      | <arithmeticExpr>
-<arithmeticExpr>    ::= <term> (( "+" | "-") <arithmeticExpr>)*
-<term>              ::= <unary> (("*" | "/") <term>)*
-<unary>             ::= "(" <arithmeticExpr> ")"
-                      | ("+" | "-")? <primary>
-<primary>           ::= <vbool> | <vint> | <ident>
+<statement>         ::= "int" <ident> "=" <expression> <semi>
+                      | "bool" <ident> "=" <expression> <semi>
+                      | "if" "(" <expression> ")" "{" <statement>* "}"
+                      | <ident> "=" <expression> <semi>
+<expression>        ::= <equality>
+<equality>          ::= <comparision> (("!=" | "==") <equality>)?
+<comparision>       ::= <arithmeticExpr> ( (">" | ">=" | "<" | "<=") <comparision>)*
+<arithmeticExpr>    ::= <term> (( "+" | "-") <arithmeticExpr>)?
+<term>              ::= <unary> (("*" | "/") <term>)?
+<unary>             ::= ("!" | "-") <unary>
+                      | <primary>
+<primary>           ::= <vbool> | <vint> 
 <vbool>             ::= "true" | "false"
 <vint>              ::= [1-9] [0-9]*
                       | "0"
@@ -106,30 +103,6 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
 <semi>              ::= ";"+
 ```
 
-Vielleicht besser so (so können booleans nicht als zahlen genutzt werden:
-```
-<program>           ::= <statement>*
-<statement>         ::= "int" <ident> "=" <arithmeticExpr> <semi>
-                      | "bool" <ident> "=" <logicalExpr> <semi>
-                      | "if" "(" <logicalExpr> ")" "{" <statement>* "}"
-                      | <ident> "=" (<logicalExpr> | <arithmeticExpr>) <semi>
-<logicalExpr>       ::= "(" <logicalExpr> ")"
-                      | "!" <logicalExpr>
-                      | <logicalExpr> ("&&" | "||") <logicalExpr>
-                      | <conditionalExpr>
-                      | <vbool>
-<conditionalExpr>  ::= <arithmeticExpr> ("==" | "!=" | ">" | ">=" | "<" | "<=") <arithmeticExpr>
-<arithmeticExpr>    ::= <term> (( "+" | "-") <arithmeticExpr>)?
-<term>              ::= <unary> (("*" | "/") <term>)?
-<unary>             ::= "(" <arithmeticExpr> ")"
-                      | ("+" | "-")? <primary>
-<primary>           ::= <vint> | <ident>
-<vbool>             ::= "true" | "false"
-<vint>              ::= [1-9] [0-9]*
-                      | "0"
-<ident>             ::= ("_" | [a-z]) ("_" | [a-z] | [0-9])*
-<semi>              ::= ";"+
-```
 
 ## Finite State Machines
 

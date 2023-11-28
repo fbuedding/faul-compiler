@@ -23,7 +23,7 @@ PROGRAM
 │   │   ├── TERM
 │   │   │   └── UNARY
 │   │   │       └── PRIMARY
-│   │   │           └── V_INT: 4
+│   │   │           └── IDENT: a
 │   │   ├── MINUS: -
 │   │   └── ARITHMETIC_EXPR
 │   │       └── TERM
