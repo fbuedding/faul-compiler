@@ -7,6 +7,7 @@
       * [Keywords](#keywords)
       * [Operatoren](#operatoren)
   * [Parser Regeln (Grammatik)](#parser-regeln-grammatik)
+  * [Operatorrangfolge](#operatorrangfolge)
   * [Finite State Machines](#finite-state-machines)
     * [Integer](#integer)
     * [Word](#word)
