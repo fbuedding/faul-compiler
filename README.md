@@ -95,7 +95,8 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
 <term>              ::= <unary> (("*" | "/") <term>)?
 <unary>             ::= ("!" | "-") <unary>
                       | <primary>
-<primary>           ::= <vbool> | <vint> 
+<primary>           ::= <vbool> | <vint> | <ident>
+                      | "(" <expression> ")"
 <vbool>             ::= "true" | "false"
 <vint>              ::= [1-9] [0-9]*
                       | "0"
