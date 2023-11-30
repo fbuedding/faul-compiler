@@ -7,6 +7,10 @@ public class Token {
   public int line;
   public int linePos;
 
+  public Token(TokenType token) {
+    this.kind = token;
+    this.lexem = "";
+  }
   public Token(TokenType token, String lexem) {
     this.kind = token;
     this.lexem = lexem;

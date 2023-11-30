@@ -121,9 +121,9 @@ public enum TokenType {
   // ######## Token types for AST
   PROGRAM,
   STATEMENT,
-  CONDITION,
-  LOGICAL_EXPR,
-  CONDITIONAL_EXPR,
+  EXPRESSION,
+  EQUALITY,
+  COMPARISON,
   ARITHMETIC_EXPR,
   TERM,
   UNARY,

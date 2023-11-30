@@ -89,8 +89,8 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
                       | "if" "(" <expression> ")" "{" <statement>* "}"
                       | <ident> "=" <expression> <semi>
 <expression>        ::= <equality>
-<equality>          ::= <comparision> (("!=" | "==") <equality>)?
-<comparision>       ::= <arithmeticExpr> ( (">" | ">=" | "<" | "<=") <comparision>)*
+<equality>          ::= <comparison> (("!=" | "==") <equality>)?
+<comparison>       ::= <arithmeticExpr> ( (">" | ">=" | "<" | "<=") <comparison>)*
 <arithmeticExpr>    ::= <term> (( "+" | "-") <arithmeticExpr>)?
 <term>              ::= <unary> (("*" | "/") <term>)?
 <unary>             ::= ("!" | "-") <unary>
