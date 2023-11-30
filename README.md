@@ -146,6 +146,7 @@ stateDiagram-v2
 ## Todo
 - [X] Lexer
 - [x] Parser
-- [ ] Typechecking
-- [ ] Optimierung
+- [ ] Semantische Analyse
+  - Typechecking
+  - Optimierung
 - [ ] Code generation
