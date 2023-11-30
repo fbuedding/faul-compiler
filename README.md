@@ -104,6 +104,14 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
 <semi>              ::= ";"+
 ```
 
+## Operatorrangfolge
+
+1. Klammerungen
+2. `-` `!`
+3. `*` `/`
+4. `+` `-`
+5. `>` `>=` `<` `<=`
+6. `&&` `||` `|` `&`
 
 ## Finite State Machines
 
