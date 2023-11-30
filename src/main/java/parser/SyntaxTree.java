@@ -3,8 +3,6 @@ package parser;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import javax.swing.tree.TreeNode;
-
 import lexer.Token;
 
 public class SyntaxTree {

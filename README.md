@@ -88,9 +88,9 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
                       | "bool" <ident> "=" <expression> <semi>
                       | "if" "(" <expression> ")" "{" <statement>* "}"
                       | <ident> "=" <expression> <semi>
-<expression>        ::= <equality>
-<equality>          ::= <comparison> (("!=" | "==") <equality>)?
-<comparison>       ::= <arithmeticExpr> ( (">" | ">=" | "<" | "<=") <comparison>)*
+<expression>        ::= <equality> ( ("&&" | "||" | "&" | "|") <expression>)
+<equality>          ::= <comparision> (("!=" | "==") <equality>)?
+<comparision>       ::= <arithmeticExpr> ( (">" | ">=" | "<" | "<=") <comparision>)?
 <arithmeticExpr>    ::= <term> (( "+" | "-") <arithmeticExpr>)?
 <term>              ::= <unary> (("*" | "/") <term>)?
 <unary>             ::= ("!" | "-") <unary>
@@ -136,5 +136,7 @@ stateDiagram-v2
 
 ## Todo
 - [X] Lexer
-- [ ] Parser
+- [x] Parser
+- [ ] Typechecking
+- [ ] Optimierung
 - [ ] Code generation

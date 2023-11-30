@@ -202,10 +202,10 @@ class LexerTest {
     String input = file.Reader.readFile("src/test/resources/simpleNoError.faul");
     assertDoesNotThrow(() -> {
       Lexer l = new Lexer(input);
-      Token[] ts = l.genTokens();
-      System.out.println(Arrays.toString(ts));
+      l.genTokens();
     });
   }
+
   @Test
   public void shouldErrorOnLine3Pos10() throws FileNotFoundException {
     String input = file.Reader.readFile("src/test/resources/lexerErrorOnLine3Pos10.faul");

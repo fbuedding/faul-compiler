@@ -1,5 +1,6 @@
 package parser;
 
+import java.util.Stack;
 import java.util.Vector;
 
 import lexer.Token;
@@ -12,6 +13,7 @@ public class Parser {
   private Token[] tokens;
   private int currentToken = 0;
   private int nextToken = 1;
+  private Stack<Integer> visibilityStack = new Stack<Integer>();
 
   private Vector<String> declaredIdentifier = new Vector<String>();
 
@@ -19,6 +21,7 @@ public class Parser {
     this.tokens = tokens;
     if (tokens.length < 2)
       throw new Error("Empty File!");
+    visibilityStack.push(0);
   }
 
   private boolean checkToken(TokenType tt) {
@@ -105,6 +108,29 @@ public class Parser {
         declaredIdentifier.add(boolIdent);
         break;
       case IF:
+        matchToken(TokenType.IF, st);
+        matchToken(TokenType.OPEN_BRACKET, st);
+        expression(st.insertSubtree(new Token(TokenType.EXPRESSION, "")));
+        matchToken(TokenType.CLOSE_BRACKET, st);
+        matchToken(TokenType.OPEN_PARANTHESES, st);
+        visibilityStack.push(declaredIdentifier.size());
+        while (!checkToken(TokenType.CLOSE_PARANTHESES)) {
+          statement(st.insertSubtree(new Token(TokenType.STATEMENT, "")));
+        }
+        matchToken(TokenType.CLOSE_PARANTHESES, st);
+        int elementsToBeRemoved = declaredIdentifier.size() - visibilityStack.pop();
+        for (int i = 0; i < elementsToBeRemoved; i++) {
+          declaredIdentifier.removeLast();
+        }
+        break;
+      case IDENT:
+        if (!declaredIdentifier.contains(currentToken().lexem)) {
+          throw new UnknownIdentifierError(currentToken());
+        }
+        matchToken(TokenType.IDENT, st);
+        matchToken(TokenType.EQ, st);
+        expression(st.insertSubtree(new Token(TokenType.EXPRESSION, "")));
+        matchToken(TokenType.SEMICOLON, st);
         break;
       default:
         throw new SyntaxError(currentToken(), expected);
@@ -123,6 +149,19 @@ public class Parser {
    */
   public void expression(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
     equality(st.insertSubtree(new Token(TokenType.EQUALITY, "")));
+    if (checkToken(TokenType.LAND)) {
+     matchToken(TokenType.LAND, st); 
+     expression(st);
+    } else if (checkToken(TokenType.LOR)) {
+     matchToken(TokenType.LOR, st); 
+     expression(st);
+    } else if (checkToken(TokenType.AND)) {
+     matchToken(TokenType.AND, st); 
+     expression(st);
+    } else if (checkToken(TokenType.OR)) {
+     matchToken(TokenType.OR, st); 
+     expression(st);
+    }
   }
 
   /**
@@ -161,11 +200,11 @@ public class Parser {
       matchToken(TokenType.GT, st);
       comparison(st.insertSubtree(new Token(TokenType.COMPARISON, "")));
     } else if (checkToken(TokenType.GTEQ)) {
-      comparison(st.insertSubtree(new Token(TokenType.COMPARISON, "")));
       matchToken(TokenType.GTEQ, st);
-    } else if (checkToken(TokenType.LT)) {
       comparison(st.insertSubtree(new Token(TokenType.COMPARISON, "")));
+    } else if (checkToken(TokenType.LT)) {
       matchToken(TokenType.LT, st);
+      comparison(st.insertSubtree(new Token(TokenType.COMPARISON, "")));
     } else if (checkToken(TokenType.LTEQ)) {
       matchToken(TokenType.LTEQ, st);
       comparison(st.insertSubtree(new Token(TokenType.COMPARISON, "")));
@@ -243,7 +282,8 @@ public class Parser {
    * @throws UnknownIdentifierError
    */
   private void primary(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
-    TokenType[] expected = new TokenType[] { TokenType.V_INT, TokenType.V_BOOL, TokenType.OPEN_BRACKET, TokenType.IDENT };
+    TokenType[] expected = new TokenType[] { TokenType.V_INT, TokenType.V_BOOL, TokenType.OPEN_BRACKET,
+        TokenType.IDENT };
     if (checkToken(TokenType.OPEN_BRACKET)) {
       matchToken(TokenType.OPEN_BRACKET, st);
       expression(st.insertSubtree(new Token(TokenType.EXPRESSION)));
@@ -253,7 +293,7 @@ public class Parser {
     } else if (checkToken(TokenType.V_INT)) {
       matchToken(TokenType.V_INT, st);
     } else if (checkToken(TokenType.IDENT)) {
-      if(!declaredIdentifier.contains(currentToken().lexem)){
+      if (!declaredIdentifier.contains(currentToken().lexem)) {
         throw new UnknownIdentifierError(currentToken());
       }
       matchToken(TokenType.IDENT, st);
