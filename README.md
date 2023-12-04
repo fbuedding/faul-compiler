@@ -118,7 +118,7 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
 
 ### Parser Ausgabe
 
-Der Parser gibt einen Abstrakten Syntax Baum (AST) aus. Dieser lässt sich durch die toString Methode beispielsweise so ausgeben:
+Der Parser gibt einen Parse Tree aus. Dieser lässt sich durch die toString Methode beispielsweise so ausgeben:
 
 #### Input
 
@@ -480,6 +480,7 @@ stateDiagram-v2
 ## Todo
 - [X] Lexer
 - [x] Parser
+- [ ] Abstract Syntax Tree (AST)
 - [ ] Semantische Analyse
   - Typechecking
   - Optimierung

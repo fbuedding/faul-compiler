@@ -3,10 +3,12 @@ package parser;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+
 import lexer.Token;
+import lexer.TokenKind;
 
 public class SyntaxTree {
-  Token token;
+  public Token token;
   LinkedList<SyntaxTree> childNodes;
 
   public SyntaxTree(Token t) {
@@ -58,6 +60,10 @@ public class SyntaxTree {
     }
   }
 
+  public TokenKind getKind() {
+    return token.kind;
+  }
+
   SyntaxTree insertSubtree(Token t) {
     SyntaxTree node;
     node = new SyntaxTree(t);
@@ -65,7 +71,11 @@ public class SyntaxTree {
     return node;
   }
 
-  SyntaxTree getChild(int i) {
+  public boolean hasChilds() {
+    return this.childNodes.size() > 0;
+  }
+
+  public SyntaxTree getChild(int i) {
     if (i > this.childNodes.size())
       return null;
     else
@@ -76,7 +86,7 @@ public class SyntaxTree {
     return this.childNodes;
   }
 
-  int getChildNumber() {
+  public int getChildNumber() {
     return childNodes.size();
   }
 }

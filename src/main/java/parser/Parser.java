@@ -4,7 +4,7 @@ import java.util.Stack;
 import java.util.Vector;
 
 import lexer.Token;
-import lexer.TokenType;
+import lexer.TokenKind;
 
 /**
  * 
@@ -13,22 +13,22 @@ public class Parser {
   private Token[] tokens;
   private int currentToken = 0;
   private int nextToken = 1;
-  private Stack<Integer> visibilityStack = new Stack<Integer>();
+  private Stack<Integer> scopes = new Stack<Integer>();
 
-  private Vector<String> declaredIdentifier = new Vector<String>();
+  private Vector<String> symbolTable = new Vector<String>();
 
   public Parser(Token[] tokens) {
     this.tokens = tokens;
     if (tokens.length < 2)
       throw new Error("Empty File!");
-    visibilityStack.push(0);
+    scopes.push(0);
   }
 
-  private boolean checkToken(TokenType tt) {
+  private boolean checkToken(TokenKind tt) {
     return tokens[currentToken].kind == tt;
   }
 
-  private void matchToken(TokenType tt, SyntaxTree st) throws SyntaxError {
+  private void matchToken(TokenKind tt, SyntaxTree st) throws SyntaxError {
     if (!checkToken(tt)) {
       throw new SyntaxError(currentToken(), tt);
     }
@@ -44,13 +44,6 @@ public class Parser {
     return tokens[currentToken];
   }
 
-  private Token peekToken() {
-    if (nextToken >= tokens.length) {
-      return tokens[tokens.length - 1]; // EOF
-    }
-    return tokens[nextToken];
-  }
-
   // ################# Begin parsing methods #################
 
   /**
@@ -62,8 +55,8 @@ public class Parser {
    */
   public void program(SyntaxTree st) throws SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError {
 
-    while (!checkToken(TokenType.EOF)) {
-      this.statement(st.insertSubtree(new Token(TokenType.STATEMENT, "")));
+    while (!checkToken(TokenKind.EOF)) {
+      this.statement(st.insertSubtree(new Token(TokenKind.STATEMENT, "")));
     }
   }
 
@@ -81,56 +74,56 @@ public class Parser {
    * @throws IndentifierAlreadyDeclaredError
    */
   private void statement(SyntaxTree st) throws SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError {
-    TokenType[] expected = new TokenType[] { TokenType.INT, TokenType.BOOL, TokenType.IF, TokenType.IDENT };
+    TokenKind[] expected = new TokenKind[] { TokenKind.INT, TokenKind.BOOL, TokenKind.IF, TokenKind.IDENT };
     switch (currentToken().kind) {
       case INT:
-        matchToken(TokenType.INT, st);
+        matchToken(TokenKind.INT, st);
         String ident = currentToken().lexem;
-        if (declaredIdentifier.contains(ident)) {
+        if (symbolTable.contains(ident)) {
           throw new IndentifierAlreadyDeclaredError(currentToken());
         }
-        matchToken(TokenType.IDENT, st);
-        matchToken(TokenType.EQ, st);
-        expression(st.insertSubtree(new Token(TokenType.EXPRESSION, "")));
-        matchToken(TokenType.SEMICOLON, st);
-        declaredIdentifier.add(ident);
+        matchToken(TokenKind.IDENT, st);
+        matchToken(TokenKind.EQ, st);
+        expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
+        matchToken(TokenKind.SEMICOLON, st);
+        symbolTable.add(ident);
         break;
       case BOOL:
-        matchToken(TokenType.BOOL, st);
+        matchToken(TokenKind.BOOL, st);
         String boolIdent = currentToken().lexem;
-        if (declaredIdentifier.contains(boolIdent)) {
+        if (symbolTable.contains(boolIdent)) {
           throw new IndentifierAlreadyDeclaredError(currentToken());
         }
-        matchToken(TokenType.IDENT, st);
-        matchToken(TokenType.EQ, st);
-        expression(st.insertSubtree(new Token(TokenType.EXPRESSION, "")));
-        matchToken(TokenType.SEMICOLON, st);
-        declaredIdentifier.add(boolIdent);
+        matchToken(TokenKind.IDENT, st);
+        matchToken(TokenKind.EQ, st);
+        expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
+        matchToken(TokenKind.SEMICOLON, st);
+        symbolTable.add(boolIdent);
         break;
       case IF:
-        matchToken(TokenType.IF, st);
-        matchToken(TokenType.OPEN_BRACKET, st);
-        expression(st.insertSubtree(new Token(TokenType.EXPRESSION, "")));
-        matchToken(TokenType.CLOSE_BRACKET, st);
-        matchToken(TokenType.OPEN_PARANTHESES, st);
-        visibilityStack.push(declaredIdentifier.size());
-        while (!checkToken(TokenType.CLOSE_PARANTHESES)) {
-          statement(st.insertSubtree(new Token(TokenType.STATEMENT, "")));
+        matchToken(TokenKind.IF, st);
+        matchToken(TokenKind.OPEN_BRACKET, st);
+        expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
+        matchToken(TokenKind.CLOSE_BRACKET, st);
+        matchToken(TokenKind.OPEN_PARANTHESES, st);
+        scopes.push(symbolTable.size());
+        while (!checkToken(TokenKind.CLOSE_PARANTHESES)) {
+          statement(st.insertSubtree(new Token(TokenKind.STATEMENT, "")));
         }
-        matchToken(TokenType.CLOSE_PARANTHESES, st);
-        int elementsToBeRemoved = declaredIdentifier.size() - visibilityStack.pop();
+        matchToken(TokenKind.CLOSE_PARANTHESES, st);
+        int elementsToBeRemoved = symbolTable.size() - scopes.pop();
         for (int i = 0; i < elementsToBeRemoved; i++) {
-          declaredIdentifier.removeLast();
+          symbolTable.removeLast();
         }
         break;
       case IDENT:
-        if (!declaredIdentifier.contains(currentToken().lexem)) {
+        if (!symbolTable.contains(currentToken().lexem)) {
           throw new UnknownIdentifierError(currentToken());
         }
-        matchToken(TokenType.IDENT, st);
-        matchToken(TokenType.EQ, st);
-        expression(st.insertSubtree(new Token(TokenType.EXPRESSION, "")));
-        matchToken(TokenType.SEMICOLON, st);
+        matchToken(TokenKind.IDENT, st);
+        matchToken(TokenKind.EQ, st);
+        expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
+        matchToken(TokenKind.SEMICOLON, st);
         break;
       default:
         throw new SyntaxError(currentToken(), expected);
@@ -148,18 +141,18 @@ public class Parser {
    * @throws UnknownIdentifierError
    */
   public void expression(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
-    equality(st.insertSubtree(new Token(TokenType.EQUALITY, "")));
-    if (checkToken(TokenType.LAND)) {
-     matchToken(TokenType.LAND, st); 
+    equality(st.insertSubtree(new Token(TokenKind.EQUALITY, "")));
+    if (checkToken(TokenKind.LAND)) {
+     matchToken(TokenKind.LAND, st); 
      expression(st);
-    } else if (checkToken(TokenType.LOR)) {
-     matchToken(TokenType.LOR, st); 
+    } else if (checkToken(TokenKind.LOR)) {
+     matchToken(TokenKind.LOR, st); 
      expression(st);
-    } else if (checkToken(TokenType.AND)) {
-     matchToken(TokenType.AND, st); 
+    } else if (checkToken(TokenKind.AND)) {
+     matchToken(TokenKind.AND, st); 
      expression(st);
-    } else if (checkToken(TokenType.OR)) {
-     matchToken(TokenType.OR, st); 
+    } else if (checkToken(TokenKind.OR)) {
+     matchToken(TokenKind.OR, st); 
      expression(st);
     }
   }
@@ -174,13 +167,13 @@ public class Parser {
    * @throws UnknownIdentifierError
    */
   public void equality(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
-    comparison(st.insertSubtree(new Token(TokenType.COMPARISON, "")));
-    if (checkToken(TokenType.NOTEQ)) {
-      matchToken(TokenType.NOTEQ, st);
-      equality(st.insertSubtree(new Token(TokenType.EQUALITY, "")));
-    } else if (checkToken(TokenType.EQEQ)) {
-      matchToken(TokenType.EQEQ, st);
-      equality(st.insertSubtree(new Token(TokenType.EQUALITY, "")));
+    comparison(st.insertSubtree(new Token(TokenKind.COMPARISON, "")));
+    if (checkToken(TokenKind.NOTEQ)) {
+      matchToken(TokenKind.NOTEQ, st);
+      equality(st.insertSubtree(new Token(TokenKind.EQUALITY, "")));
+    } else if (checkToken(TokenKind.EQEQ)) {
+      matchToken(TokenKind.EQEQ, st);
+      equality(st.insertSubtree(new Token(TokenKind.EQUALITY, "")));
     }
   }
 
@@ -195,19 +188,19 @@ public class Parser {
    * @throws UnknownIdentifierError
    */
   private void comparison(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
-    arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
-    if (checkToken(TokenType.GT)) {
-      matchToken(TokenType.GT, st);
-      comparison(st.insertSubtree(new Token(TokenType.COMPARISON, "")));
-    } else if (checkToken(TokenType.GTEQ)) {
-      matchToken(TokenType.GTEQ, st);
-      comparison(st.insertSubtree(new Token(TokenType.COMPARISON, "")));
-    } else if (checkToken(TokenType.LT)) {
-      matchToken(TokenType.LT, st);
-      comparison(st.insertSubtree(new Token(TokenType.COMPARISON, "")));
-    } else if (checkToken(TokenType.LTEQ)) {
-      matchToken(TokenType.LTEQ, st);
-      comparison(st.insertSubtree(new Token(TokenType.COMPARISON, "")));
+    arithmeticExpr(st.insertSubtree(new Token(TokenKind.ARITHMETIC_EXPR, "")));
+    if (checkToken(TokenKind.GT)) {
+      matchToken(TokenKind.GT, st);
+      comparison(st.insertSubtree(new Token(TokenKind.COMPARISON, "")));
+    } else if (checkToken(TokenKind.GTEQ)) {
+      matchToken(TokenKind.GTEQ, st);
+      comparison(st.insertSubtree(new Token(TokenKind.COMPARISON, "")));
+    } else if (checkToken(TokenKind.LT)) {
+      matchToken(TokenKind.LT, st);
+      comparison(st.insertSubtree(new Token(TokenKind.COMPARISON, "")));
+    } else if (checkToken(TokenKind.LTEQ)) {
+      matchToken(TokenKind.LTEQ, st);
+      comparison(st.insertSubtree(new Token(TokenKind.COMPARISON, "")));
     }
   }
 
@@ -219,19 +212,19 @@ public class Parser {
    * @throws UnknownIdentifierError
    */
   private void arithmeticExpr(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
-    term(st.insertSubtree(new Token(TokenType.TERM, "")));
-    if (checkToken(TokenType.PLUS)) {
-      matchToken(TokenType.PLUS, st);
-      arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
-    } else if (checkToken(TokenType.MINUS)) {
-      matchToken(TokenType.MINUS, st);
-      arithmeticExpr(st.insertSubtree(new Token(TokenType.ARITHMETIC_EXPR, "")));
+    term(st.insertSubtree(new Token(TokenKind.TERM, "")));
+    if (checkToken(TokenKind.PLUS)) {
+      matchToken(TokenKind.PLUS, st);
+      arithmeticExpr(st.insertSubtree(new Token(TokenKind.ARITHMETIC_EXPR, "")));
+    } else if (checkToken(TokenKind.MINUS)) {
+      matchToken(TokenKind.MINUS, st);
+      arithmeticExpr(st.insertSubtree(new Token(TokenKind.ARITHMETIC_EXPR, "")));
     }
   }
 
   /**
    * ```
-   * <term> ::= <unary> (("*" | "/") <term>)*
+   * <term> ::= <unary> (("*" | "/") <term>)?
    * ```
    * 
    * @param st
@@ -239,13 +232,13 @@ public class Parser {
    * @throws UnknownIdentifierError
    */
   private void term(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
-    unary(st.insertSubtree(new Token(TokenType.UNARY, "")));
-    if (checkToken(TokenType.ASTERISK)) {
-      matchToken(TokenType.ASTERISK, st);
-      term(st.insertSubtree(new Token(TokenType.TERM, "")));
-    } else if (checkToken(TokenType.SLASH)) {
-      matchToken(TokenType.SLASH, st);
-      term(st.insertSubtree(new Token(TokenType.TERM, "")));
+    unary(st.insertSubtree(new Token(TokenKind.UNARY, "")));
+    if (checkToken(TokenKind.ASTERISK)) {
+      matchToken(TokenKind.ASTERISK, st);
+      term(st.insertSubtree(new Token(TokenKind.TERM, "")));
+    } else if (checkToken(TokenKind.SLASH)) {
+      matchToken(TokenKind.SLASH, st);
+      term(st.insertSubtree(new Token(TokenKind.TERM, "")));
     }
   }
 
@@ -260,14 +253,14 @@ public class Parser {
    * @throws UnknownIdentifierError
    */
   private void unary(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
-    if (checkToken(TokenType.NOT)) {
-      matchToken(TokenType.NOT, st);
-      unary(st.insertSubtree(new Token(TokenType.UNARY, "")));
-    } else if (checkToken(TokenType.PLUS)) {
-      matchToken(TokenType.PLUS, st);
-      unary(st.insertSubtree(new Token(TokenType.UNARY, "")));
+    if (checkToken(TokenKind.NOT)) {
+      matchToken(TokenKind.NOT, st);
+      unary(st.insertSubtree(new Token(TokenKind.UNARY, "")));
+    } else if (checkToken(TokenKind.MINUS)) {
+      matchToken(TokenKind.MINUS, st);
+      unary(st.insertSubtree(new Token(TokenKind.UNARY, "")));
     } else {
-      primary(st.insertSubtree(new Token(TokenType.PRIMARY, "")));
+      primary(st.insertSubtree(new Token(TokenKind.PRIMARY, "")));
     }
   }
 
@@ -282,21 +275,21 @@ public class Parser {
    * @throws UnknownIdentifierError
    */
   private void primary(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
-    TokenType[] expected = new TokenType[] { TokenType.V_INT, TokenType.V_BOOL, TokenType.OPEN_BRACKET,
-        TokenType.IDENT };
-    if (checkToken(TokenType.OPEN_BRACKET)) {
-      matchToken(TokenType.OPEN_BRACKET, st);
-      expression(st.insertSubtree(new Token(TokenType.EXPRESSION)));
-      matchToken(TokenType.CLOSE_BRACKET, st);
-    } else if (checkToken(TokenType.V_BOOL)) {
-      matchToken(TokenType.V_BOOL, st);
-    } else if (checkToken(TokenType.V_INT)) {
-      matchToken(TokenType.V_INT, st);
-    } else if (checkToken(TokenType.IDENT)) {
-      if (!declaredIdentifier.contains(currentToken().lexem)) {
+    TokenKind[] expected = new TokenKind[] { TokenKind.V_INT, TokenKind.V_BOOL, TokenKind.OPEN_BRACKET,
+        TokenKind.IDENT };
+    if (checkToken(TokenKind.OPEN_BRACKET)) {
+      matchToken(TokenKind.OPEN_BRACKET, st);
+      expression(st.insertSubtree(new Token(TokenKind.EXPRESSION)));
+      matchToken(TokenKind.CLOSE_BRACKET, st);
+    } else if (checkToken(TokenKind.V_BOOL)) {
+      matchToken(TokenKind.V_BOOL, st);
+    } else if (checkToken(TokenKind.V_INT)) {
+      matchToken(TokenKind.V_INT, st);
+    } else if (checkToken(TokenKind.IDENT)) {
+      if (!symbolTable.contains(currentToken().lexem)) {
         throw new UnknownIdentifierError(currentToken());
       }
-      matchToken(TokenType.IDENT, st);
+      matchToken(TokenKind.IDENT, st);
     } else {
       throw new SyntaxError(currentToken(), expected);
     }

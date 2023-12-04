@@ -32,7 +32,7 @@ class LexerTest {
       String i = "+-*/";
       Lexer l = new Lexer(i);
       Token token = l.getToken();
-      while (token.kind != TokenType.EOF) {
+      while (token.kind != TokenKind.EOF) {
         token = l.getToken();
       }
     });
@@ -44,7 +44,7 @@ class LexerTest {
       String i = "🫥";
       Lexer l = new Lexer(i);
       Token token = l.getToken();
-      while (token.kind != TokenType.EOF) {
+      while (token.kind != TokenKind.EOF) {
         token = l.getToken();
       }
     });
@@ -52,16 +52,16 @@ class LexerTest {
 
   @Test
   public void typeShouldMatch() throws LexerError {
-    Map<String, TokenType> tests = new HashMap<String, TokenType>();
-    tests.put("==", TokenType.EQEQ);
-    tests.put("=", TokenType.EQ);
-    tests.put("!=", TokenType.NOTEQ);
-    tests.put("!", TokenType.NOT);
-    tests.put("<=", TokenType.LTEQ);
-    tests.put("<", TokenType.LT);
-    tests.put(">=", TokenType.GTEQ);
-    tests.put(">", TokenType.GT);
-    for (Map.Entry<String, TokenType> test : tests.entrySet()) {
+    Map<String, TokenKind> tests = new HashMap<String, TokenKind>();
+    tests.put("==", TokenKind.EQEQ);
+    tests.put("=", TokenKind.EQ);
+    tests.put("!=", TokenKind.NOTEQ);
+    tests.put("!", TokenKind.NOT);
+    tests.put("<=", TokenKind.LTEQ);
+    tests.put("<", TokenKind.LT);
+    tests.put(">=", TokenKind.GTEQ);
+    tests.put(">", TokenKind.GT);
+    for (Map.Entry<String, TokenKind> test : tests.entrySet()) {
       Lexer l = new Lexer(test.getKey());
       assertEquals(l.getToken().kind, test.getValue());
     }
@@ -69,7 +69,7 @@ class LexerTest {
 
   @Test
   public void shouldBeV_INT() throws LexerError {
-    Token expected = new Token(TokenType.V_INT, "123456");
+    Token expected = new Token(TokenKind.V_INT, "123456");
     Lexer l = new Lexer(expected.lexem + "+");
     Token is = l.getToken();
     assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
@@ -128,7 +128,7 @@ class LexerTest {
     for (String input : inputs) {
       Lexer l = new Lexer(input);
       Token is = l.getToken();
-      Token expected = new Token(TokenType.IDENT, input.substring(0, input.length() - 1));
+      Token expected = new Token(TokenKind.IDENT, input.substring(0, input.length() - 1));
       assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
     }
   }
@@ -137,16 +137,16 @@ class LexerTest {
   public void testVaraibleAssignment() throws LexerError {
     String input = "int testInt = 123;";
     Token[] expected = new Token[] {
-        new Token(TokenType.INT, "int"),
-        new Token(TokenType.IDENT, "testInt"),
-        new Token(TokenType.EQ, "="),
-        new Token(TokenType.V_INT, "123"),
-        new Token(TokenType.SEMICOLON, ";"),
+        new Token(TokenKind.INT, "int"),
+        new Token(TokenKind.IDENT, "testInt"),
+        new Token(TokenKind.EQ, "="),
+        new Token(TokenKind.V_INT, "123"),
+        new Token(TokenKind.SEMICOLON, ";"),
     };
     Lexer l = new Lexer(input);
     Token t = l.getToken();
     Vector<Token> tokens = new Vector<Token>();
-    while (t.kind != TokenType.EOF) {
+    while (t.kind != TokenKind.EOF) {
       tokens.add(t);
       t = l.getToken();
     }
@@ -160,34 +160,34 @@ class LexerTest {
   public void testIfBlock() throws LexerError {
     String input = "if( a == bc){\nint testInt= 1 2 3 ;\nint a=12 3 ;\nbool testBool =true;\n}";
     Token[] expected = new Token[] {
-        new Token(TokenType.IF, "if"),
-        new Token(TokenType.OPEN_BRACKET, "("),
-        new Token(TokenType.IDENT, "a"),
-        new Token(TokenType.EQEQ, "=="),
-        new Token(TokenType.IDENT, "bc"),
-        new Token(TokenType.CLOSE_BRACKET, ")"),
-        new Token(TokenType.OPEN_PARANTHESES, "{"),
-        new Token(TokenType.INT, "int"),
-        new Token(TokenType.IDENT, "testInt"),
-        new Token(TokenType.EQ, "="),
-        new Token(TokenType.V_INT, "123"),
-        new Token(TokenType.SEMICOLON, ";"),
-        new Token(TokenType.INT, "int"),
-        new Token(TokenType.IDENT, "a"),
-        new Token(TokenType.EQ, "="),
-        new Token(TokenType.V_INT, "123"),
-        new Token(TokenType.SEMICOLON, ";"),
-        new Token(TokenType.BOOL, "bool"),
-        new Token(TokenType.IDENT, "testBool"),
-        new Token(TokenType.EQ, "="),
-        new Token(TokenType.V_BOOL, "true"),
-        new Token(TokenType.SEMICOLON, ";"),
-        new Token(TokenType.CLOSE_PARANTHESES, "}"),
+        new Token(TokenKind.IF, "if"),
+        new Token(TokenKind.OPEN_BRACKET, "("),
+        new Token(TokenKind.IDENT, "a"),
+        new Token(TokenKind.EQEQ, "=="),
+        new Token(TokenKind.IDENT, "bc"),
+        new Token(TokenKind.CLOSE_BRACKET, ")"),
+        new Token(TokenKind.OPEN_PARANTHESES, "{"),
+        new Token(TokenKind.INT, "int"),
+        new Token(TokenKind.IDENT, "testInt"),
+        new Token(TokenKind.EQ, "="),
+        new Token(TokenKind.V_INT, "123"),
+        new Token(TokenKind.SEMICOLON, ";"),
+        new Token(TokenKind.INT, "int"),
+        new Token(TokenKind.IDENT, "a"),
+        new Token(TokenKind.EQ, "="),
+        new Token(TokenKind.V_INT, "123"),
+        new Token(TokenKind.SEMICOLON, ";"),
+        new Token(TokenKind.BOOL, "bool"),
+        new Token(TokenKind.IDENT, "testBool"),
+        new Token(TokenKind.EQ, "="),
+        new Token(TokenKind.V_BOOL, "true"),
+        new Token(TokenKind.SEMICOLON, ";"),
+        new Token(TokenKind.CLOSE_PARANTHESES, "}"),
     };
     Lexer l = new Lexer(input);
     Token t = l.getToken();
     Vector<Token> tokens = new Vector<Token>();
-    while (t.kind != TokenType.EOF) {
+    while (t.kind != TokenKind.EOF) {
       tokens.add(t);
       t = l.getToken();
     }
@@ -212,7 +212,7 @@ class LexerTest {
     LexerError thrown = assertThrows(LexerError.class, () -> {
       Lexer l = new Lexer(input);
       Token token = l.getToken();
-      while (token.kind != TokenType.EOF) {
+      while (token.kind != TokenKind.EOF) {
         token = l.getToken();
       }
     });

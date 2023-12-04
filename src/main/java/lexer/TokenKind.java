@@ -3,7 +3,7 @@ package lexer;
 /**
  * Tokens that can be used
  */
-public enum TokenType {
+public enum TokenKind {
   /**
    * End of input
    */
@@ -103,7 +103,7 @@ public enum TokenType {
    */
   NOT,
   /**
-   *  Bitwise or
+   * Bitwise or
    */
   OR,
   /**

@@ -2,28 +2,28 @@ package lexer;
 
 public class Token {
 
-  public TokenType kind;
+  public TokenKind kind;
   public String lexem;
   public int line;
   public int linePos;
 
-  public Token(TokenType token) {
+  public Token(TokenKind token) {
     this.kind = token;
     this.lexem = "";
   }
-  public Token(TokenType token, String lexem) {
+  public Token(TokenKind token, String lexem) {
     this.kind = token;
     this.lexem = lexem;
   }
 
-  Token(TokenType token, String lexem, int line, int linePos) {
+  Token(TokenKind token, String lexem, int line, int linePos) {
     this.kind = token;
     this.lexem = lexem;
     this.line = line;
     this.linePos = linePos;
   }
 
-  public Token(TokenType token, char lexem, int line, int linePos) {
+  public Token(TokenKind token, char lexem, int line, int linePos) {
     this.kind = token;
     this.lexem = String.valueOf(lexem);
     this.line = line;

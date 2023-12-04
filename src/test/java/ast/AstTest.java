@@ -1,4 +1,4 @@
-package parser;
+package ast;
 
 import java.io.IOException;
 
@@ -8,8 +8,16 @@ import lexer.Lexer;
 import lexer.LexerError;
 import lexer.Token;
 import lexer.TokenKind;
+import parser.IndentifierAlreadyDeclaredError;
+import parser.Parser;
+import parser.SyntaxError;
+import parser.SyntaxTree;
+import parser.UnknownIdentifierError;
 
-public class ParserTest {
+/**
+ * AstTest
+ */
+public class AstTest {
 
   @Test
   public void syntaxTree()
@@ -18,8 +26,10 @@ public class ParserTest {
         int a = 3 + 5;
         int b = a - 6;
         int c = 5 * ( 5 + 6 * 3);
-        bool g = 5 <= -5;
+        bool g = 5 == 8 - 5*3;
         bool z = 4 >= 5*6;
+        """;
+        /*
         if(g){
           int d = 6;
           int e = d *( 5 -3 /7);
@@ -31,13 +41,17 @@ public class ParserTest {
           }
         }
         int d = 5;
-        """;
+        """;*/
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());
     SyntaxTree st = new SyntaxTree(new Token(TokenKind.PROGRAM, ""));
     p.program(st);
-
-    file.Writer.write("src/test/resources/tree.txt", st.toString());
-
+    AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
+    
+    file.Writer.write("src/test/resources/treeForAst.txt", st.toString());
+    AbstractSyntaxTree ast = astf.fromSyntaxTree(st);
+    System.out.println(ast);
+    System.out.println(astf.sTable);
   }
+
 }
