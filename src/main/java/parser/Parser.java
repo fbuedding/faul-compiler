@@ -28,7 +28,7 @@ public class Parser {
     return tokens[currentToken].kind == tt;
   }
 
-  private void matchToken(TokenKind tt, SyntaxTree st) throws SyntaxError {
+  private void matchToken(TokenKind tt, ParseTree st) throws SyntaxError {
     if (!checkToken(tt)) {
       throw new SyntaxError(currentToken(), tt);
     }
@@ -53,7 +53,7 @@ public class Parser {
    * @throws UnknownIdentifierError
    * @throws IndentifierAlreadyDeclaredError*
    */
-  public void program(SyntaxTree st) throws SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError {
+  public void program(ParseTree st) throws SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError {
 
     while (!checkToken(TokenKind.EOF)) {
       this.statement(st.insertSubtree(new Token(TokenKind.STATEMENT, "")));
@@ -73,7 +73,7 @@ public class Parser {
    * @throws UnknownIdentifierError
    * @throws IndentifierAlreadyDeclaredError
    */
-  private void statement(SyntaxTree st) throws SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError {
+  private void statement(ParseTree st) throws SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError {
     TokenKind[] expected = new TokenKind[] { TokenKind.INT, TokenKind.BOOL, TokenKind.IF, TokenKind.IDENT };
     switch (currentToken().kind) {
       case INT:
@@ -133,14 +133,14 @@ public class Parser {
 
   /**
    * ```
-   * <expression> ::= <equality>
+   * <expression> ::= <equality> ( ("&&" | "||" | "&" | "|") <expression>)?
    * ```
    *
    * @param st
    * @throws SyntaxError
    * @throws UnknownIdentifierError
    */
-  public void expression(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
+  public void expression(ParseTree st) throws SyntaxError, UnknownIdentifierError {
     equality(st.insertSubtree(new Token(TokenKind.EQUALITY, "")));
     if (checkToken(TokenKind.LAND)) {
      matchToken(TokenKind.LAND, st); 
@@ -166,7 +166,7 @@ public class Parser {
    * @throws SyntaxError
    * @throws UnknownIdentifierError
    */
-  public void equality(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
+  public void equality(ParseTree st) throws SyntaxError, UnknownIdentifierError {
     comparison(st.insertSubtree(new Token(TokenKind.COMPARISON, "")));
     if (checkToken(TokenKind.NOTEQ)) {
       matchToken(TokenKind.NOTEQ, st);
@@ -179,15 +179,14 @@ public class Parser {
 
   /**
    * ```
-   * <comparision> ::= <arithmeticExpr> ( (">" | ">=" | "<" | "<=")
-   * <comparision>)*
+   * <comparision> ::= <arithmeticExpr> ( (">" | ">=" | "<" | "<=") <comparision>)?
    * ```
    * 
    * @param st
    * @throws SyntaxError
    * @throws UnknownIdentifierError
    */
-  private void comparison(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
+  private void comparison(ParseTree st) throws SyntaxError, UnknownIdentifierError {
     arithmeticExpr(st.insertSubtree(new Token(TokenKind.ARITHMETIC_EXPR, "")));
     if (checkToken(TokenKind.GT)) {
       matchToken(TokenKind.GT, st);
@@ -205,13 +204,13 @@ public class Parser {
   }
 
   /**
-   * <arithmeticExpr> ::= <term> (( "+" | "-") <arithmeticExpr>)*
+   * <arithmeticExpr> ::= <term> (( "+" | "-") <arithmeticExpr>)?
    * 
    * @param st
    * @throws SyntaxError
    * @throws UnknownIdentifierError
    */
-  private void arithmeticExpr(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
+  private void arithmeticExpr(ParseTree st) throws SyntaxError, UnknownIdentifierError {
     term(st.insertSubtree(new Token(TokenKind.TERM, "")));
     if (checkToken(TokenKind.PLUS)) {
       matchToken(TokenKind.PLUS, st);
@@ -231,7 +230,7 @@ public class Parser {
    * @throws SyntaxError
    * @throws UnknownIdentifierError
    */
-  private void term(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
+  private void term(ParseTree st) throws SyntaxError, UnknownIdentifierError {
     unary(st.insertSubtree(new Token(TokenKind.UNARY, "")));
     if (checkToken(TokenKind.ASTERISK)) {
       matchToken(TokenKind.ASTERISK, st);
@@ -252,7 +251,7 @@ public class Parser {
    * @throws SyntaxError
    * @throws UnknownIdentifierError
    */
-  private void unary(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
+  private void unary(ParseTree st) throws SyntaxError, UnknownIdentifierError {
     if (checkToken(TokenKind.NOT)) {
       matchToken(TokenKind.NOT, st);
       unary(st.insertSubtree(new Token(TokenKind.UNARY, "")));
@@ -274,7 +273,7 @@ public class Parser {
    * @throws SyntaxError
    * @throws UnknownIdentifierError
    */
-  private void primary(SyntaxTree st) throws SyntaxError, UnknownIdentifierError {
+  private void primary(ParseTree st) throws SyntaxError, UnknownIdentifierError {
     TokenKind[] expected = new TokenKind[] { TokenKind.V_INT, TokenKind.V_BOOL, TokenKind.OPEN_BRACKET,
         TokenKind.IDENT };
     if (checkToken(TokenKind.OPEN_BRACKET)) {

@@ -15,8 +15,10 @@ PROGRAM
 │   │               └── ARITHMETIC_EXPR
 │   │                   └── TERM
 │   │                       └── UNARY
-│   │                           └── PRIMARY
-│   │                               └── V_INT: 5
+│   │                           ├── MINUS: -
+│   │                           └── UNARY
+│   │                               └── PRIMARY
+│   │                                   └── V_INT: 5
 │   └── SEMICOLON: ;
 ├── STATEMENT
 │   ├── INT: int

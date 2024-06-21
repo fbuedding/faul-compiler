@@ -7,32 +7,32 @@ import java.util.LinkedList;
 import lexer.Token;
 import lexer.TokenKind;
 
-public class SyntaxTree {
+public class ParseTree {
   public Token token;
-  LinkedList<SyntaxTree> childNodes;
+  LinkedList<ParseTree> childNodes;
 
-  public SyntaxTree(Token t) {
-    childNodes = new LinkedList<SyntaxTree>();
+  public ParseTree(Token t) {
+    childNodes = new LinkedList<ParseTree>();
     this.token = t;
   }
 
-  void printSyntaxTree(int tabs) {
+  void printParseTree(int tabs) {
     for (int i = 0; i < tabs; i++) {
       System.out.print("  ");
     }
     System.out.println(token);
     for (int i = 0; i < this.childNodes.size(); i++) {
-      this.childNodes.get(i).printSyntaxTree(tabs + 1);
+      this.childNodes.get(i).printParseTree(tabs + 1);
     }
   }
 
-  void buildStringSyntaxTree(int tabs, StringBuilder sb, String indentation) {
+  void buildStringParseTree(int tabs, StringBuilder sb, String indentation) {
     for (int i = 0; i < tabs; i++) {
       sb.append(indentation);
     }
     sb.append(token + "\n");
     for (int i = 0; i < this.childNodes.size(); i++) {
-      this.childNodes.get(i).buildStringSyntaxTree(tabs + 1, sb, indentation);
+      this.childNodes.get(i).buildStringParseTree(tabs + 1, sb, indentation);
     }
   }
 
@@ -50,8 +50,8 @@ public class SyntaxTree {
 
     }
     buffer.append('\n');
-    for (Iterator<SyntaxTree> it = childNodes.iterator(); it.hasNext();) {
-      SyntaxTree next = it.next();
+    for (Iterator<ParseTree> it = childNodes.iterator(); it.hasNext();) {
+      ParseTree next = it.next();
       if (it.hasNext()) {
         next.print(buffer, childrenPrefix + "├── ", childrenPrefix + "│   ");
       } else {
@@ -64,9 +64,9 @@ public class SyntaxTree {
     return token.kind;
   }
 
-  SyntaxTree insertSubtree(Token t) {
-    SyntaxTree node;
-    node = new SyntaxTree(t);
+  ParseTree insertSubtree(Token t) {
+    ParseTree node;
+    node = new ParseTree(t);
     this.childNodes.addLast(node);
     return node;
   }
@@ -75,14 +75,14 @@ public class SyntaxTree {
     return this.childNodes.size() > 0;
   }
 
-  public SyntaxTree getChild(int i) {
+  public ParseTree getChild(int i) {
     if (i > this.childNodes.size())
       return null;
     else
       return this.childNodes.get(i);
   }
 
-  LinkedList<SyntaxTree> getChildNodes() {
+  LinkedList<ParseTree> getChildNodes() {
     return this.childNodes;
   }
 

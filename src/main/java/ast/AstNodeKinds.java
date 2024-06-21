@@ -8,6 +8,8 @@ public enum AstNodeKinds {
   IF,
   CONDITION,
   BRANCH,
+  INTEGER,
+  BOOLEAN,
   /**
    * Indetifier, varaible name
    */

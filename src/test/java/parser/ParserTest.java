@@ -34,7 +34,7 @@ public class ParserTest {
         """;
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());
-    SyntaxTree st = new SyntaxTree(new Token(TokenKind.PROGRAM, ""));
+    ParseTree st = new ParseTree(new Token(TokenKind.PROGRAM, ""));
     p.program(st);
 
     file.Writer.write("src/test/resources/tree.txt", st.toString());

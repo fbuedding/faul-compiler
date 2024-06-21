@@ -5,7 +5,7 @@ import java.util.Vector;
 import java.util.Map.Entry;
 
 import lexer.Token;
-import parser.SyntaxTree;
+import parser.ParseTree;
 
 public class AbstractSyntaxTreeFactory {
   public AbstractSyntaxTree ast;
@@ -20,18 +20,18 @@ public class AbstractSyntaxTreeFactory {
     sTable = new SymbolTable();
   }
 
-  public AbstractSyntaxTree fromSyntaxTree(SyntaxTree st) {
+  public AbstractSyntaxTree fromParseTree(ParseTree st) {
     processProgram(st, ast, sTable);
     return ast;
   }
 
-  private void processProgram(SyntaxTree st, AbstractSyntaxTree ast, SymbolTable sTable) {
+  private void processProgram(ParseTree st, AbstractSyntaxTree ast, SymbolTable sTable) {
     for (int i = 0; i < st.getChildNumber(); i++) {
       statement(st.getChild(i), ast, sTable);
     }
   }
 
-  private void statement(SyntaxTree st, AbstractSyntaxTree ast, SymbolTable sTable) {
+  private void statement(ParseTree st, AbstractSyntaxTree ast, SymbolTable sTable) {
     switch (st.getChild(STATEMENT_TYPE).getKind()) {
       case IF:
 
@@ -73,71 +73,106 @@ public class AbstractSyntaxTreeFactory {
     }
   }
 
-  void expression(AbstractSyntaxTree ast, SyntaxTree st, SymbolTable sTable) {
+  void expression(AbstractSyntaxTree ast, ParseTree st, SymbolTable sTable) {
     if (!st.hasChilds()) {
-      
-    }
-    if(st.getChildNumber()>1){
-      switch (st.getChild(OPERATOR).getKind()) {
-        case EQEQ:
-          
+      switch (st.getKind()) {
+        case V_INT:
+
           break;
 
-        case NOTEQ:
-          
-          break;
+        case V_BOOL:
 
-        case LTEQ:
-          
-          break;
-
-        case LT:
-          
-          break;
-
-        case GTEQ:
-          
-          break;
-
-        case GT:
-          
-          break;
-        
-        case LAND:
-          
-          break;
-
-        case LOR:
-          
-          break;
-
-        case OR:
-          
-          break;
-
-        case AND:
-          
-          break;
-
-        case PLUS:
-          
-          break;
-
-        case MINUS:
-          
-          break;
-
-        case ASTERISK:
-          
-          break;
-
-        case SLASH:
-          
           break;
 
         default:
           break;
       }
+    } else if (st.getChildNumber() == 1) {
+      expression(ast, st.getChild(0), sTable);
+    } else if (st.getChildNumber() == 2) {
+      AbstractSyntaxTree tmp;
+      switch (st.getKind()) {
+        case MINUS:
+          tmp = ast.insertSubTree(AstNodeKinds.MINUS, AstNodeTypes.NONE, st.token.line, st.token.linePos);
+          tmp.insertSubTree(AstNodeKinds.INTEGER, AstNodeTypes.INTEGER, -1, -1);
+
+          break;
+
+        case NOT:
+
+          break;
+
+        default:
+          break;
+      }
+
+    } else if (st.getChildNumber() == 3) {
+      switch (st.getChild(OPERATOR).getKind()) {
+        case EQEQ:
+
+          break;
+
+        case NOTEQ:
+
+          break;
+
+        case LTEQ:
+
+          break;
+
+        case LT:
+
+          break;
+
+        case GTEQ:
+
+          break;
+
+        case GT:
+
+          break;
+
+        case LAND:
+
+          break;
+
+        case LOR:
+
+          break;
+
+        case OR:
+
+          break;
+
+        case AND:
+
+          break;
+
+        case PLUS:
+
+          break;
+
+        case MINUS:
+
+          break;
+
+        case ASTERISK:
+
+          break;
+
+        case SLASH:
+
+          break;
+
+        case EXPRESSION:
+
+          break;
+
+        default:
+          break;
+      }
+    } else {
+      // TODO
     }
   }
 
