@@ -1,0 +1,112 @@
+PROGRAM
+├── DECLARATION
+│   ├── IDENT: a
+│   └── ADRESS: 0
+├── ASSIGNMENT
+│   ├── IDENT: a
+│   └── PLUS
+│       ├── INTEGER: 3
+│       └── INTEGER: 5
+├── DECLARATION
+│   ├── IDENT: b
+│   └── ADRESS: 1
+├── ASSIGNMENT
+│   ├── IDENT: b
+│   └── LT
+│       ├── IDENT: a
+│       └── INTEGER: 6
+├── DECLARATION
+│   ├── IDENT: c
+│   └── ADRESS: 2
+├── ASSIGNMENT
+│   ├── IDENT: c
+│   └── ASTERISK
+│       ├── INTEGER: 5
+│       └── PLUS
+│           ├── INTEGER: 5
+│           └── ASTERISK
+│               ├── INTEGER: 6
+│               └── INTEGER: 3
+├── DECLARATION
+│   ├── IDENT: e
+│   └── ADRESS: 3
+├── ASSIGNMENT
+│   ├── IDENT: e
+│   └── LAND
+│       ├── BOOLEAN: true
+│       └── BOOLEAN: false
+├── DECLARATION
+│   ├── IDENT: g
+│   └── ADRESS: 4
+├── ASSIGNMENT
+│   ├── IDENT: g
+│   └── EQEQ
+│       ├── INTEGER: 5
+│       └── MINUS
+│           ├── INTEGER: 8
+│           └── ASTERISK
+│               ├── INTEGER: 5
+│               └── INTEGER: 3
+├── DECLARATION
+│   ├── IDENT: z
+│   └── ADRESS: 5
+├── ASSIGNMENT
+│   ├── IDENT: z
+│   └── GTEQ
+│       ├── INTEGER: 4
+│       └── ASTERISK
+│           ├── INTEGER: 5
+│           └── INTEGER: 6
+├── IF
+│   ├── CONDITION
+│   │   └── LAND
+│   │       ├── IDENT: g
+│   │       └── BOOLEAN: true
+│   └── BRANCH
+│       ├── DECLARATION
+│       │   ├── IDENT: d
+│       │   └── ADRESS: 6
+│       ├── ASSIGNMENT
+│       │   ├── IDENT: d
+│       │   └── INTEGER: 6
+│       ├── IF
+│       │   ├── CONDITION
+│       │   │   └── BOOLEAN: true
+│       │   └── BRANCH
+│       │       ├── ASSIGNMENT
+│       │       │   ├── IDENT: z
+│       │       │   └── GTEQ
+│       │       │       ├── INTEGER: 4
+│       │       │       └── ASTERISK
+│       │       │           ├── INTEGER: 5
+│       │       │           └── INTEGER: 6
+│       │       ├── DECLARATION
+│       │       │   ├── IDENT: asd
+│       │       │   └── ADRESS: 7
+│       │       └── ASSIGNMENT
+│       │           ├── IDENT: asd
+│       │           └── INTEGER: 5
+│       └── IF
+│           ├── CONDITION
+│           │   └── LOR
+│           │       ├── LAND
+│           │       │   ├── BOOLEAN: false
+│           │       │   └── BOOLEAN: false
+│           │       └── OR
+│           │           ├── LOR
+│           │           │   ├── BOOLEAN: true
+│           │           │   └── BOOLEAN: false
+│           │           └── INTEGER: 6
+│           └── BRANCH
+│               ├── DECLARATION
+│               │   ├── IDENT: asd
+│               │   └── ADRESS: 7
+│               └── ASSIGNMENT
+│                   ├── IDENT: asd
+│                   └── INTEGER: 5
+├── DECLARATION
+│   ├── IDENT: d
+│   └── ADRESS: 6
+└── ASSIGNMENT
+    ├── IDENT: d
+    └── INTEGER: 5

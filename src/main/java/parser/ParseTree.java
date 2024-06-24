@@ -3,7 +3,6 @@ package parser;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-
 import lexer.Token;
 import lexer.TokenKind;
 
@@ -86,7 +85,19 @@ public class ParseTree {
     return this.childNodes;
   }
 
-  public int getChildNumber() {
+  /**
+   * This removes the first child element and returns itself. Convenient for
+   * turning a declaration into an assignment.
+   * 
+   * @return
+   */
+  public ParseTree removeFirst() {
+    // e
+    this.childNodes.removeFirst();
+    return this;
+  }
+
+  public int getChildCount() {
     return childNodes.size();
   }
 }

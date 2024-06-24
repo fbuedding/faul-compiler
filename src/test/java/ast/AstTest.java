@@ -23,20 +23,20 @@ public class AstTest {
   public void syntaxTree()
       throws LexerError, SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError, IOException {
     String i = """
-        int a = 3 + -5;
-        int b = a - 6;
+        int a = 3 + 5;
+        bool b = a < 6;
         int c = 5 * ( 5 + 6 * 3);
+        bool e = true && false;
         bool g = 5 == 8 - 5*3;
         bool z = 4 >= 5*6;
-        """;
-        /*
-        if(g){
+        if(g && true){
           int d = 6;
-          int e = d *( 5 -3 /7);
           if(true) {
             z = 4 >= 5*6;
+            int asd = 5;
           }
           if((false && false) || (true || false) | 6) {
+            int asd = 5;
 
           }
         }
@@ -50,7 +50,8 @@ public class AstTest {
     
     file.Writer.write("src/test/resources/treeForAst.txt", st.toString());
     AbstractSyntaxTree ast = astf.fromParseTree(st);
-    System.out.println(ast);
+    file.Writer.write("src/test/resources/Ast.txt", ast.toString());
+
     System.out.println(astf.sTable);
   }
 

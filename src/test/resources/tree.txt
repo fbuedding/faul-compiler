@@ -244,47 +244,51 @@ PROGRAM
 │   │   │   │                       │   │                   └── PRIMARY
 │   │   │   │                       │   │                       └── V_BOOL: false
 │   │   │   │                       │   ├── LAND: &&
-│   │   │   │                       │   └── EQUALITY
-│   │   │   │                       │       └── COMPARISON
-│   │   │   │                       │           └── ARITHMETIC_EXPR
-│   │   │   │                       │               └── TERM
-│   │   │   │                       │                   └── UNARY
-│   │   │   │                       │                       └── PRIMARY
-│   │   │   │                       │                           └── V_BOOL: false
+│   │   │   │                       │   └── EXPRESSION
+│   │   │   │                       │       └── EQUALITY
+│   │   │   │                       │           └── COMPARISON
+│   │   │   │                       │               └── ARITHMETIC_EXPR
+│   │   │   │                       │                   └── TERM
+│   │   │   │                       │                       └── UNARY
+│   │   │   │                       │                           └── PRIMARY
+│   │   │   │                       │                               └── V_BOOL: false
 │   │   │   │                       └── CLOSE_BRACKET: )
 │   │   │   ├── LOR: ||
-│   │   │   ├── EQUALITY
-│   │   │   │   └── COMPARISON
-│   │   │   │       └── ARITHMETIC_EXPR
-│   │   │   │           └── TERM
-│   │   │   │               └── UNARY
-│   │   │   │                   └── PRIMARY
-│   │   │   │                       ├── OPEN_BRACKET: (
-│   │   │   │                       ├── EXPRESSION
-│   │   │   │                       │   ├── EQUALITY
-│   │   │   │                       │   │   └── COMPARISON
-│   │   │   │                       │   │       └── ARITHMETIC_EXPR
-│   │   │   │                       │   │           └── TERM
-│   │   │   │                       │   │               └── UNARY
-│   │   │   │                       │   │                   └── PRIMARY
-│   │   │   │                       │   │                       └── V_BOOL: true
-│   │   │   │                       │   ├── LOR: ||
-│   │   │   │                       │   └── EQUALITY
-│   │   │   │                       │       └── COMPARISON
-│   │   │   │                       │           └── ARITHMETIC_EXPR
-│   │   │   │                       │               └── TERM
-│   │   │   │                       │                   └── UNARY
-│   │   │   │                       │                       └── PRIMARY
-│   │   │   │                       │                           └── V_BOOL: false
-│   │   │   │                       └── CLOSE_BRACKET: )
-│   │   │   ├── OR: |
-│   │   │   └── EQUALITY
-│   │   │       └── COMPARISON
-│   │   │           └── ARITHMETIC_EXPR
-│   │   │               └── TERM
-│   │   │                   └── UNARY
-│   │   │                       └── PRIMARY
-│   │   │                           └── V_INT: 6
+│   │   │   └── EXPRESSION
+│   │   │       ├── EQUALITY
+│   │   │       │   └── COMPARISON
+│   │   │       │       └── ARITHMETIC_EXPR
+│   │   │       │           └── TERM
+│   │   │       │               └── UNARY
+│   │   │       │                   └── PRIMARY
+│   │   │       │                       ├── OPEN_BRACKET: (
+│   │   │       │                       ├── EXPRESSION
+│   │   │       │                       │   ├── EQUALITY
+│   │   │       │                       │   │   └── COMPARISON
+│   │   │       │                       │   │       └── ARITHMETIC_EXPR
+│   │   │       │                       │   │           └── TERM
+│   │   │       │                       │   │               └── UNARY
+│   │   │       │                       │   │                   └── PRIMARY
+│   │   │       │                       │   │                       └── V_BOOL: true
+│   │   │       │                       │   ├── LOR: ||
+│   │   │       │                       │   └── EXPRESSION
+│   │   │       │                       │       └── EQUALITY
+│   │   │       │                       │           └── COMPARISON
+│   │   │       │                       │               └── ARITHMETIC_EXPR
+│   │   │       │                       │                   └── TERM
+│   │   │       │                       │                       └── UNARY
+│   │   │       │                       │                           └── PRIMARY
+│   │   │       │                       │                               └── V_BOOL: false
+│   │   │       │                       └── CLOSE_BRACKET: )
+│   │   │       ├── OR: |
+│   │   │       └── EXPRESSION
+│   │   │           └── EQUALITY
+│   │   │               └── COMPARISON
+│   │   │                   └── ARITHMETIC_EXPR
+│   │   │                       └── TERM
+│   │   │                           └── UNARY
+│   │   │                               └── PRIMARY
+│   │   │                                   └── V_INT: 6
 │   │   ├── CLOSE_BRACKET: )
 │   │   ├── OPEN_PARANTHESES: {
 │   │   └── CLOSE_PARANTHESES: }

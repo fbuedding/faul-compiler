@@ -15,24 +15,23 @@ PROGRAM
 │   │               └── ARITHMETIC_EXPR
 │   │                   └── TERM
 │   │                       └── UNARY
-│   │                           ├── MINUS: -
-│   │                           └── UNARY
-│   │                               └── PRIMARY
-│   │                                   └── V_INT: 5
+│   │                           └── PRIMARY
+│   │                               └── V_INT: 5
 │   └── SEMICOLON: ;
 ├── STATEMENT
-│   ├── INT: int
+│   ├── BOOL: bool
 │   ├── IDENT: b
 │   ├── EQ: =
 │   ├── EXPRESSION
 │   │   └── EQUALITY
 │   │       └── COMPARISON
-│   │           └── ARITHMETIC_EXPR
-│   │               ├── TERM
-│   │               │   └── UNARY
-│   │               │       └── PRIMARY
-│   │               │           └── IDENT: a
-│   │               ├── MINUS: -
+│   │           ├── ARITHMETIC_EXPR
+│   │           │   └── TERM
+│   │           │       └── UNARY
+│   │           │           └── PRIMARY
+│   │           │               └── IDENT: a
+│   │           ├── LT: <
+│   │           └── COMPARISON
 │   │               └── ARITHMETIC_EXPR
 │   │                   └── TERM
 │   │                       └── UNARY
@@ -79,6 +78,28 @@ PROGRAM
 │   └── SEMICOLON: ;
 ├── STATEMENT
 │   ├── BOOL: bool
+│   ├── IDENT: e
+│   ├── EQ: =
+│   ├── EXPRESSION
+│   │   ├── EQUALITY
+│   │   │   └── COMPARISON
+│   │   │       └── ARITHMETIC_EXPR
+│   │   │           └── TERM
+│   │   │               └── UNARY
+│   │   │                   └── PRIMARY
+│   │   │                       └── V_BOOL: true
+│   │   ├── LAND: &&
+│   │   └── EXPRESSION
+│   │       └── EQUALITY
+│   │           └── COMPARISON
+│   │               └── ARITHMETIC_EXPR
+│   │                   └── TERM
+│   │                       └── UNARY
+│   │                           └── PRIMARY
+│   │                               └── V_BOOL: false
+│   └── SEMICOLON: ;
+├── STATEMENT
+│   ├── BOOL: bool
 │   ├── IDENT: g
 │   ├── EQ: =
 │   ├── EXPRESSION
@@ -109,28 +130,209 @@ PROGRAM
 │   │                                   └── PRIMARY
 │   │                                       └── V_INT: 3
 │   └── SEMICOLON: ;
+├── STATEMENT
+│   ├── BOOL: bool
+│   ├── IDENT: z
+│   ├── EQ: =
+│   ├── EXPRESSION
+│   │   └── EQUALITY
+│   │       └── COMPARISON
+│   │           ├── ARITHMETIC_EXPR
+│   │           │   └── TERM
+│   │           │       └── UNARY
+│   │           │           └── PRIMARY
+│   │           │               └── V_INT: 4
+│   │           ├── GTEQ: >=
+│   │           └── COMPARISON
+│   │               └── ARITHMETIC_EXPR
+│   │                   └── TERM
+│   │                       ├── UNARY
+│   │                       │   └── PRIMARY
+│   │                       │       └── V_INT: 5
+│   │                       ├── ASTERISK: *
+│   │                       └── TERM
+│   │                           └── UNARY
+│   │                               └── PRIMARY
+│   │                                   └── V_INT: 6
+│   └── SEMICOLON: ;
+├── STATEMENT
+│   ├── IF: if
+│   ├── OPEN_BRACKET: (
+│   ├── EXPRESSION
+│   │   ├── EQUALITY
+│   │   │   └── COMPARISON
+│   │   │       └── ARITHMETIC_EXPR
+│   │   │           └── TERM
+│   │   │               └── UNARY
+│   │   │                   └── PRIMARY
+│   │   │                       └── IDENT: g
+│   │   ├── LAND: &&
+│   │   └── EXPRESSION
+│   │       └── EQUALITY
+│   │           └── COMPARISON
+│   │               └── ARITHMETIC_EXPR
+│   │                   └── TERM
+│   │                       └── UNARY
+│   │                           └── PRIMARY
+│   │                               └── V_BOOL: true
+│   ├── CLOSE_BRACKET: )
+│   ├── OPEN_PARANTHESES: {
+│   ├── STATEMENT
+│   │   ├── INT: int
+│   │   ├── IDENT: d
+│   │   ├── EQ: =
+│   │   ├── EXPRESSION
+│   │   │   └── EQUALITY
+│   │   │       └── COMPARISON
+│   │   │           └── ARITHMETIC_EXPR
+│   │   │               └── TERM
+│   │   │                   └── UNARY
+│   │   │                       └── PRIMARY
+│   │   │                           └── V_INT: 6
+│   │   └── SEMICOLON: ;
+│   ├── STATEMENT
+│   │   ├── IF: if
+│   │   ├── OPEN_BRACKET: (
+│   │   ├── EXPRESSION
+│   │   │   └── EQUALITY
+│   │   │       └── COMPARISON
+│   │   │           └── ARITHMETIC_EXPR
+│   │   │               └── TERM
+│   │   │                   └── UNARY
+│   │   │                       └── PRIMARY
+│   │   │                           └── V_BOOL: true
+│   │   ├── CLOSE_BRACKET: )
+│   │   ├── OPEN_PARANTHESES: {
+│   │   ├── STATEMENT
+│   │   │   ├── IDENT: z
+│   │   │   ├── EQ: =
+│   │   │   ├── EXPRESSION
+│   │   │   │   └── EQUALITY
+│   │   │   │       └── COMPARISON
+│   │   │   │           ├── ARITHMETIC_EXPR
+│   │   │   │           │   └── TERM
+│   │   │   │           │       └── UNARY
+│   │   │   │           │           └── PRIMARY
+│   │   │   │           │               └── V_INT: 4
+│   │   │   │           ├── GTEQ: >=
+│   │   │   │           └── COMPARISON
+│   │   │   │               └── ARITHMETIC_EXPR
+│   │   │   │                   └── TERM
+│   │   │   │                       ├── UNARY
+│   │   │   │                       │   └── PRIMARY
+│   │   │   │                       │       └── V_INT: 5
+│   │   │   │                       ├── ASTERISK: *
+│   │   │   │                       └── TERM
+│   │   │   │                           └── UNARY
+│   │   │   │                               └── PRIMARY
+│   │   │   │                                   └── V_INT: 6
+│   │   │   └── SEMICOLON: ;
+│   │   ├── STATEMENT
+│   │   │   ├── INT: int
+│   │   │   ├── IDENT: asd
+│   │   │   ├── EQ: =
+│   │   │   ├── EXPRESSION
+│   │   │   │   └── EQUALITY
+│   │   │   │       └── COMPARISON
+│   │   │   │           └── ARITHMETIC_EXPR
+│   │   │   │               └── TERM
+│   │   │   │                   └── UNARY
+│   │   │   │                       └── PRIMARY
+│   │   │   │                           └── V_INT: 5
+│   │   │   └── SEMICOLON: ;
+│   │   └── CLOSE_PARANTHESES: }
+│   ├── STATEMENT
+│   │   ├── IF: if
+│   │   ├── OPEN_BRACKET: (
+│   │   ├── EXPRESSION
+│   │   │   ├── EQUALITY
+│   │   │   │   └── COMPARISON
+│   │   │   │       └── ARITHMETIC_EXPR
+│   │   │   │           └── TERM
+│   │   │   │               └── UNARY
+│   │   │   │                   └── PRIMARY
+│   │   │   │                       ├── OPEN_BRACKET: (
+│   │   │   │                       ├── EXPRESSION
+│   │   │   │                       │   ├── EQUALITY
+│   │   │   │                       │   │   └── COMPARISON
+│   │   │   │                       │   │       └── ARITHMETIC_EXPR
+│   │   │   │                       │   │           └── TERM
+│   │   │   │                       │   │               └── UNARY
+│   │   │   │                       │   │                   └── PRIMARY
+│   │   │   │                       │   │                       └── V_BOOL: false
+│   │   │   │                       │   ├── LAND: &&
+│   │   │   │                       │   └── EXPRESSION
+│   │   │   │                       │       └── EQUALITY
+│   │   │   │                       │           └── COMPARISON
+│   │   │   │                       │               └── ARITHMETIC_EXPR
+│   │   │   │                       │                   └── TERM
+│   │   │   │                       │                       └── UNARY
+│   │   │   │                       │                           └── PRIMARY
+│   │   │   │                       │                               └── V_BOOL: false
+│   │   │   │                       └── CLOSE_BRACKET: )
+│   │   │   ├── LOR: ||
+│   │   │   └── EXPRESSION
+│   │   │       ├── EQUALITY
+│   │   │       │   └── COMPARISON
+│   │   │       │       └── ARITHMETIC_EXPR
+│   │   │       │           └── TERM
+│   │   │       │               └── UNARY
+│   │   │       │                   └── PRIMARY
+│   │   │       │                       ├── OPEN_BRACKET: (
+│   │   │       │                       ├── EXPRESSION
+│   │   │       │                       │   ├── EQUALITY
+│   │   │       │                       │   │   └── COMPARISON
+│   │   │       │                       │   │       └── ARITHMETIC_EXPR
+│   │   │       │                       │   │           └── TERM
+│   │   │       │                       │   │               └── UNARY
+│   │   │       │                       │   │                   └── PRIMARY
+│   │   │       │                       │   │                       └── V_BOOL: true
+│   │   │       │                       │   ├── LOR: ||
+│   │   │       │                       │   └── EXPRESSION
+│   │   │       │                       │       └── EQUALITY
+│   │   │       │                       │           └── COMPARISON
+│   │   │       │                       │               └── ARITHMETIC_EXPR
+│   │   │       │                       │                   └── TERM
+│   │   │       │                       │                       └── UNARY
+│   │   │       │                       │                           └── PRIMARY
+│   │   │       │                       │                               └── V_BOOL: false
+│   │   │       │                       └── CLOSE_BRACKET: )
+│   │   │       ├── OR: |
+│   │   │       └── EXPRESSION
+│   │   │           └── EQUALITY
+│   │   │               └── COMPARISON
+│   │   │                   └── ARITHMETIC_EXPR
+│   │   │                       └── TERM
+│   │   │                           └── UNARY
+│   │   │                               └── PRIMARY
+│   │   │                                   └── V_INT: 6
+│   │   ├── CLOSE_BRACKET: )
+│   │   ├── OPEN_PARANTHESES: {
+│   │   ├── STATEMENT
+│   │   │   ├── INT: int
+│   │   │   ├── IDENT: asd
+│   │   │   ├── EQ: =
+│   │   │   ├── EXPRESSION
+│   │   │   │   └── EQUALITY
+│   │   │   │       └── COMPARISON
+│   │   │   │           └── ARITHMETIC_EXPR
+│   │   │   │               └── TERM
+│   │   │   │                   └── UNARY
+│   │   │   │                       └── PRIMARY
+│   │   │   │                           └── V_INT: 5
+│   │   │   └── SEMICOLON: ;
+│   │   └── CLOSE_PARANTHESES: }
+│   └── CLOSE_PARANTHESES: }
 └── STATEMENT
-    ├── BOOL: bool
-    ├── IDENT: z
+    ├── INT: int
+    ├── IDENT: d
     ├── EQ: =
     ├── EXPRESSION
     │   └── EQUALITY
     │       └── COMPARISON
-    │           ├── ARITHMETIC_EXPR
-    │           │   └── TERM
-    │           │       └── UNARY
-    │           │           └── PRIMARY
-    │           │               └── V_INT: 4
-    │           ├── GTEQ: >=
-    │           └── COMPARISON
-    │               └── ARITHMETIC_EXPR
-    │                   └── TERM
-    │                       ├── UNARY
-    │                       │   └── PRIMARY
-    │                       │       └── V_INT: 5
-    │                       ├── ASTERISK: *
-    │                       └── TERM
-    │                           └── UNARY
-    │                               └── PRIMARY
-    │                                   └── V_INT: 6
+    │           └── ARITHMETIC_EXPR
+    │               └── TERM
+    │                   └── UNARY
+    │                       └── PRIMARY
+    │                           └── V_INT: 5
     └── SEMICOLON: ;

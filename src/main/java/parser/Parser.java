@@ -143,17 +143,17 @@ public class Parser {
   public void expression(ParseTree st) throws SyntaxError, UnknownIdentifierError {
     equality(st.insertSubtree(new Token(TokenKind.EQUALITY, "")));
     if (checkToken(TokenKind.LAND)) {
-     matchToken(TokenKind.LAND, st); 
-     expression(st);
+      matchToken(TokenKind.LAND, st);
+      expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
     } else if (checkToken(TokenKind.LOR)) {
-     matchToken(TokenKind.LOR, st); 
-     expression(st);
+      matchToken(TokenKind.LOR, st);
+      expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
     } else if (checkToken(TokenKind.AND)) {
-     matchToken(TokenKind.AND, st); 
-     expression(st);
+      matchToken(TokenKind.AND, st);
+      expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
     } else if (checkToken(TokenKind.OR)) {
-     matchToken(TokenKind.OR, st); 
-     expression(st);
+      matchToken(TokenKind.OR, st);
+      expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
     }
   }
 
@@ -179,7 +179,8 @@ public class Parser {
 
   /**
    * ```
-   * <comparision> ::= <arithmeticExpr> ( (">" | ">=" | "<" | "<=") <comparision>)?
+   * <comparision> ::= <arithmeticExpr> ( (">" | ">=" | "<" | "<=")
+   * <comparision>)?
    * ```
    * 
    * @param st
