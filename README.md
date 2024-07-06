@@ -61,7 +61,7 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
 <equality>          ::= <comparision> (("!=" | "==") <equality>)?
 <comparision>       ::= <arithmeticExpr> ( (">" | ">=" | "<" | "<=") <comparision>)?
 <arithmeticExpr>    ::= <term> (( "+" | "-") <arithmeticExpr>)?
-<term>              ::= <unary> (("*" | "/") <term>)?
+<term>              ::= <unary> (("*" | "/" | "%") <term>)?
 <unary>             ::= ("!" | "-") <unary>
                       | <primary>
 <primary>           ::= <vbool> | <vint> | <ident>
