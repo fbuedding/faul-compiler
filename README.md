@@ -4,17 +4,19 @@
 - [Faul-Lang compiler](#faul-lang-compiler)
   - [Aufbau](#aufbau)
     - [Vision](#vision)
+  - [Sprache](#sprache)
+    - [Regeln (Grammatik)](#regeln-grammatik)
+    - [Operatorrangfolge](#operatorrangfolge)
     - [Token](#token)
       - [Basic](#basic)
       - [Keywords](#keywords)
       - [Operatoren](#operatoren)
-  - [Parser](#parser)
-    - [Regeln (Grammatik)](#regeln-grammatik)
-    - [Operatorrangfolge](#operatorrangfolge)
-    - [Parser Ausgabe](#parser-ausgabe)
+  - [Compiler Phasen](#compiler-phasen)
+    - [Frontend](#frontend)
       - [Input](#input)
-      - [Parse Tree or Syntax Tree](#parse-tree-or-syntax-tree)
-    - [Abstact Syntax Tree](#abstact-syntax-tree)
+      - [Lexer](#lexer)
+      - [Parser](#parser)
+      - [Syntaktische Analyse](#syntaktische-analyse)
   - [Finite State Machines](#finite-state-machines)
     - [Integer](#integer)
     - [Word](#word)
@@ -39,7 +41,48 @@ Statements werden durch ein Semicolon terminiert.
 
 Block-Statements sind auch geplant. Zunächst soll dies nur `if` beinhalten.
 
-### Token
+
+## Sprache
+
+### Regeln (Grammatik)
+
+Es wird zu bezeichnung der Regeln die Backus-Naur-Form genutzt.
+
+Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground](https://bnfplayground.pauliankline.com/?bnf=%3Cprogram%3E%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Cstatement%3E*%0A%3Cstatement%3E%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%22int%22%20%3Cident%3E%20%22%3D%22%20%3Cexpression%3E%20%3Csemi%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%22bool%22%20%3Cident%3E%20%22%3D%22%20%3Cexpression%3E%20%3Csemi%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%22if%22%20%22(%22%20%3Cexpression%3E%20%22)%22%20%22%7B%22%20%3Cstatement%3E*%20%22%7D%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%3Cident%3E%20%22%3D%22%20%3Cexpression%3E%20%3Csemi%3E%0A%3Cexpression%3E%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Cequality%3E%20(%20(%22%26%26%22%20%7C%20%22%7C%7C%22%20%7C%20%22%26%22%20%7C%20%22%7C%22)%20%3Cexpression%3E)%3F%0A%3Cequality%3E%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Ccomparision%3E%20((%22!%3D%22%20%7C%20%22%3D%3D%22)%20%3Cequality%3E)%3F%0A%3Ccomparision%3E%20%20%20%20%20%20%20%3A%3A%3D%20%3CarithmeticExpr%3E%20(%20(%22%3E%22%20%7C%20%22%3E%3D%22%20%7C%20%22%3C%22%20%7C%20%22%3C%3D%22)%20%3Ccomparision%3E)%3F%0A%3CarithmeticExpr%3E%20%20%20%20%3A%3A%3D%20%3Cterm%3E%20((%20%22%2B%22%20%7C%20%22-%22)%20%3CarithmeticExpr%3E)%3F%0A%3Cterm%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Cunary%3E%20((%22*%22%20%7C%20%22%2F%22)%20%3Cterm%3E)%3F%0A%3Cunary%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20(%22!%22%20%7C%20%22-%22)%20%3Cunary%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%3Cprimary%3E%0A%3Cprimary%3E%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Cvbool%3E%20%7C%20%3Cvint%3E%20%7C%20%3Cident%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%22(%22%20%3Cexpression%3E%20%22)%22%0A%3Cvbool%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%22true%22%20%7C%20%22false%22%0A%3Cvint%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%5B1-9%5D%20%5B0-9%5D*%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%220%22%0A%3Cident%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20(%22_%22%20%7C%20%5Ba-z%5D)%20(%22_%22%20%7C%20%5Ba-z%5D%20%7C%20%5B0-9%5D)*%0A%3Csemi%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%22%3B%22%2B&name=faul-lang).
+
+```
+<program>           ::= <statement>*
+<statement>         ::= "int" <ident> "=" <expression> <semi>
+                      | "bool" <ident> "=" <expression> <semi>
+                      | "if" "(" <expression> ")" "{" <statement>* "}" ("else" "{" <statement>* "}")?
+                      | "while" "(" <expression> ")" "{" <statement>* "}"
+                      | <ident> "=" <expression> <semi>
+<expression>        ::= <equality> ( ("&&" | "||" | "&" | "|") <expression>)?
+<equality>          ::= <comparision> (("!=" | "==") <equality>)?
+<comparision>       ::= <arithmeticExpr> ( (">" | ">=" | "<" | "<=") <comparision>)?
+<arithmeticExpr>    ::= <term> (( "+" | "-") <arithmeticExpr>)?
+<term>              ::= <unary> (("*" | "/") <term>)?
+<unary>             ::= ("!" | "-") <unary>
+                      | <primary>
+<primary>           ::= <vbool> | <vint> | <ident>
+                      | "(" <expression> ")"
+<vbool>             ::= "true" | "false"
+<vint>              ::= [1-9] [0-9]*
+                      | "0"
+<ident>             ::= ("_" | [a-z]) ("_" | [a-z] | [0-9])*
+<semi>              ::= ";"+
+```
+
+### Operatorrangfolge
+
+1. Klammerungen
+2. `-` `!`
+3. `*` `/`
+4. `+` `-`
+5. `>` `>=` `<` `<=`
+6. `&&` `||` `|` `&`
+
+### Token 
 Tokens der Faul-Lang.
 #### Basic
 
@@ -86,74 +129,51 @@ Tokens der Faul-Lang.
 | OPEN_BRACKET  |           (           |
 | CLOSE_BRACKET |           )           |
 
-## Parser 
 
-### Regeln (Grammatik)
+## Compiler Phasen
 
-Es wird zu bezeichnung der Regeln die Backus-Naur-Form genutzt.
-
-Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground](https://bnfplayground.pauliankline.com/?bnf=%3Cprogram%3E%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Cstatement%3E*%0A%3Cstatement%3E%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%22int%22%20%3Cident%3E%20%22%3D%22%20%3Cexpression%3E%20%3Csemi%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%22bool%22%20%3Cident%3E%20%22%3D%22%20%3Cexpression%3E%20%3Csemi%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%22if%22%20%22(%22%20%3Cexpression%3E%20%22)%22%20%22%7B%22%20%3Cstatement%3E*%20%22%7D%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%3Cident%3E%20%22%3D%22%20%3Cexpression%3E%20%3Csemi%3E%0A%3Cexpression%3E%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Cequality%3E%20(%20(%22%26%26%22%20%7C%20%22%7C%7C%22%20%7C%20%22%26%22%20%7C%20%22%7C%22)%20%3Cexpression%3E)%3F%0A%3Cequality%3E%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Ccomparision%3E%20((%22!%3D%22%20%7C%20%22%3D%3D%22)%20%3Cequality%3E)%3F%0A%3Ccomparision%3E%20%20%20%20%20%20%20%3A%3A%3D%20%3CarithmeticExpr%3E%20(%20(%22%3E%22%20%7C%20%22%3E%3D%22%20%7C%20%22%3C%22%20%7C%20%22%3C%3D%22)%20%3Ccomparision%3E)%3F%0A%3CarithmeticExpr%3E%20%20%20%20%3A%3A%3D%20%3Cterm%3E%20((%20%22%2B%22%20%7C%20%22-%22)%20%3CarithmeticExpr%3E)%3F%0A%3Cterm%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Cunary%3E%20((%22*%22%20%7C%20%22%2F%22)%20%3Cterm%3E)%3F%0A%3Cunary%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20(%22!%22%20%7C%20%22-%22)%20%3Cunary%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%3Cprimary%3E%0A%3Cprimary%3E%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Cvbool%3E%20%7C%20%3Cvint%3E%20%7C%20%3Cident%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%22(%22%20%3Cexpression%3E%20%22)%22%0A%3Cvbool%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%22true%22%20%7C%20%22false%22%0A%3Cvint%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%5B1-9%5D%20%5B0-9%5D*%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%220%22%0A%3Cident%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20(%22_%22%20%7C%20%5Ba-z%5D)%20(%22_%22%20%7C%20%5Ba-z%5D%20%7C%20%5B0-9%5D)*%0A%3Csemi%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%22%3B%22%2B&name=faul-lang).
-
-```
-<program>           ::= <statement>*
-<statement>         ::= "int" <ident> "=" <expression> <semi>
-                      | "bool" <ident> "=" <expression> <semi>
-                      | "if" "(" <expression> ")" "{" <statement>* "}" ("else" "{" <statement>* "}")?
-                      | "while" "(" <expression> ")" "{" <statement>* "}"
-                      | <ident> "=" <expression> <semi>
-<expression>        ::= <equality> ( ("&&" | "||" | "&" | "|") <expression>)?
-<equality>          ::= <comparision> (("!=" | "==") <equality>)?
-<comparision>       ::= <arithmeticExpr> ( (">" | ">=" | "<" | "<=") <comparision>)?
-<arithmeticExpr>    ::= <term> (( "+" | "-") <arithmeticExpr>)?
-<term>              ::= <unary> (("*" | "/") <term>)?
-<unary>             ::= ("!" | "-") <unary>
-                      | <primary>
-<primary>           ::= <vbool> | <vint> | <ident>
-                      | "(" <expression> ")"
-<vbool>             ::= "true" | "false"
-<vint>              ::= [1-9] [0-9]*
-                      | "0"
-<ident>             ::= ("_" | [a-z]) ("_" | [a-z] | [0-9])*
-<semi>              ::= ";"+
-```
-
-### Operatorrangfolge
-
-1. Klammerungen
-2. `-` `!`
-3. `*` `/`
-4. `+` `-`
-5. `>` `>=` `<` `<=`
-6. `&&` `||` `|` `&`
-
-### Parser Ausgabe
-
-Der Parser gibt einen Parse Tree aus. Dieser lässt sich durch die toString Methode beispielsweise so ausgeben:
+### Frontend
 
 #### Input
 
 ```c
 int a = 3 + 5;
-int b = a - 6;
+bool b = a < 6;
 int c = 5 * ( 5 + 6 * 3);
-bool g = 5 <= 5;
+bool e = true && false;
+bool g = 5 == 8 - 5*3;
 bool z = 4 >= 5*6;
-if(g){
+if(g && true){
   int d = 6;
-  int e = d *( 5 -3 /7);
   if(true) {
     z = 4 >= 5*6;
+    int asd = 5;
+  }
+  else {
+    int paul = 0;
+    while(true){
+      int fabian = 0;
+    }
   }
   if((false && false) || (true || false) | 6) {
-
+    int asd = 5;
   }
 }
 int d = 5;
 ```
 
-#### Parse Tree or Syntax Tree
+#### Lexer
+Der Lexer geneiert aus dem [Input](#input) ein stream an [Token](#token)
+
+#### Parser
+
+Der Parser verarbeitet den [Token-Stream](#token) und gibt einen Parse Tree aus. Hierbei wird auch auf Syntaxfehler hin überprüft.
+
+Dieser lässt sich durch die toString Methode beispielsweise so ausgeben:
 
 ```
+Parse Tree (Syntax Tree)
+
 PROGRAM
 ├── STATEMENT
 │   ├── INT: int
@@ -537,9 +557,16 @@ PROGRAM
     └── SEMICOLON: ;
 
 ```
-### Abstact Syntax Tree
+#### Syntaktische Analyse
+
+Oftmals wird gar kein Parse Tree erstell sondern direkt ein abstrakter Syntax Baum (AST). Dieser Compiler tut dies aus Übersichtsgründen nicht. Die [AbstractSyntaxTreeFactory](src/main/ast/AbstractSyntaxTreeFractory.java) verarbeitet den [Parse Tree](#parse-tree-syntax-tree) zu einem AST.
+
+Dieser lässt sich auch mit der Methode toString() wie folgt ausgeben:
+
 
 ```
+Abstract Syntax Tree
+
 PROGRAM
 ├── DECLARATION
 │   ├── IDENT: a
