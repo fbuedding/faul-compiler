@@ -1,19 +1,25 @@
-<!-- TOC -->
-* [Faul-Lang compiler](#faul-lang-compiler)
-  * [Aufbau](#aufbau)
-    * [Vision](#vision)
-    * [Token](#token)
-      * [Basic](#basic)
-      * [Keywords](#keywords)
-      * [Operatoren](#operatoren)
-  * [Parser Regeln (Grammatik)](#parser-regeln-grammatik)
-  * [Operatorrangfolge](#operatorrangfolge)
-  * [Finite State Machines](#finite-state-machines)
-    * [Integer](#integer)
-    * [Word](#word)
-  * [Todo](#todo)
-<!-- TOC -->
 # Faul-Lang compiler
+
+<!--toc:start-->
+- [Faul-Lang compiler](#faul-lang-compiler)
+  - [Aufbau](#aufbau)
+    - [Vision](#vision)
+    - [Token](#token)
+      - [Basic](#basic)
+      - [Keywords](#keywords)
+      - [Operatoren](#operatoren)
+  - [Parser](#parser)
+    - [Regeln (Grammatik)](#regeln-grammatik)
+    - [Operatorrangfolge](#operatorrangfolge)
+    - [Parser Ausgabe](#parser-ausgabe)
+      - [Input](#input)
+      - [Parse Tree or Syntax Tree](#parse-tree-or-syntax-tree)
+  - [Finite State Machines](#finite-state-machines)
+    - [Integer](#integer)
+    - [Word](#word)
+  - [Todo](#todo)
+<!--toc:end-->
+
 Ein kleiner compiler, der faul-lang in mips assembler übersetzt.
 
 ## Aufbau
@@ -144,7 +150,8 @@ if(g){
 int d = 5;
 ```
 
-#### AST
+#### Parse Tree or Syntax Tree
+
 ```
 PROGRAM
 ├── STATEMENT
@@ -167,18 +174,19 @@ PROGRAM
 │   │                               └── V_INT: 5
 │   └── SEMICOLON: ;
 ├── STATEMENT
-│   ├── INT: int
+│   ├── BOOL: bool
 │   ├── IDENT: b
 │   ├── EQ: =
 │   ├── EXPRESSION
 │   │   └── EQUALITY
 │   │       └── COMPARISON
-│   │           └── ARITHMETIC_EXPR
-│   │               ├── TERM
-│   │               │   └── UNARY
-│   │               │       └── PRIMARY
-│   │               │           └── IDENT: a
-│   │               ├── MINUS: -
+│   │           ├── ARITHMETIC_EXPR
+│   │           │   └── TERM
+│   │           │       └── UNARY
+│   │           │           └── PRIMARY
+│   │           │               └── IDENT: a
+│   │           ├── LT: <
+│   │           └── COMPARISON
 │   │               └── ARITHMETIC_EXPR
 │   │                   └── TERM
 │   │                       └── UNARY
@@ -225,23 +233,57 @@ PROGRAM
 │   └── SEMICOLON: ;
 ├── STATEMENT
 │   ├── BOOL: bool
-│   ├── IDENT: g
+│   ├── IDENT: e
 │   ├── EQ: =
 │   ├── EXPRESSION
-│   │   └── EQUALITY
-│   │       └── COMPARISON
-│   │           ├── ARITHMETIC_EXPR
-│   │           │   └── TERM
-│   │           │       └── UNARY
-│   │           │           └── PRIMARY
-│   │           │               └── V_INT: 5
-│   │           ├── LTEQ: <=
+│   │   ├── EQUALITY
+│   │   │   └── COMPARISON
+│   │   │       └── ARITHMETIC_EXPR
+│   │   │           └── TERM
+│   │   │               └── UNARY
+│   │   │                   └── PRIMARY
+│   │   │                       └── V_BOOL: true
+│   │   ├── LAND: &&
+│   │   └── EXPRESSION
+│   │       └── EQUALITY
 │   │           └── COMPARISON
 │   │               └── ARITHMETIC_EXPR
 │   │                   └── TERM
 │   │                       └── UNARY
 │   │                           └── PRIMARY
-│   │                               └── V_INT: 5
+│   │                               └── V_BOOL: false
+│   └── SEMICOLON: ;
+├── STATEMENT
+│   ├── BOOL: bool
+│   ├── IDENT: g
+│   ├── EQ: =
+│   ├── EXPRESSION
+│   │   └── EQUALITY
+│   │       ├── COMPARISON
+│   │       │   └── ARITHMETIC_EXPR
+│   │       │       └── TERM
+│   │       │           └── UNARY
+│   │       │               └── PRIMARY
+│   │       │                   └── V_INT: 5
+│   │       ├── EQEQ: ==
+│   │       └── EQUALITY
+│   │           └── COMPARISON
+│   │               └── ARITHMETIC_EXPR
+│   │                   ├── TERM
+│   │                   │   └── UNARY
+│   │                   │       └── PRIMARY
+│   │                   │           └── V_INT: 8
+│   │                   ├── MINUS: -
+│   │                   └── ARITHMETIC_EXPR
+│   │                       └── TERM
+│   │                           ├── UNARY
+│   │                           │   └── PRIMARY
+│   │                           │       └── V_INT: 5
+│   │                           ├── ASTERISK: *
+│   │                           └── TERM
+│   │                               └── UNARY
+│   │                                   └── PRIMARY
+│   │                                       └── V_INT: 3
 │   └── SEMICOLON: ;
 ├── STATEMENT
 │   ├── BOOL: bool
@@ -272,13 +314,22 @@ PROGRAM
 │   ├── IF: if
 │   ├── OPEN_BRACKET: (
 │   ├── EXPRESSION
-│   │   └── EQUALITY
-│   │       └── COMPARISON
-│   │           └── ARITHMETIC_EXPR
-│   │               └── TERM
-│   │                   └── UNARY
-│   │                       └── PRIMARY
-│   │                           └── IDENT: g
+│   │   ├── EQUALITY
+│   │   │   └── COMPARISON
+│   │   │       └── ARITHMETIC_EXPR
+│   │   │           └── TERM
+│   │   │               └── UNARY
+│   │   │                   └── PRIMARY
+│   │   │                       └── IDENT: g
+│   │   ├── LAND: &&
+│   │   └── EXPRESSION
+│   │       └── EQUALITY
+│   │           └── COMPARISON
+│   │               └── ARITHMETIC_EXPR
+│   │                   └── TERM
+│   │                       └── UNARY
+│   │                           └── PRIMARY
+│   │                               └── V_BOOL: true
 │   ├── CLOSE_BRACKET: )
 │   ├── OPEN_PARANTHESES: {
 │   ├── STATEMENT
@@ -293,44 +344,6 @@ PROGRAM
 │   │   │                   └── UNARY
 │   │   │                       └── PRIMARY
 │   │   │                           └── V_INT: 6
-│   │   └── SEMICOLON: ;
-│   ├── STATEMENT
-│   │   ├── INT: int
-│   │   ├── IDENT: e
-│   │   ├── EQ: =
-│   │   ├── EXPRESSION
-│   │   │   └── EQUALITY
-│   │   │       └── COMPARISON
-│   │   │           └── ARITHMETIC_EXPR
-│   │   │               └── TERM
-│   │   │                   ├── UNARY
-│   │   │                   │   └── PRIMARY
-│   │   │                   │       └── IDENT: d
-│   │   │                   ├── ASTERISK: *
-│   │   │                   └── TERM
-│   │   │                       └── UNARY
-│   │   │                           └── PRIMARY
-│   │   │                               ├── OPEN_BRACKET: (
-│   │   │                               ├── EXPRESSION
-│   │   │                               │   └── EQUALITY
-│   │   │                               │       └── COMPARISON
-│   │   │                               │           └── ARITHMETIC_EXPR
-│   │   │                               │               ├── TERM
-│   │   │                               │               │   └── UNARY
-│   │   │                               │               │       └── PRIMARY
-│   │   │                               │               │           └── V_INT: 5
-│   │   │                               │               ├── MINUS: -
-│   │   │                               │               └── ARITHMETIC_EXPR
-│   │   │                               │                   └── TERM
-│   │   │                               │                       ├── UNARY
-│   │   │                               │                       │   └── PRIMARY
-│   │   │                               │                       │       └── V_INT: 3
-│   │   │                               │                       ├── SLASH: /
-│   │   │                               │                       └── TERM
-│   │   │                               │                           └── UNARY
-│   │   │                               │                               └── PRIMARY
-│   │   │                               │                                   └── V_INT: 7
-│   │   │                               └── CLOSE_BRACKET: )
 │   │   └── SEMICOLON: ;
 │   ├── STATEMENT
 │   │   ├── IF: if
@@ -369,6 +382,62 @@ PROGRAM
 │   │   │   │                               └── PRIMARY
 │   │   │   │                                   └── V_INT: 6
 │   │   │   └── SEMICOLON: ;
+│   │   ├── STATEMENT
+│   │   │   ├── INT: int
+│   │   │   ├── IDENT: asd
+│   │   │   ├── EQ: =
+│   │   │   ├── EXPRESSION
+│   │   │   │   └── EQUALITY
+│   │   │   │       └── COMPARISON
+│   │   │   │           └── ARITHMETIC_EXPR
+│   │   │   │               └── TERM
+│   │   │   │                   └── UNARY
+│   │   │   │                       └── PRIMARY
+│   │   │   │                           └── V_INT: 5
+│   │   │   └── SEMICOLON: ;
+│   │   ├── CLOSE_PARANTHESES: }
+│   │   ├── ELSE: else
+│   │   ├── OPEN_PARANTHESES: {
+│   │   ├── STATEMENT
+│   │   │   ├── INT: int
+│   │   │   ├── IDENT: paul
+│   │   │   ├── EQ: =
+│   │   │   ├── EXPRESSION
+│   │   │   │   └── EQUALITY
+│   │   │   │       └── COMPARISON
+│   │   │   │           └── ARITHMETIC_EXPR
+│   │   │   │               └── TERM
+│   │   │   │                   └── UNARY
+│   │   │   │                       └── PRIMARY
+│   │   │   │                           └── V_INT: 0
+│   │   │   └── SEMICOLON: ;
+│   │   ├── STATEMENT
+│   │   │   ├── WHILE: while
+│   │   │   ├── OPEN_BRACKET: (
+│   │   │   ├── EXPRESSION
+│   │   │   │   └── EQUALITY
+│   │   │   │       └── COMPARISON
+│   │   │   │           └── ARITHMETIC_EXPR
+│   │   │   │               └── TERM
+│   │   │   │                   └── UNARY
+│   │   │   │                       └── PRIMARY
+│   │   │   │                           └── V_BOOL: true
+│   │   │   ├── CLOSE_BRACKET: )
+│   │   │   ├── OPEN_PARANTHESES: {
+│   │   │   ├── STATEMENT
+│   │   │   │   ├── INT: int
+│   │   │   │   ├── IDENT: fabian
+│   │   │   │   ├── EQ: =
+│   │   │   │   ├── EXPRESSION
+│   │   │   │   │   └── EQUALITY
+│   │   │   │   │       └── COMPARISON
+│   │   │   │   │           └── ARITHMETIC_EXPR
+│   │   │   │   │               └── TERM
+│   │   │   │   │                   └── UNARY
+│   │   │   │   │                       └── PRIMARY
+│   │   │   │   │                           └── V_INT: 0
+│   │   │   │   └── SEMICOLON: ;
+│   │   │   └── CLOSE_PARANTHESES: }
 │   │   └── CLOSE_PARANTHESES: }
 │   ├── STATEMENT
 │   │   ├── IF: if
@@ -390,49 +459,66 @@ PROGRAM
 │   │   │   │                       │   │                   └── PRIMARY
 │   │   │   │                       │   │                       └── V_BOOL: false
 │   │   │   │                       │   ├── LAND: &&
-│   │   │   │                       │   └── EQUALITY
-│   │   │   │                       │       └── COMPARISON
-│   │   │   │                       │           └── ARITHMETIC_EXPR
-│   │   │   │                       │               └── TERM
-│   │   │   │                       │                   └── UNARY
-│   │   │   │                       │                       └── PRIMARY
-│   │   │   │                       │                           └── V_BOOL: false
+│   │   │   │                       │   └── EXPRESSION
+│   │   │   │                       │       └── EQUALITY
+│   │   │   │                       │           └── COMPARISON
+│   │   │   │                       │               └── ARITHMETIC_EXPR
+│   │   │   │                       │                   └── TERM
+│   │   │   │                       │                       └── UNARY
+│   │   │   │                       │                           └── PRIMARY
+│   │   │   │                       │                               └── V_BOOL: false
 │   │   │   │                       └── CLOSE_BRACKET: )
 │   │   │   ├── LOR: ||
-│   │   │   ├── EQUALITY
-│   │   │   │   └── COMPARISON
-│   │   │   │       └── ARITHMETIC_EXPR
-│   │   │   │           └── TERM
-│   │   │   │               └── UNARY
-│   │   │   │                   └── PRIMARY
-│   │   │   │                       ├── OPEN_BRACKET: (
-│   │   │   │                       ├── EXPRESSION
-│   │   │   │                       │   ├── EQUALITY
-│   │   │   │                       │   │   └── COMPARISON
-│   │   │   │                       │   │       └── ARITHMETIC_EXPR
-│   │   │   │                       │   │           └── TERM
-│   │   │   │                       │   │               └── UNARY
-│   │   │   │                       │   │                   └── PRIMARY
-│   │   │   │                       │   │                       └── V_BOOL: true
-│   │   │   │                       │   ├── LOR: ||
-│   │   │   │                       │   └── EQUALITY
-│   │   │   │                       │       └── COMPARISON
-│   │   │   │                       │           └── ARITHMETIC_EXPR
-│   │   │   │                       │               └── TERM
-│   │   │   │                       │                   └── UNARY
-│   │   │   │                       │                       └── PRIMARY
-│   │   │   │                       │                           └── V_BOOL: false
-│   │   │   │                       └── CLOSE_BRACKET: )
-│   │   │   ├── OR: |
-│   │   │   └── EQUALITY
-│   │   │       └── COMPARISON
-│   │   │           └── ARITHMETIC_EXPR
-│   │   │               └── TERM
-│   │   │                   └── UNARY
-│   │   │                       └── PRIMARY
-│   │   │                           └── V_INT: 6
+│   │   │   └── EXPRESSION
+│   │   │       ├── EQUALITY
+│   │   │       │   └── COMPARISON
+│   │   │       │       └── ARITHMETIC_EXPR
+│   │   │       │           └── TERM
+│   │   │       │               └── UNARY
+│   │   │       │                   └── PRIMARY
+│   │   │       │                       ├── OPEN_BRACKET: (
+│   │   │       │                       ├── EXPRESSION
+│   │   │       │                       │   ├── EQUALITY
+│   │   │       │                       │   │   └── COMPARISON
+│   │   │       │                       │   │       └── ARITHMETIC_EXPR
+│   │   │       │                       │   │           └── TERM
+│   │   │       │                       │   │               └── UNARY
+│   │   │       │                       │   │                   └── PRIMARY
+│   │   │       │                       │   │                       └── V_BOOL: true
+│   │   │       │                       │   ├── LOR: ||
+│   │   │       │                       │   └── EXPRESSION
+│   │   │       │                       │       └── EQUALITY
+│   │   │       │                       │           └── COMPARISON
+│   │   │       │                       │               └── ARITHMETIC_EXPR
+│   │   │       │                       │                   └── TERM
+│   │   │       │                       │                       └── UNARY
+│   │   │       │                       │                           └── PRIMARY
+│   │   │       │                       │                               └── V_BOOL: false
+│   │   │       │                       └── CLOSE_BRACKET: )
+│   │   │       ├── OR: |
+│   │   │       └── EXPRESSION
+│   │   │           └── EQUALITY
+│   │   │               └── COMPARISON
+│   │   │                   └── ARITHMETIC_EXPR
+│   │   │                       └── TERM
+│   │   │                           └── UNARY
+│   │   │                               └── PRIMARY
+│   │   │                                   └── V_INT: 6
 │   │   ├── CLOSE_BRACKET: )
 │   │   ├── OPEN_PARANTHESES: {
+│   │   ├── STATEMENT
+│   │   │   ├── INT: int
+│   │   │   ├── IDENT: asd
+│   │   │   ├── EQ: =
+│   │   │   ├── EXPRESSION
+│   │   │   │   └── EQUALITY
+│   │   │   │       └── COMPARISON
+│   │   │   │           └── ARITHMETIC_EXPR
+│   │   │   │               └── TERM
+│   │   │   │                   └── UNARY
+│   │   │   │                       └── PRIMARY
+│   │   │   │                           └── V_INT: 5
+│   │   │   └── SEMICOLON: ;
 │   │   └── CLOSE_PARANTHESES: }
 │   └── CLOSE_PARANTHESES: }
 └── STATEMENT
@@ -449,6 +535,139 @@ PROGRAM
     │                           └── V_INT: 5
     └── SEMICOLON: ;
 
+```
+### Abstact Syntax Tree
+
+```
+PROGRAM
+├── DECLARATION
+│   ├── IDENT: a
+│   └── ADRESS: 0
+├── ASSIGNMENT
+│   ├── IDENT: a
+│   └── PLUS
+│       ├── INTEGER: 3
+│       └── INTEGER: 5
+├── DECLARATION
+│   ├── IDENT: b
+│   └── ADRESS: 1
+├── ASSIGNMENT
+│   ├── IDENT: b
+│   └── LT
+│       ├── IDENT: a
+│       └── INTEGER: 6
+├── DECLARATION
+│   ├── IDENT: c
+│   └── ADRESS: 2
+├── ASSIGNMENT
+│   ├── IDENT: c
+│   └── ASTERISK
+│       ├── INTEGER: 5
+│       └── PLUS
+│           ├── INTEGER: 5
+│           └── ASTERISK
+│               ├── INTEGER: 6
+│               └── INTEGER: 3
+├── DECLARATION
+│   ├── IDENT: e
+│   └── ADRESS: 3
+├── ASSIGNMENT
+│   ├── IDENT: e
+│   └── LAND
+│       ├── BOOLEAN: true
+│       └── BOOLEAN: false
+├── DECLARATION
+│   ├── IDENT: g
+│   └── ADRESS: 4
+├── ASSIGNMENT
+│   ├── IDENT: g
+│   └── EQEQ
+│       ├── INTEGER: 5
+│       └── MINUS
+│           ├── INTEGER: 8
+│           └── ASTERISK
+│               ├── INTEGER: 5
+│               └── INTEGER: 3
+├── DECLARATION
+│   ├── IDENT: z
+│   └── ADRESS: 5
+├── ASSIGNMENT
+│   ├── IDENT: z
+│   └── GTEQ
+│       ├── INTEGER: 4
+│       └── ASTERISK
+│           ├── INTEGER: 5
+│           └── INTEGER: 6
+├── IF
+│   ├── CONDITION
+│   │   └── LAND
+│   │       ├── IDENT: g
+│   │       └── BOOLEAN: true
+│   └── BRANCH
+│       ├── DECLARATION
+│       │   ├── IDENT: d
+│       │   └── ADRESS: 6
+│       ├── ASSIGNMENT
+│       │   ├── IDENT: d
+│       │   └── INTEGER: 6
+│       ├── IF
+│       │   ├── CONDITION
+│       │   │   └── BOOLEAN: true
+│       │   ├── BRANCH
+│       │   │   ├── ASSIGNMENT
+│       │   │   │   ├── IDENT: z
+│       │   │   │   └── GTEQ
+│       │   │   │       ├── INTEGER: 4
+│       │   │   │       └── ASTERISK
+│       │   │   │           ├── INTEGER: 5
+│       │   │   │           └── INTEGER: 6
+│       │   │   ├── DECLARATION
+│       │   │   │   ├── IDENT: asd
+│       │   │   │   └── ADRESS: 7
+│       │   │   └── ASSIGNMENT
+│       │   │       ├── IDENT: asd
+│       │   │       └── INTEGER: 5
+│       │   └── BRANCH
+│       │       ├── DECLARATION
+│       │       │   ├── IDENT: paul
+│       │       │   └── ADRESS: 7
+│       │       ├── ASSIGNMENT
+│       │       │   ├── IDENT: paul
+│       │       │   └── INTEGER: 0
+│       │       └── WHILE
+│       │           ├── CONDITION
+│       │           │   └── BOOLEAN: true
+│       │           └── BRANCH
+│       │               ├── DECLARATION
+│       │               │   ├── IDENT: fabian
+│       │               │   └── ADRESS: 8
+│       │               └── ASSIGNMENT
+│       │                   ├── IDENT: fabian
+│       │                   └── INTEGER: 0
+│       └── IF
+│           ├── CONDITION
+│           │   └── LOR
+│           │       ├── LAND
+│           │       │   ├── BOOLEAN: false
+│           │       │   └── BOOLEAN: false
+│           │       └── OR
+│           │           ├── LOR
+│           │           │   ├── BOOLEAN: true
+│           │           │   └── BOOLEAN: false
+│           │           └── INTEGER: 6
+│           └── BRANCH
+│               ├── DECLARATION
+│               │   ├── IDENT: asd
+│               │   └── ADRESS: 7
+│               └── ASSIGNMENT
+│                   ├── IDENT: asd
+│                   └── INTEGER: 5
+├── DECLARATION
+│   ├── IDENT: d
+│   └── ADRESS: 6
+└── ASSIGNMENT
+    ├── IDENT: d
+    └── INTEGER: 5
 ```
 
 ## Finite State Machines
