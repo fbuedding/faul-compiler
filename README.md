@@ -48,12 +48,13 @@ Tokens der Faul-Lang.
 
 #### Keywords
 
-| Name | Beschreibung                 |
-|------|------------------------------|
-| INT  | Zum erstellen eines Integers |
-| BOOL | Zum erstellen eines Boolean  |
-| IF   | Beginnt ein If-Statement     |
-| ELSE | Beginnt ein ELSE-Statement   |
+| Name  | Beschreibung                 |
+|-------|------------------------------|
+| INT   | Zum erstellen eines Integers |
+| BOOL  | Zum erstellen eines Boolean  |
+| IF    | Beginnt ein If-Statement     |
+| ELSE  | Beginnt ein ELSE-Statement   |
+| WHILE | Beginnt ein While-Statement  |
 
 #### Operatoren
 
@@ -482,7 +483,7 @@ stateDiagram-v2
 ## Todo
 - [X] Lexer
 - [x] Parser
-- [ ] Abstract Syntax Tree (AST)
+- [x] Abstract Syntax Tree (AST)
 - [ ] Semantische Analyse
   - Typechecking
   - Optimierung
