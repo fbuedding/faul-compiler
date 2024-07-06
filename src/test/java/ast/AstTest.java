@@ -36,25 +36,25 @@ public class AstTest {
             int asd = 5;
           }
           else {
-            while(true) {
-              int test = 0;
+            int paul = 0;
+            while(true){
+              int fabian = 0;
             }
           }
           if((false && false) || (true || false) | 6) {
             int asd = 5;
-
           }
         }
         int d = 5;
         """; //*/
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());
-    ParseTree st = new ParseTree(new Token(TokenKind.PROGRAM, ""));
-    p.program(st);
+    ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+    p.program(pt);
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
     
-    file.Writer.write("src/test/resources/treeForAst.txt", st.toString());
-    AbstractSyntaxTree ast = astf.fromParseTree(st);
+    file.Writer.write("src/test/resources/treeForAst.txt", pt.toString());
+    AbstractSyntaxTree ast = astf.fromParseTree(pt);
     file.Writer.write("src/test/resources/Ast.txt", ast.toString());
 
   }

@@ -3,6 +3,7 @@ package parser;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import ast.AstNodeKinds;
 import lexer.Token;
 import lexer.TokenKind;
 
@@ -13,25 +14,6 @@ public class ParseTree {
   public ParseTree(Token t) {
     childNodes = new LinkedList<ParseTree>();
     this.token = t;
-  }
-
-  void printParseTree(int tabs) {
-    for (int i = 0; i < tabs; i++) {
-      System.out.print("  ");
-    }
-    for (int i = 0; i < this.childNodes.size(); i++) {
-      this.childNodes.get(i).printParseTree(tabs + 1);
-    }
-  }
-
-  void buildStringParseTree(int tabs, StringBuilder sb, String indentation) {
-    for (int i = 0; i < tabs; i++) {
-      sb.append(indentation);
-    }
-    sb.append(token + "\n");
-    for (int i = 0; i < this.childNodes.size(); i++) {
-      this.childNodes.get(i).buildStringParseTree(tabs + 1, sb, indentation);
-    }
   }
 
   public String toString() {
@@ -62,26 +44,44 @@ public class ParseTree {
     return token.kind;
   }
 
-  ParseTree insertSubtree(Token t) {
-    ParseTree node;
-    node = new ParseTree(t);
-    this.childNodes.addLast(node);
-    return node;
-  }
-
   public boolean hasChilds() {
     return this.childNodes.size() > 0;
   }
 
+  /**
+   * Returns the first index of child with given kind, starting at the first child
+   * 
+   * @param kind TokenKind to be looked for
+   * @return index of the child or -1 if not found
+   */
+  public int getChildIndex(TokenKind kind) {
+    return getChildIndex(kind, 0);
+  }
+
+  /**
+   * Returns the first index of child with given kind
+   * 
+   * @param kind   TokenKind to be looked for
+   * @param offset offset from where the search starts
+   * @return index of the child or -1 if not found
+   */
+  public int getChildIndex(TokenKind kind, int offset) {
+    if (!this.hasChilds()) {
+      return -1;
+    }
+    for (int i = offset; i < this.childNodes.size(); i++) {
+      if (this.getChild(i).getKind() == kind) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
   public ParseTree getChild(int i) {
-    if (i > this.childNodes.size())
+    if (i > this.childNodes.size() || i < 0)
       return null;
     else
       return this.childNodes.get(i);
-  }
-
-  LinkedList<ParseTree> getChildNodes() {
-    return this.childNodes;
   }
 
   /**
@@ -98,5 +98,35 @@ public class ParseTree {
 
   public int getChildCount() {
     return childNodes.size();
+  }
+
+  void printParseTree(int tabs) {
+    for (int i = 0; i < tabs; i++) {
+      System.out.print("  ");
+    }
+    for (int i = 0; i < this.childNodes.size(); i++) {
+      this.childNodes.get(i).printParseTree(tabs + 1);
+    }
+  }
+
+  void buildStringParseTree(int tabs, StringBuilder sb, String indentation) {
+    for (int i = 0; i < tabs; i++) {
+      sb.append(indentation);
+    }
+    sb.append(token + "\n");
+    for (int i = 0; i < this.childNodes.size(); i++) {
+      this.childNodes.get(i).buildStringParseTree(tabs + 1, sb, indentation);
+    }
+  }
+
+  ParseTree insertSubtree(Token t) {
+    ParseTree node;
+    node = new ParseTree(t);
+    this.childNodes.addLast(node);
+    return node;
+  }
+
+  LinkedList<ParseTree> getChildNodes() {
+    return this.childNodes;
   }
 }

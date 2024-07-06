@@ -244,6 +244,19 @@ PROGRAM
 │   │   ├── ELSE: else
 │   │   ├── OPEN_PARANTHESES: {
 │   │   ├── STATEMENT
+│   │   │   ├── INT: int
+│   │   │   ├── IDENT: paul
+│   │   │   ├── EQ: =
+│   │   │   ├── EXPRESSION
+│   │   │   │   └── EQUALITY
+│   │   │   │       └── COMPARISON
+│   │   │   │           └── ARITHMETIC_EXPR
+│   │   │   │               └── TERM
+│   │   │   │                   └── UNARY
+│   │   │   │                       └── PRIMARY
+│   │   │   │                           └── V_INT: 0
+│   │   │   └── SEMICOLON: ;
+│   │   ├── STATEMENT
 │   │   │   ├── WHILE: while
 │   │   │   ├── OPEN_BRACKET: (
 │   │   │   ├── EXPRESSION
@@ -258,7 +271,7 @@ PROGRAM
 │   │   │   ├── OPEN_PARANTHESES: {
 │   │   │   ├── STATEMENT
 │   │   │   │   ├── INT: int
-│   │   │   │   ├── IDENT: test
+│   │   │   │   ├── IDENT: fabian
 │   │   │   │   ├── EQ: =
 │   │   │   │   ├── EXPRESSION
 │   │   │   │   │   └── EQUALITY

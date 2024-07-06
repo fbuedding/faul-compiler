@@ -72,20 +72,27 @@ PROGRAM
 │       ├── IF
 │       │   ├── CONDITION
 │       │   │   └── BOOLEAN: true
+│       │   ├── BRANCH
+│       │   │   ├── ASSIGNMENT
+│       │   │   │   ├── IDENT: z
+│       │   │   │   └── GTEQ
+│       │   │   │       ├── INTEGER: 4
+│       │   │   │       └── ASTERISK
+│       │   │   │           ├── INTEGER: 5
+│       │   │   │           └── INTEGER: 6
+│       │   │   ├── DECLARATION
+│       │   │   │   ├── IDENT: asd
+│       │   │   │   └── ADRESS: 7
+│       │   │   └── ASSIGNMENT
+│       │   │       ├── IDENT: asd
+│       │   │       └── INTEGER: 5
 │       │   └── BRANCH
-│       │       ├── ASSIGNMENT
-│       │       │   ├── IDENT: z
-│       │       │   └── GTEQ
-│       │       │       ├── INTEGER: 4
-│       │       │       └── ASTERISK
-│       │       │           ├── INTEGER: 5
-│       │       │           └── INTEGER: 6
 │       │       ├── DECLARATION
-│       │       │   ├── IDENT: asd
+│       │       │   ├── IDENT: paul
 │       │       │   └── ADRESS: 7
 │       │       └── ASSIGNMENT
-│       │           ├── IDENT: asd
-│       │           └── INTEGER: 5
+│       │           ├── IDENT: paul
+│       │           └── INTEGER: 0
 │       └── IF
 │           ├── CONDITION
 │           │   └── LOR
