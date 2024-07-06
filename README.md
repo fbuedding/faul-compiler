@@ -559,7 +559,7 @@ PROGRAM
 ```
 #### Syntaktische Analyse
 
-Oftmals wird gar kein Parse Tree erstell sondern direkt ein abstrakter Syntax Baum (AST). Dieser Compiler tut dies aus Übersichtsgründen nicht. Die [AbstractSyntaxTreeFactory](src/main/java/ast/AbstractSyntaxTreeFractory.java) verarbeitet den [Parse Tree](#parse-tree-syntax-tree) zu einem AST.
+Oftmals wird gar kein Parse Tree erstell sondern direkt ein abstrakter Syntax Baum (AST). Dieser Compiler tut dies aus Übersichtsgründen nicht. Die [AbstractSyntaxTreeFactory](src/main/java/ast/AbstractSyntaxTreeFactory.java) verarbeitet den [Parse Tree](#parse-tree-syntax-tree) zu einem AST.
 
 Dieser lässt sich auch mit der Methode toString() wie folgt ausgeben:
 
