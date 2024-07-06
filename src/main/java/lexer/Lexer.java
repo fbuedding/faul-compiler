@@ -123,9 +123,9 @@ public class Lexer {
 
     else if (currentCharacter == '0') {
       if (isDigit(lookAhead())) {
-        throw new LexerError("Numberscannot start with 0", currentLine, currentPosition);
+        throw new LexerError("Numbers cannot start with 0", currentLine, currentPosition);
       }
-      t = new Token(TokenKind.V_INT,currentCharacter, currentLine, currentLinePosition);
+      t = new Token(TokenKind.V_INT, currentCharacter, currentLine, currentLinePosition);
     }
 
     else if (isDigit(currentCharacter)) {
@@ -134,8 +134,9 @@ public class Lexer {
 
     else if (isWordStart(currentCharacter)) {
       return matchWord();
-    } else
+    } else {
       throw new LexerError("Unknown Token", currentLine, currentLinePosition);
+    }
     nextCharacter();
     return t;
   }
@@ -202,13 +203,17 @@ public class Lexer {
         wordFsm.nextState(lookAhead());
       }
     } catch (NoTransitionError e) {
-      throw new LexerError("Invalid character in identifier: <" + String.valueOf(currentCharacter), currentLine,
+      throw new LexerError("Invalid character in identifier: <" + String.valueOf(currentCharacter) + ">", currentLine,
           currentLinePosition);
     } finally {
       wordFsm.reset();
     }
     if (t.lexem.equals("if")) {
       t.kind = TokenKind.IF;
+    } else if (t.lexem.equals("else")) {
+      t.kind = TokenKind.ELSE;
+    } else if (t.lexem.equals("while")) {
+      t.kind = TokenKind.WHILE;
     } else if (t.lexem.equals("int")) {
       t.kind = TokenKind.INT;
     } else if (t.lexem.equals("bool")) {

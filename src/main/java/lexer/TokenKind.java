@@ -45,6 +45,14 @@ public enum TokenKind {
    * if keyword
    */
   IF,
+  /**
+   * else keyword
+   */
+  ELSE,
+  /**
+   * while keyword
+   */
+  WHILE,
   // Operators
   /**
    * =

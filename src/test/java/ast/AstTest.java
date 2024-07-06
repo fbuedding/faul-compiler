@@ -35,6 +35,11 @@ public class AstTest {
             z = 4 >= 5*6;
             int asd = 5;
           }
+          else {
+            while(true) {
+              int test = 0;
+            }
+          }
           if((false && false) || (true || false) | 6) {
             int asd = 5;
 
@@ -52,7 +57,6 @@ public class AstTest {
     AbstractSyntaxTree ast = astf.fromParseTree(st);
     file.Writer.write("src/test/resources/Ast.txt", ast.toString());
 
-    System.out.println(astf.sTable);
   }
 
 }

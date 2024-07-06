@@ -24,6 +24,13 @@ public class Parser {
     scopes.push(0);
   }
 
+  /**
+   * Good for checking if current token is a specific token without actually
+   * matching it
+   * 
+   * @param tt
+   * @return true if current token is of kind
+   */
   private boolean checkToken(TokenKind tt) {
     return tokens[currentToken].kind == tt;
   }
@@ -100,7 +107,7 @@ public class Parser {
         matchToken(TokenKind.SEMICOLON, st);
         symbolTable.add(boolIdent);
         break;
-      case IF:
+      case IF: {
         matchToken(TokenKind.IF, st);
         matchToken(TokenKind.OPEN_BRACKET, st);
         expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
@@ -115,7 +122,40 @@ public class Parser {
         for (int i = 0; i < elementsToBeRemoved; i++) {
           symbolTable.removeLast();
         }
+        // Since I want the else branch to be under the if statement
+        if (checkToken(TokenKind.ELSE)) {
+          matchToken(TokenKind.ELSE, st);
+          matchToken(TokenKind.OPEN_PARANTHESES, st);
+          scopes.push(symbolTable.size());
+          while (!checkToken(TokenKind.CLOSE_PARANTHESES)) {
+            statement(st.insertSubtree(new Token(TokenKind.STATEMENT, "")));
+          }
+          matchToken(TokenKind.CLOSE_PARANTHESES, st);
+          elementsToBeRemoved = symbolTable.size() - scopes.pop();
+          for (int i = 0; i < elementsToBeRemoved; i++) {
+            symbolTable.removeLast();
+          }
+
+        }
         break;
+      }
+      case WHILE: {
+        matchToken(TokenKind.WHILE, st);
+        matchToken(TokenKind.OPEN_BRACKET, st);
+        expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
+        matchToken(TokenKind.CLOSE_BRACKET, st);
+        matchToken(TokenKind.OPEN_PARANTHESES, st);
+        scopes.push(symbolTable.size());
+        while (!checkToken(TokenKind.CLOSE_PARANTHESES)) {
+          statement(st.insertSubtree(new Token(TokenKind.STATEMENT, "")));
+        }
+        matchToken(TokenKind.CLOSE_PARANTHESES, st);
+        int elementsToBeRemoved = symbolTable.size() - scopes.pop();
+        for (int i = 0; i < elementsToBeRemoved; i++) {
+          symbolTable.removeLast();
+        }
+        break;
+      }
       case IDENT:
         if (!symbolTable.contains(currentToken().lexem)) {
           throw new UnknownIdentifierError(currentToken());

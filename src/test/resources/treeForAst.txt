@@ -240,6 +240,36 @@ PROGRAM
 │   │   │   │                       └── PRIMARY
 │   │   │   │                           └── V_INT: 5
 │   │   │   └── SEMICOLON: ;
+│   │   ├── CLOSE_PARANTHESES: }
+│   │   ├── ELSE: else
+│   │   ├── OPEN_PARANTHESES: {
+│   │   ├── STATEMENT
+│   │   │   ├── WHILE: while
+│   │   │   ├── OPEN_BRACKET: (
+│   │   │   ├── EXPRESSION
+│   │   │   │   └── EQUALITY
+│   │   │   │       └── COMPARISON
+│   │   │   │           └── ARITHMETIC_EXPR
+│   │   │   │               └── TERM
+│   │   │   │                   └── UNARY
+│   │   │   │                       └── PRIMARY
+│   │   │   │                           └── V_BOOL: true
+│   │   │   ├── CLOSE_BRACKET: )
+│   │   │   ├── OPEN_PARANTHESES: {
+│   │   │   ├── STATEMENT
+│   │   │   │   ├── INT: int
+│   │   │   │   ├── IDENT: test
+│   │   │   │   ├── EQ: =
+│   │   │   │   ├── EXPRESSION
+│   │   │   │   │   └── EQUALITY
+│   │   │   │   │       └── COMPARISON
+│   │   │   │   │           └── ARITHMETIC_EXPR
+│   │   │   │   │               └── TERM
+│   │   │   │   │                   └── UNARY
+│   │   │   │   │                       └── PRIMARY
+│   │   │   │   │                           └── V_INT: 0
+│   │   │   │   └── SEMICOLON: ;
+│   │   │   └── CLOSE_PARANTHESES: }
 │   │   └── CLOSE_PARANTHESES: }
 │   ├── STATEMENT
 │   │   ├── IF: if

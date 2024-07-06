@@ -4,4 +4,8 @@ a = a+ 4;
 }
 if ( true || false) {
   int beta = 234;
+} else {
+  while(true) {
+    bool test = true;
+  }
 }

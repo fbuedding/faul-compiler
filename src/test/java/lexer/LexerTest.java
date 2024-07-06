@@ -158,7 +158,7 @@ class LexerTest {
 
   @Test
   public void testIfBlock() throws LexerError {
-    String input = "if( a == bc){\nint testInt= 1 2 3 ;\nint a=12 3 ;\nbool testBool =true;\n}";
+    String input = "if( a == bc){\nint testInt= 1 2 3 ;\nint a=12 3 ;\nbool testBool =true;\n} else{}";
     Token[] expected = new Token[] {
         new Token(TokenKind.IF, "if"),
         new Token(TokenKind.OPEN_BRACKET, "("),
@@ -182,6 +182,33 @@ class LexerTest {
         new Token(TokenKind.EQ, "="),
         new Token(TokenKind.V_BOOL, "true"),
         new Token(TokenKind.SEMICOLON, ";"),
+        new Token(TokenKind.CLOSE_PARANTHESES, "}"),
+        new Token(TokenKind.ELSE, "else"),
+        new Token(TokenKind.OPEN_PARANTHESES, "{"),
+        new Token(TokenKind.CLOSE_PARANTHESES, "}"),
+    };
+    Lexer l = new Lexer(input);
+    Token t = l.getToken();
+    Vector<Token> tokens = new Vector<Token>();
+    while (t.kind != TokenKind.EOF) {
+      tokens.add(t);
+      t = l.getToken();
+    }
+    for (int i = 0; i < expected.length; i++) {
+      assertTrue(expected[i].equals(tokens.get(i)),
+          String.format("Expected: %s but is %s", expected[i], tokens.get(i)));
+    }
+  }
+
+  @Test
+  public void testWhileLoop() throws LexerError {
+    String input = "while(true){}";
+    Token[] expected = new Token[] {
+        new Token(TokenKind.WHILE, "while"),
+        new Token(TokenKind.OPEN_BRACKET, "("),
+        new Token(TokenKind.V_BOOL, "true"),
+        new Token(TokenKind.CLOSE_BRACKET, ")"),
+        new Token(TokenKind.OPEN_PARANTHESES, "{"),
         new Token(TokenKind.CLOSE_PARANTHESES, "}"),
     };
     Lexer l = new Lexer(input);

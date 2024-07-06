@@ -53,6 +53,7 @@ Tokens der Faul-Lang.
 | INT  | Zum erstellen eines Integers |
 | BOOL | Zum erstellen eines Boolean  |
 | IF   | Beginnt ein If-Statement     |
+| ELSE | Beginnt ein ELSE-Statement   |
 
 #### Operatoren
 
@@ -89,7 +90,8 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
 <program>           ::= <statement>*
 <statement>         ::= "int" <ident> "=" <expression> <semi>
                       | "bool" <ident> "=" <expression> <semi>
-                      | "if" "(" <expression> ")" "{" <statement>* "}"
+                      | "if" "(" <expression> ")" "{" <statement>* "}" ("else" "{" <statement>* "}")?
+                      | "while" "(" <expression> ")" "{" <statement>* "}"
                       | <ident> "=" <expression> <semi>
 <expression>        ::= <equality> ( ("&&" | "||" | "&" | "|") <expression>)?
 <equality>          ::= <comparision> (("!=" | "==") <equality>)?

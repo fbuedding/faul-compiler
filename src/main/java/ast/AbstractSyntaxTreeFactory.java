@@ -331,7 +331,6 @@ public class AbstractSyntaxTreeFactory {
 
 	void primary(AbstractSyntaxTree ast, ParseTree pt, SymbolTable sTable) {
 		if (!isChildCount1or3(pt)) {
-			System.out.println(pt);
 			throw new Error("Invalid Expression child count: " + pt.getChildCount());
 		}
 		if (pt.getChildCount() == 1) {

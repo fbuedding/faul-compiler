@@ -66,14 +66,16 @@ public class Fsm<T> {
   public static Fsm<Character> wordFsm() {
     return new Fsm.Builder<Character>(0, 2)
         .addState(new State.Builder<Character>()
+            // see https://stackoverflow.com/a/27690990
             .addTransition("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_".chars().mapToObj(c -> (char) c)
                 .toArray(Character[]::new), 1))
         .addState(new State.Builder<Character>()
             .addTransition(
+            // see https://stackoverflow.com/a/27690990
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890".chars().mapToObj(c -> (char) c)
                     .toArray(Character[]::new),
                 1)
-            .addTransition(new Character[] { ' ', '-', '+', '*', '/', '<', '>', '!', ')', '(', ';', '=' }, 2))
+            .addTransition(new Character[] { ' ', '-', '+', '*', '/', '<', '>', '!', ')', '(', ';', '=', '{' }, 2))
         .addState(new State.Builder<Character>())
         .build();
   }

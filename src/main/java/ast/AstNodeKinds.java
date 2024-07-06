@@ -5,6 +5,7 @@ public enum AstNodeKinds {
   DECLARATION,
   ADRESS,
   ASSIGNMENT,
+  WHILE,
   IF,
   CONDITION,
   BRANCH,

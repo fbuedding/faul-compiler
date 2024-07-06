@@ -19,7 +19,6 @@ public class ParseTree {
     for (int i = 0; i < tabs; i++) {
       System.out.print("  ");
     }
-    System.out.println(token);
     for (int i = 0; i < this.childNodes.size(); i++) {
       this.childNodes.get(i).printParseTree(tabs + 1);
     }

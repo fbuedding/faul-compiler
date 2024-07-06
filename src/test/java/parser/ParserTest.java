@@ -29,7 +29,7 @@ public class ParserTest {
           if((false && false) || (true || false) | 6) {
 
           }
-        }
+        } 
         int d = 5;
         """;
     Lexer l = new Lexer(i);
