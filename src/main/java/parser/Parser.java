@@ -279,7 +279,11 @@ public class Parser {
     } else if (checkToken(TokenKind.SLASH)) {
       matchToken(TokenKind.SLASH, st);
       term(st.insertSubtree(new Token(TokenKind.TERM, "")));
+    }else if (checkToken(TokenKind.PERCENT)) {
+      matchToken(TokenKind.PERCENT, st);
+      term(st.insertSubtree(new Token(TokenKind.TERM, "")));
     }
+
   }
 
   /**

@@ -58,7 +58,7 @@ public class Fsm<T> {
             .addTransition(new Character[] { '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 1))
         .addState(new State.Builder<Character>()
             .addTransition(new Character[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }, 1)
-            .addTransition(new Character[] { '-', '+', '*', '/', '<', '>', '!', ')', ';', '=' }, 2))
+            .addTransition(new Character[] { '-', '+', '*', '/', '%', '<', '>', '!', ')', ';', '=' }, 2))
         .addState(new State.Builder<Character>())
         .build();
   }
@@ -71,7 +71,7 @@ public class Fsm<T> {
                 .toArray(Character[]::new), 1))
         .addState(new State.Builder<Character>()
             .addTransition(
-            // see https://stackoverflow.com/a/27690990
+                // see https://stackoverflow.com/a/27690990
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890".chars().mapToObj(c -> (char) c)
                     .toArray(Character[]::new),
                 1)

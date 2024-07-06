@@ -75,6 +75,10 @@ public enum TokenKind {
    */
   SLASH,
   /**
+   * %
+   */
+  PERCENT,
+  /**
    * (
    */
   OPEN_BRACKET,

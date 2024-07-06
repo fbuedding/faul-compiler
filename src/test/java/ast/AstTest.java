@@ -45,14 +45,14 @@ public class AstTest {
             int asd = 5;
           }
         }
-        int d = 5;
-        """; //*/
+        int d = 5 % 3;
+        """; // */
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());
     ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
     p.program(pt);
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
-    
+
     file.Writer.write("src/test/resources/treeForAst.txt", pt.toString());
     AbstractSyntaxTree ast = astf.fromParseTree(pt);
     file.Writer.write("src/test/resources/Ast.txt", ast.toString());

@@ -54,6 +54,9 @@ public class Lexer {
     else if (currentCharacter == '/')
       t = new Token(TokenKind.SLASH, currentCharacter, currentLine, currentLinePosition);
 
+    else if (currentCharacter == '%')
+      t = new Token(TokenKind.PERCENT, currentCharacter, currentLine, currentLinePosition);
+
     else if (currentCharacter == '(')
       t = new Token(TokenKind.OPEN_BRACKET, currentCharacter, currentLine, currentLinePosition);
 

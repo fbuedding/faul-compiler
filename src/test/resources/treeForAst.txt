@@ -375,7 +375,12 @@ PROGRAM
     │       └── COMPARISON
     │           └── ARITHMETIC_EXPR
     │               └── TERM
-    │                   └── UNARY
-    │                       └── PRIMARY
-    │                           └── V_INT: 5
+    │                   ├── UNARY
+    │                   │   └── PRIMARY
+    │                   │       └── V_INT: 5
+    │                   ├── PERCENT: %
+    │                   └── TERM
+    │                       └── UNARY
+    │                           └── PRIMARY
+    │                               └── V_INT: 3
     └── SEMICOLON: ;

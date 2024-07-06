@@ -5,6 +5,7 @@ import static parser.Constants.ASSIGNMENT_IDENTIFIER;
 import static parser.Constants.DECLARATION_TYPE;
 import static parser.Constants.DECLARERATION_EXPRESSION;
 import static parser.Constants.DECLARERATION_IDENTIFIER;
+import static parser.Constants.EMPTY_BLOCK_SIZE;
 import static parser.Constants.FIRST_OPERAND;
 import static parser.Constants.IF_EXPRESSION;
 import static parser.Constants.IF_STATEMENT;
@@ -77,7 +78,7 @@ public class AbstractSyntaxTreeFactory {
             sTable.getScopedSymbolTable());
 
         // check if else branch is present and if the else branch is not empty
-        if (pt.getChildIndex(TokenKind.ELSE) != -1 && pt.getChildIndex(TokenKind.ELSE) != pt.getChildCount() - 3) {
+        if (pt.getChildIndex(TokenKind.ELSE) != -1 && pt.getChildIndex(TokenKind.ELSE) != pt.getChildCount() - EMPTY_BLOCK_SIZE - 1) {
           elseBranch(pt, if_node.insertSubTree(AstNodeKinds.BRANCH, AstNodeTypes.NONE, pt.token.line, pt.token.linePos),
               sTable.getScopedSymbolTable());
         }
@@ -93,7 +94,8 @@ public class AbstractSyntaxTreeFactory {
 
         // check if else branch is present and if the else branch is not empty
         if (pt.getChildIndex(TokenKind.ELSE) != -1 && pt.getChildIndex(TokenKind.ELSE) != pt.getChildCount() - 3) {
-          elseBranch(pt, while_node.insertSubTree(AstNodeKinds.BRANCH, AstNodeTypes.NONE, pt.token.line, pt.token.linePos),
+          elseBranch(pt,
+              while_node.insertSubTree(AstNodeKinds.BRANCH, AstNodeTypes.NONE, pt.token.line, pt.token.linePos),
               sTable.getScopedSymbolTable());
         }
         break;
@@ -321,11 +323,15 @@ public class AbstractSyntaxTreeFactory {
       ParseTree op = pt.getChild(OPERATOR);
       switch (op.getKind()) {
         case ASTERISK:
-          tmp = ast.insertSubTree(AstNodeKinds.ASTERISK, AstNodeTypes.INTEGER, op.token.line, op.token.linePos);
+          tmp = ast.insertSubTree(AstNodeKinds.MUL, AstNodeTypes.INTEGER, op.token.line, op.token.linePos);
 
           break;
         case SLASH:
-          tmp = ast.insertSubTree(AstNodeKinds.SLASH, AstNodeTypes.INTEGER, op.token.line, op.token.linePos);
+          tmp = ast.insertSubTree(AstNodeKinds.DIV, AstNodeTypes.INTEGER, op.token.line, op.token.linePos);
+
+          break;
+        case PERCENT:
+          tmp = ast.insertSubTree(AstNodeKinds.MOD, AstNodeTypes.INTEGER, op.token.line, op.token.linePos);
 
           break;
 

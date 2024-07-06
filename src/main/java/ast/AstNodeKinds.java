@@ -23,11 +23,15 @@ public enum AstNodeKinds {
   /**
    * *
    */
-  ASTERISK,
+  MUL,
   /**
    * /
    */
-  SLASH,
+  DIV,
+  /**
+   * /
+   */
+  MOD,
   /**
    * ==
    */

@@ -10,7 +10,7 @@ public  final class Constants {
   // If
   public static final int IF_EXPRESSION = 2;
   public static final int IF_STATEMENT = 5;
-  // If
+  // While
   public static final int WHILE_EXPRESSION = 2;
   public static final int WHILE_STATEMENT = 5;
   // Declarations
@@ -30,4 +30,6 @@ public  final class Constants {
   // Primary  child indeces
   public static final int PRIMARY_VALUE = 0;
   public static final int PRIMARY_EXPRESSION = 1;
+  // Util
+  public static final int EMPTY_BLOCK_SIZE = 2;
 }
