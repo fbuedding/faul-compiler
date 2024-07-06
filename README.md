@@ -16,7 +16,7 @@
       - [Input](#input)
       - [Lexer](#lexer)
       - [Parser](#parser)
-      - [Syntaktische Analyse](#syntaktische-analyse)
+      - [Semantische Analyse](#semantische-analyse)
   - [Finite State Machines](#finite-state-machines)
     - [Integer](#integer)
     - [Word](#word)
@@ -557,7 +557,7 @@ PROGRAM
     └── SEMICOLON: ;
 
 ```
-#### Syntaktische Analyse
+#### Semantische Analyse
 
 Oftmals wird gar kein Parse Tree erstellt sondern direkt ein abstrakter Syntax Baum (AST). 
 Dieser Compiler tut dies aus Gründen der Simplizität nicht. Die [AbstractSyntaxTreeFactory](src/main/java/ast/AbstractSyntaxTreeFactory.java) verarbeitet den [Parse Tree](#parse-tree-syntax-tree) zu einem AST.
