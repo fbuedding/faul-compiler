@@ -14,6 +14,7 @@ import static parser.Constants.PRIMARY_VALUE;
 import static parser.Constants.SECOND_OPERAND;
 import static parser.Constants.STATEMENT_TYPE;
 import static parser.Constants.UNARY_OPERATOR;
+import static parser.Constants.WHILE_EXPRESSION;
 
 import java.util.Hashtable;
 import java.util.Map.Entry;
@@ -78,6 +79,21 @@ public class AbstractSyntaxTreeFactory {
         // check if else branch is present and if the else branch is not empty
         if (pt.getChildIndex(TokenKind.ELSE) != -1 && pt.getChildIndex(TokenKind.ELSE) != pt.getChildCount() - 3) {
           elseBranch(pt, if_node.insertSubTree(AstNodeKinds.BRANCH, AstNodeTypes.NONE, pt.token.line, pt.token.linePos),
+              sTable.getScopedSymbolTable());
+        }
+        break;
+      case WHILE:
+        AbstractSyntaxTree while_node = ast.insertSubTree(AstNodeKinds.WHILE, AstNodeTypes.NONE, pt.token.line,
+            pt.token.linePos);
+        ParseTree while_condition = pt.getChild(WHILE_EXPRESSION);
+        expression(while_node.insertSubTree(AstNodeKinds.CONDITION, AstNodeTypes.BOOLEAN,
+            while_condition.token.line, while_condition.token.linePos), while_condition, sTable);
+        branch(pt, while_node.insertSubTree(AstNodeKinds.BRANCH, AstNodeTypes.NONE, pt.token.line, pt.token.linePos),
+            sTable.getScopedSymbolTable());
+
+        // check if else branch is present and if the else branch is not empty
+        if (pt.getChildIndex(TokenKind.ELSE) != -1 && pt.getChildIndex(TokenKind.ELSE) != pt.getChildCount() - 3) {
+          elseBranch(pt, while_node.insertSubTree(AstNodeKinds.BRANCH, AstNodeTypes.NONE, pt.token.line, pt.token.linePos),
               sTable.getScopedSymbolTable());
         }
         break;

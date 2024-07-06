@@ -10,6 +10,9 @@ public  final class Constants {
   // If
   public static final int IF_EXPRESSION = 2;
   public static final int IF_STATEMENT = 5;
+  // If
+  public static final int WHILE_EXPRESSION = 2;
+  public static final int WHILE_STATEMENT = 5;
   // Declarations
   public static final int DECLARATION_TYPE = 0;
   public static final int DECLARERATION_IDENTIFIER = 1;
