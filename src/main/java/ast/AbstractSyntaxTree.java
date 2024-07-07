@@ -13,7 +13,11 @@ public class AbstractSyntaxTree {
   public LinkedList<AbstractSyntaxTree> children;
   int line;
   int linePos;
-  String value = null;
+  public String value = null;
+
+  public AstNodeKinds getKind() {
+    return this.kind;
+  }
 
   public AbstractSyntaxTree(AstNodeKinds k, AstNodeTypes t, int line, int linePos) {
     this.kind = k;
@@ -21,6 +25,21 @@ public class AbstractSyntaxTree {
     this.line = line;
     this.linePos = linePos;
     children = new LinkedList<>();
+  }
+
+  public int depth() {
+    if (children.size() == 0) {
+      return 0;
+
+    }
+    int depth = 0;
+    for (AbstractSyntaxTree abstractSyntaxTree : children) {
+      if (abstractSyntaxTree.depth() > depth) {
+       depth = abstractSyntaxTree.depth(); 
+      }
+    }
+    return depth + 1;
+
   }
 
   public AbstractSyntaxTree insertSubTree(AstNodeKinds k, AstNodeTypes t, int line, int linePos) {
@@ -34,6 +53,19 @@ public class AbstractSyntaxTree {
     node.value = value;
     children.add(node);
     return node;
+  }
+
+  public AbstractSyntaxTree getChild(int i) {
+    return this.children.get(i);
+  }
+
+  public AbstractSyntaxTree getChild(AstNodeKinds kind) {
+    for (AbstractSyntaxTree abstractSyntaxTree : children) {
+      if (abstractSyntaxTree.kind == kind) {
+        return abstractSyntaxTree;
+      }
+    }
+    return null;
   }
 
   @Override

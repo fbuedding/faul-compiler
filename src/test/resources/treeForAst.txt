@@ -9,8 +9,10 @@ PROGRAM
 │   │           └── ARITHMETIC_EXPR
 │   │               ├── TERM
 │   │               │   └── UNARY
-│   │               │       └── PRIMARY
-│   │               │           └── V_INT: 3
+│   │               │       ├── MINUS: -
+│   │               │       └── UNARY
+│   │               │           └── PRIMARY
+│   │               │               └── V_INT: 3
 │   │               ├── PLUS: +
 │   │               └── ARITHMETIC_EXPR
 │   │                   └── TERM
@@ -25,18 +27,13 @@ PROGRAM
 │   ├── EXPRESSION
 │   │   └── EQUALITY
 │   │       └── COMPARISON
-│   │           ├── ARITHMETIC_EXPR
-│   │           │   └── TERM
-│   │           │       └── UNARY
-│   │           │           └── PRIMARY
-│   │           │               └── IDENT: a
-│   │           ├── LT: <
-│   │           └── COMPARISON
-│   │               └── ARITHMETIC_EXPR
-│   │                   └── TERM
+│   │           └── ARITHMETIC_EXPR
+│   │               └── TERM
+│   │                   └── UNARY
+│   │                       ├── NOT: !
 │   │                       └── UNARY
 │   │                           └── PRIMARY
-│   │                               └── V_INT: 6
+│   │                               └── V_BOOL: true
 │   └── SEMICOLON: ;
 ├── STATEMENT
 │   ├── INT: int
@@ -366,21 +363,73 @@ PROGRAM
 │   │   │   └── SEMICOLON: ;
 │   │   └── CLOSE_PARANTHESES: }
 │   └── CLOSE_PARANTHESES: }
+├── STATEMENT
+│   ├── INT: int
+│   ├── IDENT: d
+│   ├── EQ: =
+│   ├── EXPRESSION
+│   │   └── EQUALITY
+│   │       └── COMPARISON
+│   │           └── ARITHMETIC_EXPR
+│   │               └── TERM
+│   │                   ├── UNARY
+│   │                   │   └── PRIMARY
+│   │                   │       └── V_INT: 5
+│   │                   ├── PERCENT: %
+│   │                   └── TERM
+│   │                       └── UNARY
+│   │                           └── PRIMARY
+│   │                               └── V_INT: 3
+│   └── SEMICOLON: ;
+├── STATEMENT
+│   ├── INT: int
+│   ├── IDENT: and
+│   ├── EQ: =
+│   ├── EXPRESSION
+│   │   ├── EQUALITY
+│   │   │   └── COMPARISON
+│   │   │       └── ARITHMETIC_EXPR
+│   │   │           └── TERM
+│   │   │               └── UNARY
+│   │   │                   └── PRIMARY
+│   │   │                       └── V_INT: 5
+│   │   ├── AND: &
+│   │   └── EXPRESSION
+│   │       └── EQUALITY
+│   │           └── COMPARISON
+│   │               └── ARITHMETIC_EXPR
+│   │                   └── TERM
+│   │                       └── UNARY
+│   │                           └── PRIMARY
+│   │                               └── V_INT: 5
+│   └── SEMICOLON: ;
 └── STATEMENT
     ├── INT: int
-    ├── IDENT: d
+    ├── IDENT: z1
     ├── EQ: =
     ├── EXPRESSION
     │   └── EQUALITY
     │       └── COMPARISON
     │           └── ARITHMETIC_EXPR
     │               └── TERM
-    │                   ├── UNARY
-    │                   │   └── PRIMARY
-    │                   │       └── V_INT: 5
-    │                   ├── PERCENT: %
-    │                   └── TERM
+    │                   └── UNARY
+    │                       ├── NOT: !
     │                       └── UNARY
     │                           └── PRIMARY
-    │                               └── V_INT: 3
+    │                               ├── OPEN_BRACKET: (
+    │                               ├── EXPRESSION
+    │                               │   └── EQUALITY
+    │                               │       └── COMPARISON
+    │                               │           └── ARITHMETIC_EXPR
+    │                               │               ├── TERM
+    │                               │               │   └── UNARY
+    │                               │               │       └── PRIMARY
+    │                               │               │           └── V_INT: 3
+    │                               │               ├── MINUS: -
+    │                               │               └── ARITHMETIC_EXPR
+    │                               │                   └── TERM
+    │                               │                       └── UNARY
+    │                               │                           └── PRIMARY
+    │                               │                               └── V_INT: 4
+    │                               └── CLOSE_BRACKET: )
     └── SEMICOLON: ;

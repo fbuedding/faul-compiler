@@ -1,23 +1,23 @@
 PROGRAM
 ├── DECLARATION
 │   ├── IDENT: a
-│   └── ADRESS: 0
+│   └── ADDRESS: 0
 ├── ASSIGNMENT
 │   ├── IDENT: a
 │   └── PLUS
-│       ├── INTEGER: 3
+│       ├── NEG
+│       │   └── INTEGER: 3
 │       └── INTEGER: 5
 ├── DECLARATION
 │   ├── IDENT: b
-│   └── ADRESS: 1
+│   └── ADDRESS: 1
 ├── ASSIGNMENT
 │   ├── IDENT: b
-│   └── LT
-│       ├── IDENT: a
-│       └── INTEGER: 6
+│   └── NOT
+│       └── BOOLEAN: true
 ├── DECLARATION
 │   ├── IDENT: c
-│   └── ADRESS: 2
+│   └── ADDRESS: 2
 ├── ASSIGNMENT
 │   ├── IDENT: c
 │   └── MUL
@@ -29,7 +29,7 @@ PROGRAM
 │               └── INTEGER: 3
 ├── DECLARATION
 │   ├── IDENT: e
-│   └── ADRESS: 3
+│   └── ADDRESS: 3
 ├── ASSIGNMENT
 │   ├── IDENT: e
 │   └── LAND
@@ -37,7 +37,7 @@ PROGRAM
 │       └── BOOLEAN: false
 ├── DECLARATION
 │   ├── IDENT: g
-│   └── ADRESS: 4
+│   └── ADDRESS: 4
 ├── ASSIGNMENT
 │   ├── IDENT: g
 │   └── EQEQ
@@ -49,7 +49,7 @@ PROGRAM
 │               └── INTEGER: 3
 ├── DECLARATION
 │   ├── IDENT: z
-│   └── ADRESS: 5
+│   └── ADDRESS: 5
 ├── ASSIGNMENT
 │   ├── IDENT: z
 │   └── GTEQ
@@ -65,7 +65,7 @@ PROGRAM
 │   └── BRANCH
 │       ├── DECLARATION
 │       │   ├── IDENT: d
-│       │   └── ADRESS: 6
+│       │   └── ADDRESS: 6
 │       ├── ASSIGNMENT
 │       │   ├── IDENT: d
 │       │   └── INTEGER: 6
@@ -82,14 +82,14 @@ PROGRAM
 │       │   │   │           └── INTEGER: 6
 │       │   │   ├── DECLARATION
 │       │   │   │   ├── IDENT: asd
-│       │   │   │   └── ADRESS: 7
+│       │   │   │   └── ADDRESS: 7
 │       │   │   └── ASSIGNMENT
 │       │   │       ├── IDENT: asd
 │       │   │       └── INTEGER: 5
 │       │   └── BRANCH
 │       │       ├── DECLARATION
 │       │       │   ├── IDENT: paul
-│       │       │   └── ADRESS: 7
+│       │       │   └── ADDRESS: 7
 │       │       ├── ASSIGNMENT
 │       │       │   ├── IDENT: paul
 │       │       │   └── INTEGER: 0
@@ -99,7 +99,7 @@ PROGRAM
 │       │           └── BRANCH
 │       │               ├── DECLARATION
 │       │               │   ├── IDENT: fabian
-│       │               │   └── ADRESS: 8
+│       │               │   └── ADDRESS: 8
 │       │               └── ASSIGNMENT
 │       │                   ├── IDENT: fabian
 │       │                   └── INTEGER: 0
@@ -117,15 +117,32 @@ PROGRAM
 │           └── BRANCH
 │               ├── DECLARATION
 │               │   ├── IDENT: asd
-│               │   └── ADRESS: 7
+│               │   └── ADDRESS: 7
 │               └── ASSIGNMENT
 │                   ├── IDENT: asd
 │                   └── INTEGER: 5
 ├── DECLARATION
 │   ├── IDENT: d
-│   └── ADRESS: 6
+│   └── ADDRESS: 6
+├── ASSIGNMENT
+│   ├── IDENT: d
+│   └── MOD
+│       ├── INTEGER: 5
+│       └── INTEGER: 3
+├── DECLARATION
+│   ├── IDENT: and
+│   └── ADDRESS: 7
+├── ASSIGNMENT
+│   ├── IDENT: and
+│   └── AND
+│       ├── INTEGER: 5
+│       └── INTEGER: 5
+├── DECLARATION
+│   ├── IDENT: z1
+│   └── ADDRESS: 8
 └── ASSIGNMENT
-    ├── IDENT: d
-    └── MOD
-        ├── INTEGER: 5
-        └── INTEGER: 3
+    ├── IDENT: z1
+    └── NOT
+        └── MINUS
+            ├── INTEGER: 3
+            └── INTEGER: 4

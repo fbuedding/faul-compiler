@@ -3,7 +3,7 @@ package ast;
 public enum AstNodeKinds {
   PROGRAM,
   DECLARATION,
-  ADRESS,
+  ADDRESS,
   ASSIGNMENT,
   WHILE,
   IF,
@@ -16,6 +16,10 @@ public enum AstNodeKinds {
    */
   IDENT,
   PLUS,
+  /**
+   * - but unary
+   */
+  NEG,
   /**
    * -
    */

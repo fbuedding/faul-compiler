@@ -14,12 +14,9 @@ import static parser.Constants.PRIMARY_EXPRESSION;
 import static parser.Constants.PRIMARY_VALUE;
 import static parser.Constants.SECOND_OPERAND;
 import static parser.Constants.STATEMENT_TYPE;
+import static parser.Constants.UNARY;
 import static parser.Constants.UNARY_OPERATOR;
 import static parser.Constants.WHILE_EXPRESSION;
-
-import java.util.Hashtable;
-import java.util.Map.Entry;
-import java.util.Vector;
 
 import lexer.Token;
 import lexer.TokenKind;
@@ -78,7 +75,8 @@ public class AbstractSyntaxTreeFactory {
             sTable.getScopedSymbolTable());
 
         // check if else branch is present and if the else branch is not empty
-        if (pt.getChildIndex(TokenKind.ELSE) != -1 && pt.getChildIndex(TokenKind.ELSE) != pt.getChildCount() - EMPTY_BLOCK_SIZE - 1) {
+        if (pt.getChildIndex(TokenKind.ELSE) != -1
+            && pt.getChildIndex(TokenKind.ELSE) != pt.getChildCount() - EMPTY_BLOCK_SIZE - 1) {
           elseBranch(pt, if_node.insertSubTree(AstNodeKinds.BRANCH, AstNodeTypes.NONE, pt.token.line, pt.token.linePos),
               sTable.getScopedSymbolTable());
         }
@@ -163,7 +161,7 @@ public class AbstractSyntaxTreeFactory {
     }
     int adress = sTable.insert(ident, type);
     ast.insertSubTree(AstNodeKinds.IDENT, type, t.line, t.linePos, ident);
-    ast.insertSubTree(AstNodeKinds.ADRESS, AstNodeTypes.MEMORY_ADDRESS, t.line, t.linePos, "" + adress);
+    ast.insertSubTree(AstNodeKinds.ADDRESS, AstNodeTypes.MEMORY_ADDRESS, t.line, t.linePos, "" + adress);
   }
 
   /**
@@ -354,11 +352,13 @@ public class AbstractSyntaxTreeFactory {
       ParseTree op = pt.getChild(UNARY_OPERATOR);
       switch (op.getKind()) {
         case NOT:
-          unary(ast.insertSubTree(AstNodeKinds.NOT, AstNodeTypes.BOOLEAN, op.token.line, op.token.linePos), pt, sTable);
+          unary(ast.insertSubTree(AstNodeKinds.NOT, AstNodeTypes.BOOLEAN, op.token.line, op.token.linePos),
+              pt.getChild(UNARY), sTable);
 
           break;
         case MINUS:
-          unary(ast.insertSubTree(AstNodeKinds.MINUS, AstNodeTypes.INTEGER, op.token.line, op.token.linePos), pt,
+          unary(ast.insertSubTree(AstNodeKinds.NEG, AstNodeTypes.INTEGER, op.token.line, op.token.linePos),
+              pt.getChild(UNARY),
               sTable);
 
           break;
@@ -418,97 +418,4 @@ public class AbstractSyntaxTreeFactory {
     return pt.getChildCount() == 1 || pt.getChildCount() == 3;
   }
 
-}
-
-class SymbolTable {
-  int memoryOffset = 0;
-  SymbolTable parent = null;
-  Vector<SymbolTable> children = new Vector<SymbolTable>();
-  Hashtable<String, Symbol> symbols;
-
-  SymbolTable() {
-    symbols = new Hashtable<String, Symbol>();
-  }
-
-  SymbolTable(SymbolTable parent, int memoryOffset) {
-    this.parent = parent;
-    this.memoryOffset = memoryOffset;
-    symbols = new Hashtable<String, Symbol>();
-
-  }
-
-  SymbolTable getScopedSymbolTable() {
-    SymbolTable st = new SymbolTable(this, (memoryOffset + symbols.size()));
-    children.add(st);
-    return st;
-  }
-
-  SymbolTable getNextScopedSymbolTable() {
-    return children.removeFirst();
-  }
-
-  int insert(String name, AstNodeTypes ant) {
-    int adress = memoryOffset + symbols.size();
-    symbols.put(name, new Symbol(ant, adress));
-    return adress;
-  }
-
-  boolean has(String name) {
-    if (symbols.containsKey(name)) {
-      return true;
-    }
-
-    if (parent == null) {
-      return false;
-    }
-    return parent.has(name);
-  }
-
-  Symbol get(String name) {
-    Symbol s = this.symbols.get(name);
-    if (s != null) {
-      return s;
-    }
-
-    if (this.parent != null) {
-      return this.parent.get(name);
-    }
-
-    return null;
-
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder buffer = new StringBuilder();
-    print(buffer, 0);
-    return buffer.toString();
-  }
-
-  private void print(StringBuilder buffer, int indentation) {
-    for (Entry<String, Symbol> entry : symbols.entrySet()) {
-      for (int i = 0; i < indentation; i++) {
-        buffer.append("  ");
-      }
-      buffer.append(entry.getKey());
-      buffer.append(":  ");
-      buffer.append(String.format("Type: %s, Memory-Adress: %d", entry.getValue().ant, entry.getValue().adress));
-      buffer.append("\n");
-    }
-    indentation++;
-    for (SymbolTable sTable : children) {
-      sTable.print(buffer, indentation);
-    }
-  }
-}
-
-class Symbol {
-  AstNodeTypes ant;
-
-  int adress;
-
-  Symbol(AstNodeTypes ant, int adress) {
-    this.ant = ant;
-    this.adress = adress;
-  }
 }

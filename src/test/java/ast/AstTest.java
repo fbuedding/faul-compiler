@@ -23,8 +23,8 @@ public class AstTest {
   public void syntaxTree()
       throws LexerError, SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError, IOException {
     String i = """
-        int a = 3 + 5;
-        bool b = a < 6;
+        int a = -3 + 5;
+        bool b = !true;
         int c = 5 * ( 5 + 6 * 3);
         bool e = true && false;
         bool g = 5 == 8 - 5*3;
@@ -46,6 +46,8 @@ public class AstTest {
           }
         }
         int d = 5 % 3;
+        int and = 5 & 5;
+        int z1 = !(3-4);
         """; // */
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());
