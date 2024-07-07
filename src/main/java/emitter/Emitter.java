@@ -1,5 +1,10 @@
 package emitter;
 
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Map.Entry;
+
 import ast.AbstractSyntaxTree;
 import ast.AstNodeKinds;
 import ast.SymbolTable;
@@ -8,7 +13,10 @@ import ast.SymbolTable;
  * Emmiter
  */
 public class Emitter {
-  public enum Register {
+  public class Memory {
+  }
+
+  enum Register {
 
     T("t"),
     S("s"),
@@ -30,6 +38,13 @@ public class Emitter {
   int wordLength = 0;
 
   String memOffsetReg = "";
+
+  // Register lists for loading of variables
+
+  final int maxLoaded = 8;
+  LinkedHashMap<Integer, String> loaded = new LinkedHashMap<>();
+  LinkedList<String> available = new LinkedList<String>(
+      Arrays.asList("s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7"));
 
   public Emitter(AbstractSyntaxTree ast, SymbolTable sTable) {
     this(ast, sTable, 4, true);
@@ -53,6 +68,57 @@ public class Emitter {
     generate(ast, sTable);
   }
 
+  private String initWord(int address) {
+    String reg = "";
+    if (!available.isEmpty()) {
+      reg = available.pop();
+    } else {
+      reg = freeLoadedWord();
+    }
+    loaded.putFirst(address, reg);
+    emit("# initializing %s from address %d", reg, address * wordLength);
+    emit("move $%s, $0", reg);
+    return reg;
+  }
+
+  private String loadWord(int address) {
+    String reg = loaded.remove(address);
+    if (reg == null && available.size() > 0) {
+      reg = available.pop();
+      emit("# loading %s from address %d", reg, address * wordLength);
+      emitLw(reg, address);
+    } else if (reg == null && available.size() == 0) {
+      reg = freeLoadedWord();
+    }
+    loaded.putFirst(address, reg);
+
+    return reg;
+
+  }
+
+  private void assignWord(int address, String thatReg) {
+    String reg = loaded.remove(address);
+    if (reg == null && !available.isEmpty()) {
+      reg = available.pop();
+    } else if (reg == null && available.size() == 0) {
+      reg = freeLoadedWord();
+    }
+    loaded.putFirst(address, reg);
+
+    emit("move $%s, $%s", reg, thatReg);
+
+  }
+
+  private String freeLoadedWord() {
+    Entry<Integer, String> entry = loaded.pollLastEntry();
+    String reg = entry.getValue();
+    int address = entry.getKey();
+    emit("# unloading %s and storing in address %d", reg, address * wordLength);
+    emitSw(reg, address);
+    return reg;
+
+  }
+
   private void emit(String s) {
     code.append(s);
     code.append("\n");
@@ -63,13 +129,19 @@ public class Emitter {
     code.append("\n");
   }
 
-  private void emitLi(String reg, int address) {
+  private void emitLw(String reg, int address) {
     emit("lw $%s, %d(%s)", reg, address * wordLength, memOffsetReg);
   }
 
+  private void emitSw(String reg, int address) {
+    emit("sw $%s, %d(%s)", reg, address * wordLength, memOffsetReg);
+  }
+
   private void emitInitVar(AbstractSyntaxTree ast) {
-    int address = Integer.parseInt(ast.value) * wordLength;
-    emit("sw $0, %d(%s)", address, memOffsetReg);
+    int address = Integer.parseInt(ast.value);
+    // loadWordIntoReg(address);
+    // emit("sw $0, %d(%s)", address, memOffsetReg);
+    initWord(address);
 
   }
 
@@ -116,10 +188,10 @@ public class Emitter {
           break;
       }
     }
-    int address = sTable.getAddress(ident) * wordLength;
-    System.out.println(address);
+    int address = sTable.getAddress(ident);
     decrementRegCounter(reg);
-    emit("sw $%s, %d(%s)", reg, address, memOffsetReg);
+    assignWord(address, reg);
+    // emit("sw $%s, %d(%s)", reg, address, memOffsetReg);
   }
 
   private String op(AbstractSyntaxTree ast, SymbolTable sTable) {
@@ -157,8 +229,7 @@ public class Emitter {
 
   private String id(AbstractSyntaxTree ast, SymbolTable sTable) {
     int address = sTable.getAddress(ast.value) * wordLength;
-    String reg = getReg(Register.S);
-    emitLi(reg, address);
+    String reg = loadWord(address);
     return reg;
   }
 

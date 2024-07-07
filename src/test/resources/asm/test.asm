@@ -1,13 +1,13 @@
 main:
-sw $0, 0($gp)
+# initializing s0 from address 0
+move $s0, $0
 li $v0, 8
 li $v1, 4
 div $t0, $v0, $v1
 li $v0, 3
 mul $t0, $t0, $v0
-sw $t0, 0($gp)
-sw $0, 4($gp)
-lw $s0, 0($gp)
-lw $s1, 0($gp)
-mul $t0, $s0, $s1
-sw $t0, 4($gp)
+move $s0, $t0
+# initializing s1 from address 4
+move $s1, $0
+mul $t0, $s0, $s0
+move $s1, $t0
