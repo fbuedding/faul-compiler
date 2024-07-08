@@ -699,6 +699,39 @@ PROGRAM
     └── INTEGER: 5
 ```
 
+## Backend
+
+### Programmoptimierung
+
+Zururzeit finden keine großen optimierungen. Leere "else"-Statements werden ignoriert.
+
+Mögliche optimierungen wären jedoch: 
+
+- Plus und Minus `0` ignorieren
+- Term `0` setzen wenn sie mit Null multipliziert werden
+- Bei Ausdrücken die immer `true` bzw. `false` sind nicht branchen oder BRanch entfernen
+- Statische variablen mit ihrem Value ersetzen
+
+### Codegenerierung
+
+Die Codegenerierung findet naiv über das Traversieren des AST statt. Bei `Expressions` wird ein modifizierter Depth-first search (DFS) eingetzt um sie in der richtigen Reihenfolge zu evaluieren.
+Der DFS ist so angepasst, dass er statt immer den linken oder rechten Ast des Binary Trees zu erst zu besuchen, den wählt, der tiefer ist. Dies führt dazu, dass nie mehr als zwei Zwischenergebnis Register benötigt werden.
+
+#### MIPS32
+
+Der genierierte Code ist MIPS32 Assembler. [MIPS32 Instruction Set Quick Reference](https://s3-eu-west-1.amazonaws.com/downloads-mips/documents/MD00565-2B-MIPS32-QRC-01.01.pdf)
+
+Zum ausführen kann [MARS MIPS simulator - Missouri State University](https://courses.missouristate.edu/KenVollmar/MARS/) genutzt werden. Dieser unterstützt auch einige Pseudo Instructions, wie zum Beispiel `li`.
+
+
+#### Variablen-Register Strategie
+
+Die Register $s0 - $s7 sind per Konvention dazu da, Werte über lange Zeit zu speichern. Prozeduren, also funktionen müssen (bzw. sollten) diese vor dem return wiederherstellen. Daher werden dort geladene Variablen gspeichert.
+
+Natürlich können in einem Pogramm mehr als acht Variablen existieren, weshalb es eine Strategie geben muss, nach der entschieden wird wann welche Variable in welches Register geladen wird und wann sie in den Speicher gescrhieben wird.
+
+Wenn eine Variable benötigt wird, sie nicht bereits in einem Register steht und alle Register belegt sind, wird die Variable, die am längsten nicht mehr genutzt wurde, in den Speicher verschoben. Danach ist ein Register frei für die Variable. 
+
 ## Finite State Machines
 
 ### Integer
