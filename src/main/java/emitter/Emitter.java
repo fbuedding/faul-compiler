@@ -16,6 +16,9 @@ import error.UnexpectedError;
  * Emmiter
  * TODO it may be clever to give evaluating functions (like expression) the
  * register to store the temp, resulting in less moves
+ *
+ * Actually this should only be done if it'S a variable other wise to much temp
+ * regs are used
  */
 public class Emitter {
   public class Memory {
@@ -100,6 +103,7 @@ public class Emitter {
       emitLw(reg, address);
     } else if (reg == null && available.size() == 0) {
       reg = freeLoadedVar();
+      emitLw(reg, address);
     }
     loaded.putFirst(address, reg);
 
@@ -208,11 +212,38 @@ public class Emitter {
         case IF:
           ifNode(currentAst, sTable);
           break;
-        default:
+        case WHILE:
+          whileNode(currentAst, sTable);
+
           break;
+        default:
+          throw new UnexpectedError("Unknown or unimplemented statement kind " + currentAst.kind, currentAst.line,
+              currentAst.linePos);
       }
     }
     // saveAllVars();
+  }
+
+  private void whileNode(AbstractSyntaxTree ast, SymbolTable sTable) throws CompileError {
+    if (ast.getChildrenCount() != 2) {
+      throw new UnexpectedError("While is empty", ast.line, ast.linePos);
+    }
+    String endLabel = getLabel();
+    AbstractSyntaxTree condition = ast.getChild(AstNodeKinds.CONDITION);
+    if (condition == null || condition.getChildrenCount() == 0) {
+      throw new UnexpectedError("While-Condition is empty", ast.line, ast.linePos);
+    }
+    emitComment("While start");
+    String loopLabel = getLabel();
+    emitLabel(loopLabel);
+    String conditionReg = expression(condition.getChild(0), sTable);
+    emit("beqz $%s, %s", conditionReg, endLabel);
+    emitNop();
+    branch(ast.getChild(1), sTable.popScopedSymbolTable());
+    emit("b %s", loopLabel);
+    emitNop();
+    emitComment("While end");
+    emitLabel(endLabel);
   }
 
   private void ifNode(AbstractSyntaxTree ast, SymbolTable sTable) throws CompileError {
@@ -221,13 +252,15 @@ public class Emitter {
     if (condition == null) {
       throw new UnexpectedError("If-Condition is empty", ast.line, ast.linePos);
     }
+
+    emitComment("If start");
     String conditionReg = expression(condition.getChild(0), sTable);
     switch (ast.getChildrenCount()) {
       case 2:
         // no else branch
         emit("beqz $%s, %s", conditionReg, endLabel);
         emitNop();
-        branch(ast.getChild(1), sTable);
+        branch(ast.getChild(1), sTable.popScopedSymbolTable());
         break;
       case 3:
         String elseLabel = getLabel();
@@ -236,11 +269,13 @@ public class Emitter {
         branch(ast.getChild(1), sTable.popScopedSymbolTable());
         emit("b %s", endLabel);
         emitNop();
+        emitComment("else start");
         emitLabel(elseLabel);
         branch(ast.getChild(2), sTable.popScopedSymbolTable());
         break;
       default:
     }
+    emitComment("If end");
     emitLabel(endLabel);
   }
 

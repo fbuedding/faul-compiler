@@ -2,6 +2,7 @@ main:
 # initializing s0 with address 0
 move $s0, $0
 addi $s0, $0, 0
+# If start
 # Loading value 2
 li $v0, 2
 # Loading value 2
@@ -16,7 +17,9 @@ seq $t0, $t0, $v0
 beqz $t0, label_0
 nop
 addi $s0, $0, 2
+# If end
 label_0:
+# If start
 # Loading value 1
 li $v0, 1
 beqz $v0, label_2
@@ -26,10 +29,12 @@ move $s1, $0
 addi $s1, $0, 1
 b label_1
 nop
+# else start
 label_2:
 # initializing s2 with address 4
 move $s2, $0
 addi $s2, $0, 2
+# If end
 label_1:
 # initializing s3 with address 4
 move $s3, $0

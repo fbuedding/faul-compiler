@@ -63,14 +63,15 @@ public class EmitterTest {
         int a10 = 10;
         int a11 = 11;
         int a12 = 12;
+        int a13 = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9;
           """; // */
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());
     ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
     p.program(pt);
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
-
     AbstractSyntaxTree ast = astf.fromParseTree(pt);
+    System.out.println(ast);
     Emitter emitter = new Emitter(ast, astf.sTable);
     emitter.generate();
     file.Writer.write("src/test/resources/asm/vars.asm", emitter.code.toString());
@@ -122,5 +123,28 @@ public class EmitterTest {
     Emitter emitter = new Emitter(ast, astf.sTable);
     emitter.generate();
     file.Writer.write("src/test/resources/asm/firstVarTwoSecondThree.asm", emitter.code.toString());
+  }
+
+  @Test
+  public void whileTest()
+      throws IOException, CompileError {
+    String i = """
+        int a = 1;
+        int b = 0;
+        while(a < 16) {
+          a = a * 2;
+          b = b + 1;
+        }
+        """; // */
+    Lexer l = new Lexer(i);
+    Parser p = new Parser(l.genTokens());
+    ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+    p.program(pt);
+    AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
+
+    AbstractSyntaxTree ast = astf.fromParseTree(pt);
+    Emitter emitter = new Emitter(ast, astf.sTable);
+    emitter.generate();
+    file.Writer.write("src/test/resources/asm/while.asm", emitter.code.toString());
   }
 }

@@ -1,157 +1,157 @@
-PROGRAM, Type: NONE, Result type: NONE
-├── IF, Type: NONE, Result type: NONE
-│   ├── CONDITION, Type: BOOLEAN, Result type: NONE
-│   │   └── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN
-│   ├── BRANCH, Type: NONE, Result type: NONE
-│   └── BRANCH, Type: NONE, Result type: NONE
-│       ├── DECLARATION, Type: NONE, Result type: NONE
-│       │   ├── IDENT: a, Type: INTEGER, Result type: NONE
-│       │   └── ADDRESS: 0, Type: MEMORY_ADDRESS, Result type: NONE
-│       └── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│           ├── IDENT: a, Type: INTEGER, Result type: INTEGER
-│           └── INTEGER: 0, Type: INTEGER, Result type: INTEGER
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: a, Type: INTEGER, Result type: NONE
-│   └── ADDRESS: 0, Type: MEMORY_ADDRESS, Result type: NONE
-├── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│   ├── IDENT: a, Type: INTEGER, Result type: INTEGER
-│   └── PLUS, Type: INTEGER, Result type: INTEGER
-│       ├── NEG, Type: INTEGER, Result type: INTEGER
-│       │   └── INTEGER: 3, Type: INTEGER, Result type: INTEGER
-│       └── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: b, Type: BOOLEAN, Result type: NONE
-│   └── ADDRESS: 1, Type: MEMORY_ADDRESS, Result type: NONE
-├── ASSIGNMENT, Type: BOOLEAN, Result type: NONE
-│   ├── IDENT: b, Type: BOOLEAN, Result type: BOOLEAN
-│   └── NOT, Type: BOOLEAN, Result type: BOOLEAN
-│       └── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: c, Type: INTEGER, Result type: NONE
-│   └── ADDRESS: 2, Type: MEMORY_ADDRESS, Result type: NONE
-├── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│   ├── IDENT: c, Type: INTEGER, Result type: INTEGER
-│   └── MUL, Type: INTEGER, Result type: INTEGER
-│       ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│       └── PLUS, Type: INTEGER, Result type: INTEGER
-│           ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│           └── MUL, Type: INTEGER, Result type: INTEGER
-│               ├── INTEGER: 6, Type: INTEGER, Result type: INTEGER
-│               └── INTEGER: 3, Type: INTEGER, Result type: INTEGER
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: e, Type: BOOLEAN, Result type: NONE
-│   └── ADDRESS: 3, Type: MEMORY_ADDRESS, Result type: NONE
-├── ASSIGNMENT, Type: BOOLEAN, Result type: NONE
-│   ├── IDENT: e, Type: BOOLEAN, Result type: BOOLEAN
-│   └── LAND, Type: BOOLEAN, Result type: BOOLEAN
-│       ├── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN
-│       └── BOOLEAN: false, Type: BOOLEAN, Result type: BOOLEAN
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: g, Type: BOOLEAN, Result type: NONE
-│   └── ADDRESS: 4, Type: MEMORY_ADDRESS, Result type: NONE
-├── ASSIGNMENT, Type: BOOLEAN, Result type: NONE
-│   ├── IDENT: g, Type: BOOLEAN, Result type: BOOLEAN
-│   └── EQEQ, Type: INTEGER, Result type: BOOLEAN
-│       ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│       └── MINUS, Type: INTEGER, Result type: INTEGER
-│           ├── INTEGER: 8, Type: INTEGER, Result type: INTEGER
-│           └── MUL, Type: INTEGER, Result type: INTEGER
-│               ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│               └── INTEGER: 3, Type: INTEGER, Result type: INTEGER
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: z, Type: BOOLEAN, Result type: NONE
-│   └── ADDRESS: 5, Type: MEMORY_ADDRESS, Result type: NONE
-├── ASSIGNMENT, Type: BOOLEAN, Result type: NONE
-│   ├── IDENT: z, Type: BOOLEAN, Result type: BOOLEAN
-│   └── GTEQ, Type: INTEGER, Result type: BOOLEAN
-│       ├── INTEGER: 4, Type: INTEGER, Result type: INTEGER
-│       └── MUL, Type: INTEGER, Result type: INTEGER
-│           ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│           └── INTEGER: 6, Type: INTEGER, Result type: INTEGER
-├── IF, Type: NONE, Result type: NONE
-│   ├── CONDITION, Type: BOOLEAN, Result type: NONE
-│   │   └── LAND, Type: BOOLEAN, Result type: BOOLEAN
-│   │       ├── IDENT: g, Type: BOOLEAN, Result type: BOOLEAN
-│   │       └── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN
-│   └── BRANCH, Type: NONE, Result type: NONE
-│       ├── DECLARATION, Type: NONE, Result type: NONE
-│       │   ├── IDENT: d, Type: INTEGER, Result type: NONE
-│       │   └── ADDRESS: 6, Type: MEMORY_ADDRESS, Result type: NONE
-│       ├── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│       │   ├── IDENT: d, Type: INTEGER, Result type: INTEGER
-│       │   └── INTEGER: 6, Type: INTEGER, Result type: INTEGER
-│       ├── IF, Type: NONE, Result type: NONE
-│       │   ├── CONDITION, Type: BOOLEAN, Result type: NONE
-│       │   │   └── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN
-│       │   ├── BRANCH, Type: NONE, Result type: NONE
-│       │   │   ├── ASSIGNMENT, Type: BOOLEAN, Result type: NONE
-│       │   │   │   ├── IDENT: z, Type: BOOLEAN, Result type: BOOLEAN
-│       │   │   │   └── GTEQ, Type: INTEGER, Result type: BOOLEAN
-│       │   │   │       ├── INTEGER: 4, Type: INTEGER, Result type: INTEGER
-│       │   │   │       └── MUL, Type: INTEGER, Result type: INTEGER
-│       │   │   │           ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│       │   │   │           └── INTEGER: 6, Type: INTEGER, Result type: INTEGER
-│       │   │   ├── DECLARATION, Type: NONE, Result type: NONE
-│       │   │   │   ├── IDENT: asd, Type: INTEGER, Result type: NONE
-│       │   │   │   └── ADDRESS: 7, Type: MEMORY_ADDRESS, Result type: NONE
-│       │   │   └── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│       │   │       ├── IDENT: asd, Type: INTEGER, Result type: INTEGER
-│       │   │       └── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│       │   └── BRANCH, Type: NONE, Result type: NONE
-│       │       ├── DECLARATION, Type: NONE, Result type: NONE
-│       │       │   ├── IDENT: paul, Type: INTEGER, Result type: NONE
-│       │       │   └── ADDRESS: 7, Type: MEMORY_ADDRESS, Result type: NONE
-│       │       ├── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│       │       │   ├── IDENT: paul, Type: INTEGER, Result type: INTEGER
-│       │       │   └── INTEGER: 0, Type: INTEGER, Result type: INTEGER
-│       │       └── WHILE, Type: NONE, Result type: NONE
-│       │           ├── CONDITION, Type: BOOLEAN, Result type: NONE
-│       │           │   └── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN
-│       │           └── BRANCH, Type: NONE, Result type: NONE
-│       │               ├── DECLARATION, Type: NONE, Result type: NONE
-│       │               │   ├── IDENT: fabian, Type: INTEGER, Result type: NONE
-│       │               │   └── ADDRESS: 8, Type: MEMORY_ADDRESS, Result type: NONE
-│       │               └── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│       │                   ├── IDENT: fabian, Type: INTEGER, Result type: INTEGER
-│       │                   └── INTEGER: 0, Type: INTEGER, Result type: INTEGER
-│       └── IF, Type: NONE, Result type: NONE
-│           ├── CONDITION, Type: BOOLEAN, Result type: NONE
-│           │   └── LOR, Type: BOOLEAN, Result type: BOOLEAN
-│           │       ├── LAND, Type: BOOLEAN, Result type: BOOLEAN
-│           │       │   ├── BOOLEAN: false, Type: BOOLEAN, Result type: BOOLEAN
-│           │       │   └── BOOLEAN: false, Type: BOOLEAN, Result type: BOOLEAN
-│           │       └── LOR, Type: BOOLEAN, Result type: BOOLEAN
-│           │           ├── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN
-│           │           └── BOOLEAN: false, Type: BOOLEAN, Result type: BOOLEAN
-│           └── BRANCH, Type: NONE, Result type: NONE
-│               ├── DECLARATION, Type: NONE, Result type: NONE
-│               │   ├── IDENT: asd, Type: INTEGER, Result type: NONE
-│               │   └── ADDRESS: 7, Type: MEMORY_ADDRESS, Result type: NONE
-│               └── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│                   ├── IDENT: asd, Type: INTEGER, Result type: INTEGER
-│                   └── INTEGER: 0, Type: INTEGER, Result type: INTEGER
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: d, Type: INTEGER, Result type: NONE
-│   └── ADDRESS: 6, Type: MEMORY_ADDRESS, Result type: NONE
-├── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│   ├── IDENT: d, Type: INTEGER, Result type: INTEGER
-│   └── MOD, Type: INTEGER, Result type: INTEGER
-│       ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│       └── INTEGER: 3, Type: INTEGER, Result type: INTEGER
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: and, Type: INTEGER, Result type: NONE
-│   └── ADDRESS: 7, Type: MEMORY_ADDRESS, Result type: NONE
-├── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│   ├── IDENT: and, Type: INTEGER, Result type: INTEGER
-│   └── AND, Type: INTEGER, Result type: INTEGER
-│       ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│       └── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: z1, Type: INTEGER, Result type: NONE
-│   └── ADDRESS: 8, Type: MEMORY_ADDRESS, Result type: NONE
-└── ASSIGNMENT, Type: INTEGER, Result type: NONE
-    ├── IDENT: z1, Type: INTEGER, Result type: INTEGER
-    └── NOT, Type: INTEGER, Result type: INTEGER
-        └── MINUS, Type: INTEGER, Result type: INTEGER
-            ├── INTEGER: 3, Type: INTEGER, Result type: INTEGER
-            └── INTEGER: 4, Type: INTEGER, Result type: INTEGER
+PROGRAM, Type: NONE, Result type: NONE,  Position: 0:0
+├── IF, Type: NONE, Result type: NONE,  Position: 0:0
+│   ├── CONDITION, Type: BOOLEAN, Result type: NONE,  Position: 0:0
+│   │   └── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN,  Position: 1:4
+│   ├── BRANCH, Type: NONE, Result type: NONE,  Position: 0:0
+│   └── BRANCH, Type: NONE, Result type: NONE,  Position: 0:0
+│       ├── DECLARATION, Type: NONE, Result type: NONE,  Position: 0:0
+│       │   ├── IDENT: a, Type: INTEGER, Result type: NONE,  Position: 4:7
+│       │   └── ADDRESS: 0, Type: MEMORY_ADDRESS, Result type: NONE,  Position: 4:7
+│       └── ASSIGNMENT, Type: INTEGER, Result type: NONE,  Position: 0:0
+│           ├── IDENT: a, Type: INTEGER, Result type: INTEGER,  Position: 4:7
+│           └── INTEGER: 0, Type: INTEGER, Result type: INTEGER,  Position: 4:11
+├── DECLARATION, Type: NONE, Result type: NONE,  Position: 0:0
+│   ├── IDENT: a, Type: INTEGER, Result type: NONE,  Position: 6:5
+│   └── ADDRESS: 0, Type: MEMORY_ADDRESS, Result type: NONE,  Position: 6:5
+├── ASSIGNMENT, Type: INTEGER, Result type: NONE,  Position: 0:0
+│   ├── IDENT: a, Type: INTEGER, Result type: INTEGER,  Position: 6:5
+│   └── PLUS, Type: INTEGER, Result type: INTEGER,  Position: 6:12
+│       ├── NEG, Type: INTEGER, Result type: INTEGER,  Position: 6:9
+│       │   └── INTEGER: 3, Type: INTEGER, Result type: INTEGER,  Position: 6:10
+│       └── INTEGER: 5, Type: INTEGER, Result type: INTEGER,  Position: 6:14
+├── DECLARATION, Type: NONE, Result type: NONE,  Position: 0:0
+│   ├── IDENT: b, Type: BOOLEAN, Result type: NONE,  Position: 7:6
+│   └── ADDRESS: 1, Type: MEMORY_ADDRESS, Result type: NONE,  Position: 7:6
+├── ASSIGNMENT, Type: BOOLEAN, Result type: NONE,  Position: 0:0
+│   ├── IDENT: b, Type: BOOLEAN, Result type: BOOLEAN,  Position: 7:6
+│   └── NOT, Type: BOOLEAN, Result type: BOOLEAN,  Position: 7:10
+│       └── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN,  Position: 7:11
+├── DECLARATION, Type: NONE, Result type: NONE,  Position: 0:0
+│   ├── IDENT: c, Type: INTEGER, Result type: NONE,  Position: 8:5
+│   └── ADDRESS: 2, Type: MEMORY_ADDRESS, Result type: NONE,  Position: 8:5
+├── ASSIGNMENT, Type: INTEGER, Result type: NONE,  Position: 0:0
+│   ├── IDENT: c, Type: INTEGER, Result type: INTEGER,  Position: 8:5
+│   └── MUL, Type: INTEGER, Result type: INTEGER,  Position: 8:11
+│       ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER,  Position: 8:9
+│       └── PLUS, Type: INTEGER, Result type: INTEGER,  Position: 8:17
+│           ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER,  Position: 8:15
+│           └── MUL, Type: INTEGER, Result type: INTEGER,  Position: 8:21
+│               ├── INTEGER: 6, Type: INTEGER, Result type: INTEGER,  Position: 8:19
+│               └── INTEGER: 3, Type: INTEGER, Result type: INTEGER,  Position: 8:23
+├── DECLARATION, Type: NONE, Result type: NONE,  Position: 0:0
+│   ├── IDENT: e, Type: BOOLEAN, Result type: NONE,  Position: 9:6
+│   └── ADDRESS: 3, Type: MEMORY_ADDRESS, Result type: NONE,  Position: 9:6
+├── ASSIGNMENT, Type: BOOLEAN, Result type: NONE,  Position: 0:0
+│   ├── IDENT: e, Type: BOOLEAN, Result type: BOOLEAN,  Position: 9:6
+│   └── LAND, Type: BOOLEAN, Result type: BOOLEAN,  Position: 9:15
+│       ├── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN,  Position: 9:10
+│       └── BOOLEAN: false, Type: BOOLEAN, Result type: BOOLEAN,  Position: 9:18
+├── DECLARATION, Type: NONE, Result type: NONE,  Position: 0:0
+│   ├── IDENT: g, Type: BOOLEAN, Result type: NONE,  Position: 10:6
+│   └── ADDRESS: 4, Type: MEMORY_ADDRESS, Result type: NONE,  Position: 10:6
+├── ASSIGNMENT, Type: BOOLEAN, Result type: NONE,  Position: 0:0
+│   ├── IDENT: g, Type: BOOLEAN, Result type: BOOLEAN,  Position: 10:6
+│   └── EQEQ, Type: INTEGER, Result type: BOOLEAN,  Position: 10:12
+│       ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER,  Position: 10:10
+│       └── MINUS, Type: INTEGER, Result type: INTEGER,  Position: 10:17
+│           ├── INTEGER: 8, Type: INTEGER, Result type: INTEGER,  Position: 10:15
+│           └── MUL, Type: INTEGER, Result type: INTEGER,  Position: 10:20
+│               ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER,  Position: 10:19
+│               └── INTEGER: 3, Type: INTEGER, Result type: INTEGER,  Position: 10:21
+├── DECLARATION, Type: NONE, Result type: NONE,  Position: 0:0
+│   ├── IDENT: z, Type: BOOLEAN, Result type: NONE,  Position: 11:6
+│   └── ADDRESS: 5, Type: MEMORY_ADDRESS, Result type: NONE,  Position: 11:6
+├── ASSIGNMENT, Type: BOOLEAN, Result type: NONE,  Position: 0:0
+│   ├── IDENT: z, Type: BOOLEAN, Result type: BOOLEAN,  Position: 11:6
+│   └── GTEQ, Type: INTEGER, Result type: BOOLEAN,  Position: 11:12
+│       ├── INTEGER: 4, Type: INTEGER, Result type: INTEGER,  Position: 11:10
+│       └── MUL, Type: INTEGER, Result type: INTEGER,  Position: 11:16
+│           ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER,  Position: 11:15
+│           └── INTEGER: 6, Type: INTEGER, Result type: INTEGER,  Position: 11:17
+├── IF, Type: NONE, Result type: NONE,  Position: 0:0
+│   ├── CONDITION, Type: BOOLEAN, Result type: NONE,  Position: 0:0
+│   │   └── LAND, Type: BOOLEAN, Result type: BOOLEAN,  Position: 12:6
+│   │       ├── IDENT: g, Type: BOOLEAN, Result type: BOOLEAN,  Position: 12:4
+│   │       └── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN,  Position: 12:9
+│   └── BRANCH, Type: NONE, Result type: NONE,  Position: 0:0
+│       ├── DECLARATION, Type: NONE, Result type: NONE,  Position: 0:0
+│       │   ├── IDENT: d, Type: INTEGER, Result type: NONE,  Position: 13:7
+│       │   └── ADDRESS: 6, Type: MEMORY_ADDRESS, Result type: NONE,  Position: 13:7
+│       ├── ASSIGNMENT, Type: INTEGER, Result type: NONE,  Position: 0:0
+│       │   ├── IDENT: d, Type: INTEGER, Result type: INTEGER,  Position: 13:7
+│       │   └── INTEGER: 6, Type: INTEGER, Result type: INTEGER,  Position: 13:11
+│       ├── IF, Type: NONE, Result type: NONE,  Position: 0:0
+│       │   ├── CONDITION, Type: BOOLEAN, Result type: NONE,  Position: 0:0
+│       │   │   └── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN,  Position: 14:6
+│       │   ├── BRANCH, Type: NONE, Result type: NONE,  Position: 0:0
+│       │   │   ├── ASSIGNMENT, Type: BOOLEAN, Result type: NONE,  Position: 0:0
+│       │   │   │   ├── IDENT: z, Type: BOOLEAN, Result type: BOOLEAN,  Position: 15:5
+│       │   │   │   └── GTEQ, Type: INTEGER, Result type: BOOLEAN,  Position: 15:11
+│       │   │   │       ├── INTEGER: 4, Type: INTEGER, Result type: INTEGER,  Position: 15:9
+│       │   │   │       └── MUL, Type: INTEGER, Result type: INTEGER,  Position: 15:15
+│       │   │   │           ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER,  Position: 15:14
+│       │   │   │           └── INTEGER: 6, Type: INTEGER, Result type: INTEGER,  Position: 15:16
+│       │   │   ├── DECLARATION, Type: NONE, Result type: NONE,  Position: 0:0
+│       │   │   │   ├── IDENT: asd, Type: INTEGER, Result type: NONE,  Position: 16:9
+│       │   │   │   └── ADDRESS: 7, Type: MEMORY_ADDRESS, Result type: NONE,  Position: 16:9
+│       │   │   └── ASSIGNMENT, Type: INTEGER, Result type: NONE,  Position: 0:0
+│       │   │       ├── IDENT: asd, Type: INTEGER, Result type: INTEGER,  Position: 16:9
+│       │   │       └── INTEGER: 5, Type: INTEGER, Result type: INTEGER,  Position: 16:15
+│       │   └── BRANCH, Type: NONE, Result type: NONE,  Position: 0:0
+│       │       ├── DECLARATION, Type: NONE, Result type: NONE,  Position: 0:0
+│       │       │   ├── IDENT: paul, Type: INTEGER, Result type: NONE,  Position: 19:9
+│       │       │   └── ADDRESS: 7, Type: MEMORY_ADDRESS, Result type: NONE,  Position: 19:9
+│       │       ├── ASSIGNMENT, Type: INTEGER, Result type: NONE,  Position: 0:0
+│       │       │   ├── IDENT: paul, Type: INTEGER, Result type: INTEGER,  Position: 19:9
+│       │       │   └── INTEGER: 0, Type: INTEGER, Result type: INTEGER,  Position: 19:16
+│       │       └── WHILE, Type: NONE, Result type: NONE,  Position: 0:0
+│       │           ├── CONDITION, Type: BOOLEAN, Result type: NONE,  Position: 0:0
+│       │           │   └── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN,  Position: 20:11
+│       │           └── BRANCH, Type: NONE, Result type: NONE,  Position: 0:0
+│       │               ├── DECLARATION, Type: NONE, Result type: NONE,  Position: 0:0
+│       │               │   ├── IDENT: fabian, Type: INTEGER, Result type: NONE,  Position: 21:11
+│       │               │   └── ADDRESS: 8, Type: MEMORY_ADDRESS, Result type: NONE,  Position: 21:11
+│       │               └── ASSIGNMENT, Type: INTEGER, Result type: NONE,  Position: 0:0
+│       │                   ├── IDENT: fabian, Type: INTEGER, Result type: INTEGER,  Position: 21:11
+│       │                   └── INTEGER: 0, Type: INTEGER, Result type: INTEGER,  Position: 21:20
+│       └── IF, Type: NONE, Result type: NONE,  Position: 0:0
+│           ├── CONDITION, Type: BOOLEAN, Result type: NONE,  Position: 0:0
+│           │   └── LOR, Type: BOOLEAN, Result type: BOOLEAN,  Position: 24:23
+│           │       ├── LAND, Type: BOOLEAN, Result type: BOOLEAN,  Position: 24:13
+│           │       │   ├── BOOLEAN: false, Type: BOOLEAN, Result type: BOOLEAN,  Position: 24:7
+│           │       │   └── BOOLEAN: false, Type: BOOLEAN, Result type: BOOLEAN,  Position: 24:16
+│           │       └── LOR, Type: BOOLEAN, Result type: BOOLEAN,  Position: 24:32
+│           │           ├── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN,  Position: 24:27
+│           │           └── BOOLEAN: false, Type: BOOLEAN, Result type: BOOLEAN,  Position: 24:35
+│           └── BRANCH, Type: NONE, Result type: NONE,  Position: 0:0
+│               ├── DECLARATION, Type: NONE, Result type: NONE,  Position: 0:0
+│               │   ├── IDENT: asd, Type: INTEGER, Result type: NONE,  Position: 25:9
+│               │   └── ADDRESS: 7, Type: MEMORY_ADDRESS, Result type: NONE,  Position: 25:9
+│               └── ASSIGNMENT, Type: INTEGER, Result type: NONE,  Position: 0:0
+│                   ├── IDENT: asd, Type: INTEGER, Result type: INTEGER,  Position: 25:9
+│                   └── INTEGER: 0, Type: INTEGER, Result type: INTEGER,  Position: 25:15
+├── DECLARATION, Type: NONE, Result type: NONE,  Position: 0:0
+│   ├── IDENT: d, Type: INTEGER, Result type: NONE,  Position: 28:5
+│   └── ADDRESS: 6, Type: MEMORY_ADDRESS, Result type: NONE,  Position: 28:5
+├── ASSIGNMENT, Type: INTEGER, Result type: NONE,  Position: 0:0
+│   ├── IDENT: d, Type: INTEGER, Result type: INTEGER,  Position: 28:5
+│   └── MOD, Type: INTEGER, Result type: INTEGER,  Position: 28:11
+│       ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER,  Position: 28:9
+│       └── INTEGER: 3, Type: INTEGER, Result type: INTEGER,  Position: 28:13
+├── DECLARATION, Type: NONE, Result type: NONE,  Position: 0:0
+│   ├── IDENT: and, Type: INTEGER, Result type: NONE,  Position: 29:5
+│   └── ADDRESS: 7, Type: MEMORY_ADDRESS, Result type: NONE,  Position: 29:5
+├── ASSIGNMENT, Type: INTEGER, Result type: NONE,  Position: 0:0
+│   ├── IDENT: and, Type: INTEGER, Result type: INTEGER,  Position: 29:5
+│   └── AND, Type: INTEGER, Result type: INTEGER,  Position: 29:13
+│       ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER,  Position: 29:11
+│       └── INTEGER: 5, Type: INTEGER, Result type: INTEGER,  Position: 29:15
+├── DECLARATION, Type: NONE, Result type: NONE,  Position: 0:0
+│   ├── IDENT: z1, Type: INTEGER, Result type: NONE,  Position: 30:5
+│   └── ADDRESS: 8, Type: MEMORY_ADDRESS, Result type: NONE,  Position: 30:5
+└── ASSIGNMENT, Type: INTEGER, Result type: NONE,  Position: 0:0
+    ├── IDENT: z1, Type: INTEGER, Result type: INTEGER,  Position: 30:5
+    └── NOT, Type: INTEGER, Result type: INTEGER,  Position: 30:10
+        └── MINUS, Type: INTEGER, Result type: INTEGER,  Position: 30:13
+            ├── INTEGER: 3, Type: INTEGER, Result type: INTEGER,  Position: 30:12
+            └── INTEGER: 4, Type: INTEGER, Result type: INTEGER,  Position: 30:14

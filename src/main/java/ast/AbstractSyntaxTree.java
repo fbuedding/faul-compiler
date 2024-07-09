@@ -17,6 +17,7 @@ public class AbstractSyntaxTree {
   public int linePos;
 
   public String value = null;
+
   public AbstractSyntaxTree(AstNodeKinds k, AstNodeTypes t, AstNodeTypes rT, int line, int linePos) {
     this.kind = k;
     this.type = t;
@@ -149,6 +150,7 @@ public class AbstractSyntaxTree {
     }
     buffer.append(", Type: " + type);
     buffer.append(", Result type: " + resultType);
+    buffer.append(",  Position: " + line + ":" + linePos);
 
     buffer.append('\n');
     for (Iterator<AbstractSyntaxTree> it = children.iterator(); it.hasNext();) {

@@ -34,6 +34,7 @@ move $s3, $t0
 # initializing s4 with address 16
 move $s4, $0
 addi $s4, $0, 0
+# If start
 # Loading value 1
 li $v0, 1
 beqz $v0, label_1
@@ -44,8 +45,10 @@ addi $s5, $0, 0
 addi $s4, $0, 1
 b label_0
 nop
+# else start
 label_1:
 addi $s4, $0, 2
+# If end
 label_0:
 # initializing s6 with address 20
 move $s6, $0
