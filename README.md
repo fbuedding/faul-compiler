@@ -796,8 +796,6 @@ Natürlich können in einem Pogramm mehr als acht Variablen existieren, weshalb 
 
 Wenn eine Variable benötigt wird, sie nicht bereits in einem Register steht und alle Register belegt sind, wird die Variable, die am längsten nicht mehr genutzt wurde, in den Speicher verschoben. Danach ist ein Register frei für die Variable. 
 
-Diese Methode besitzt jedoch den Nachteil, dass im Falle eines Branches beachtet werden muss, dass Varaiblen die in diesem geladen werden, nur geladen werden wenn der branch auch ausgeführt wird. Der simplizität wegen wird dieser Compiler daher alle s-Register in den Speicher schreiben, wenn gebranched wird oder ein Branch verlassen wird. Dabei handelt es sich nicht um die effizienteste Lösung.
-
 
 ## Finite State Machines
 
