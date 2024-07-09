@@ -23,7 +23,7 @@ import parser.UnknownIdentifierError;
  */
 public class EmitterTest {
   @Test
-  public void emitTest()
+  public void shouldNotErrorTest()
       throws LexerError, SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError, IOException, TypeError {
     String i = """
         int a = ( 8 / 4 ) * 3;
@@ -75,21 +75,12 @@ public class EmitterTest {
   }
 
   @Test
-  public void expressions()
+  public void shouldEvalToTrue()
       throws IOException, CompileError {
     String i = """
-        int a1 =  1;
-        int a2 =  2;
-        int a3 =  3;
-        int a4 =  4;
-        int a5 =  5;
-        int a6 =  6;
-        int a7 =  7;
-        int a8 =  8;
-        int a9 =  9;
-        int a10 = 10;
-        int a11 = 11;
-        int a12 = 12;
+          bool a = 6 <= 6;
+          bool b = !!a;
+          bool c = !(a != b);
           """; // */
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());
@@ -100,7 +91,6 @@ public class EmitterTest {
     AbstractSyntaxTree ast = astf.fromParseTree(pt);
     Emitter emitter = new Emitter(ast, astf.sTable);
     emitter.generate();
-    file.Writer.write("src/test/resources/asm/vars.asm", emitter.code.toString());
+    file.Writer.write("src/test/resources/asm/shouldAllBeTrue.asm", emitter.code.toString());
   }
-
 }

@@ -20,6 +20,11 @@ public class AstTest {
   public void syntaxTree()
       throws CompileError, IOException {
     String i = """
+        if(true){
+
+        } else {
+          int a = 0;
+        }
         int a = -3 + 5;
         bool b = !true;
         int c = 5 * ( 5 + 6 * 3);

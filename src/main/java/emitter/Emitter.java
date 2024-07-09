@@ -263,6 +263,38 @@ public class Emitter {
         emit("div $%s, $%s", leftReg, rightReg);
         emit("mfhi $%s", tempReg);
         break;
+      case EQEQ:
+        emit("# Equals");
+        emit("seq $%s, $%s, $%s", tempReg, leftReg, rightReg);
+        break;
+      case NOTEQ:
+        emit("# Not equals");
+        emit("sne $%s, $%s, $%s", tempReg, leftReg, rightReg);
+        break;
+      case GT:
+        emit("# Greater than");
+        emit("sgt $%s, $%s, $%s", tempReg, leftReg, rightReg);
+        break;
+      case GTEQ:
+        emit("# Greater than equal");
+        emit("sge $%s, $%s, $%s", tempReg, leftReg, rightReg);
+        break;
+      case LT:
+        emit("# Less than");
+        emit("slt $%s, $%s, $%s", tempReg, leftReg, rightReg);
+        break;
+      case LTEQ:
+        emit("# Less than equals");
+        emit("sle $%s, $%s, $%s", tempReg, leftReg, rightReg);
+        break;
+
+      // Das ergebnis ist dasselbe, daher zusammen gefasst 
+      case LOR, OR:
+        emit("or $%s, $%s, $%s", tempReg, leftReg, rightReg);
+        break;
+      case LAND, AND:
+        emit("and $%s, $%s, $%s", tempReg, leftReg, rightReg);
+        break;
 
       default:
         break;
@@ -308,7 +340,6 @@ public class Emitter {
       reg = unOp(ast, sTable);
     } else if (isId(ast)) {
       reg = id(ast, sTable);
-
     } else if (isVal(ast)) {
       reg = val(ast, sTable);
     }
@@ -335,7 +366,6 @@ public class Emitter {
         tempCount--;
       } else if (reg.startsWith("s")) {
         // save register werden nur unloaded wenn platz benötigt wird
-        throw new Error("Saved registers are LRU cached organized");
       } else if (reg.startsWith("v")) {
         valCount--;
       }

@@ -1,4 +1,15 @@
 PROGRAM, Type: NONE, Result type: NONE
+├── IF, Type: NONE, Result type: NONE
+│   ├── CONDITION, Type: BOOLEAN, Result type: NONE
+│   │   └── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN
+│   ├── BRANCH, Type: NONE, Result type: NONE
+│   └── BRANCH, Type: NONE, Result type: NONE
+│       ├── DECLARATION, Type: NONE, Result type: NONE
+│       │   ├── IDENT: a, Type: INTEGER, Result type: NONE
+│       │   └── ADDRESS: 0, Type: MEMORY_ADDRESS, Result type: NONE
+│       └── ASSIGNMENT, Type: INTEGER, Result type: NONE
+│           ├── IDENT: a, Type: INTEGER, Result type: INTEGER
+│           └── INTEGER: 0, Type: INTEGER, Result type: INTEGER
 ├── DECLARATION, Type: NONE, Result type: NONE
 │   ├── IDENT: a, Type: INTEGER, Result type: NONE
 │   └── ADDRESS: 0, Type: MEMORY_ADDRESS, Result type: NONE
