@@ -9,9 +9,13 @@ import ast.AbstractSyntaxTree;
 import ast.AstNodeKinds;
 import ast.AstNodeTypes;
 import ast.SymbolTable;
+import error.CompileError;
+import error.UnexpectedError;
 
 /**
  * Emmiter
+ * TODO it may be clever to give evaluating functions (like expression) the
+ * register to store the temp, resulting in less moves
  */
 public class Emitter {
   public class Memory {
@@ -33,7 +37,7 @@ public class Emitter {
   StringBuilder code;
   int tempCount = 0;
   int valCount = 0;
-  int savedCount = 0;
+  int labelCount = 0;
   AbstractSyntaxTree ast;
   SymbolTable sTable;
   int wordLength = 0;
@@ -55,7 +59,7 @@ public class Emitter {
     this.ast = ast;
     this.sTable = sTable;
     this.wordLength = wordLength;
-    code = new StringBuilder("main:\n");
+    code = new StringBuilder();
     if (has$Gp) {
       memOffsetReg = "$gp";
     } else {
@@ -65,11 +69,15 @@ public class Emitter {
     }
   }
 
-  public void generate() {
+  public void generate() throws CompileError {
     generate(ast, sTable);
   }
 
-  private String initVar(int address) {
+  private void emitNop() {
+    emit("nop");
+  }
+
+  private String declareVar(int address) {
     // if it's there it's out of scope
     loaded.remove(address);
     String reg = "";
@@ -140,6 +148,10 @@ public class Emitter {
     code.append("\n");
   }
 
+  private void emitLabel(String label) {
+    emit("%s:", label);
+  }
+
   private void emitExit() {
     emitComment("Exit");
     code.append("li $v0, 10\nsyscall");
@@ -168,11 +180,23 @@ public class Emitter {
     int address = Integer.parseInt(ast.value);
     // loadWordIntoReg(address);
     // emit("sw $0, %d(%s)", address, memOffsetReg);
-    initVar(address);
+    declareVar(address);
 
   }
 
-  private void generate(AbstractSyntaxTree ast, SymbolTable sTable) {
+  private void generate(AbstractSyntaxTree ast, SymbolTable sTable) throws CompileError {
+    branch(ast, sTable, "main");
+    saveAllVars();
+    emitExit();
+  }
+
+  private void branch(AbstractSyntaxTree ast, SymbolTable sTable, String label) throws CompileError {
+    emitLabel(label);
+    branch(ast, sTable);
+  }
+
+  private void branch(AbstractSyntaxTree ast, SymbolTable nTable) throws CompileError {
+    // saveAllVars();
     for (AbstractSyntaxTree currentAst : ast.children) {
       switch (currentAst.kind) {
         case DECLARATION:
@@ -181,27 +205,57 @@ public class Emitter {
         case ASSIGNMENT:
           assignment(currentAst, sTable);
           break;
-
+        case IF:
+          ifNode(currentAst, sTable);
+          break;
         default:
           break;
       }
     }
-    saveAllVars();
-    emitExit();
+    // saveAllVars();
   }
 
-  private void assignment(AbstractSyntaxTree ast, SymbolTable sTable) {
+  private void ifNode(AbstractSyntaxTree ast, SymbolTable sTable) throws CompileError {
+    String endLabel = getLabel();
+    AbstractSyntaxTree condition = ast.getChild(AstNodeKinds.CONDITION);
+    if (condition == null) {
+      throw new UnexpectedError("If-Condition is empty", ast.line, ast.linePos);
+    }
+    String conditionReg = expression(condition.getChild(0), sTable);
+    switch (ast.getChildrenCount()) {
+      case 2:
+        // no else branch
+        emit("beqz $%s, %s", conditionReg, endLabel);
+        emitNop();
+        branch(ast.getChild(1), sTable);
+        break;
+      case 3:
+        String elseLabel = getLabel();
+        emit("beqz $%s, %s", conditionReg, elseLabel);
+        emitNop();
+        branch(ast.getChild(1), sTable.popScopedSymbolTable());
+        emit("b %s", endLabel);
+        emitNop();
+        emitLabel(elseLabel);
+        branch(ast.getChild(2), sTable.popScopedSymbolTable());
+        break;
+      default:
+    }
+    emitLabel(endLabel);
+  }
+
+  private String getLabel() {
+    return String.format("label_%d", labelCount++);
+  }
+
+  private void assignment(AbstractSyntaxTree ast, SymbolTable sTable) throws UnexpectedError {
     String ident = ast.getChild(AstNodeKinds.IDENT).value;
     AbstractSyntaxTree secondChild = ast.getChild(1);
     int address = sTable.getAddress(ident);
     // TODO make this an error
     String reg = "MISSING REG";
-    if (isBinOp(secondChild)) {
-      reg = binOp(secondChild, sTable);
-    } else if (isUnOp(secondChild)) {
-      reg = unOp(secondChild, sTable);
-
-    } else if (isVal(secondChild)) {
+    // Special case, if the second child is a value we don't need a temporary reg
+    if (isVal(secondChild)) {
       reg = loadVar(address);
       switch (secondChild.kind) {
         case BOOLEAN:
@@ -222,6 +276,7 @@ public class Emitter {
       // early return since var is already assigned
       return;
     }
+    reg = expression(secondChild, sTable);
     decrementRegCounter(reg);
     assignVar(address, reg);
     // emit("sw $%s, %d(%s)", reg, address, memOffsetReg);
@@ -231,17 +286,18 @@ public class Emitter {
    * @param ast
    * @param sTable
    * @return register with the result in it
+   * @throws UnexpectedError
    */
-  private String binOp(AbstractSyntaxTree ast, SymbolTable sTable) {
+  private String binOp(AbstractSyntaxTree ast, SymbolTable sTable) throws UnexpectedError {
     AbstractSyntaxTree leftChild = ast.getChild(0);
     AbstractSyntaxTree rightChild = ast.getChild(1);
     String leftReg = "", rightReg = "";
     if (leftChild.depth() >= rightChild.depth()) {
-      leftReg = handleChild(leftChild, sTable);
-      rightReg = handleChild(rightChild, sTable);
+      leftReg = expression(leftChild, sTable);
+      rightReg = expression(rightChild, sTable);
     } else {
-      rightReg = handleChild(rightChild, sTable);
-      leftReg = handleChild(leftChild, sTable);
+      rightReg = expression(rightChild, sTable);
+      leftReg = expression(leftChild, sTable);
     }
     decrementRegCounter(leftReg, rightReg);
     String tempReg = getReg(Register.T);
@@ -288,7 +344,7 @@ public class Emitter {
         emit("sle $%s, $%s, $%s", tempReg, leftReg, rightReg);
         break;
 
-      // Das ergebnis ist dasselbe, daher zusammen gefasst 
+      // Das ergebnis ist dasselbe, daher zusammen gefasst
       case LOR, OR:
         emit("or $%s, $%s, $%s", tempReg, leftReg, rightReg);
         break;
@@ -302,8 +358,8 @@ public class Emitter {
     return tempReg;
   }
 
-  private String unOp(AbstractSyntaxTree ast, SymbolTable sTable) {
-    String reg = handleChild(ast.getChild(0), sTable);
+  private String unOp(AbstractSyntaxTree ast, SymbolTable sTable) throws UnexpectedError {
+    String reg = expression(ast.getChild(0), sTable);
     decrementRegCounter(reg);
     String tempReg = getReg(Register.T);
     switch (ast.getKind()) {
@@ -331,9 +387,9 @@ public class Emitter {
     return reg;
   }
 
-  private String handleChild(AbstractSyntaxTree ast, SymbolTable sTable) {
+  private String expression(AbstractSyntaxTree ast, SymbolTable sTable) throws UnexpectedError {
     // TODO make this an error, but only when everything is implemented
-    String reg = "MISSING REG";
+    String reg;
     if (isBinOp(ast)) {
       reg = binOp(ast, sTable);
     } else if (isUnOp(ast)) {
@@ -342,6 +398,8 @@ public class Emitter {
       reg = id(ast, sTable);
     } else if (isVal(ast)) {
       reg = val(ast, sTable);
+    } else {
+      throw new UnexpectedError("Unknown operator: " + ast.value, ast.line, ast.linePos);
     }
     return reg;
   }

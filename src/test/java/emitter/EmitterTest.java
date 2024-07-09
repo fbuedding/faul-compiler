@@ -6,17 +6,12 @@ import org.junit.jupiter.api.Test;
 
 import ast.AbstractSyntaxTree;
 import ast.AbstractSyntaxTreeFactory;
-import ast.TypeError;
 import error.CompileError;
 import lexer.Lexer;
-import lexer.LexerError;
 import lexer.Token;
 import lexer.TokenKind;
-import parser.IndentifierAlreadyDeclaredError;
 import parser.ParseTree;
 import parser.Parser;
-import parser.SyntaxError;
-import parser.UnknownIdentifierError;
 
 /**
  * EmitterTest
@@ -24,13 +19,20 @@ import parser.UnknownIdentifierError;
 public class EmitterTest {
   @Test
   public void shouldNotErrorTest()
-      throws LexerError, SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError, IOException, TypeError {
+      throws IOException, CompileError {
     String i = """
         int a = ( 8 / 4 ) * 3;
         int b = a * -a;
         int c = b % 5;
         bool d = !true;
-        if(true){}
+        int e = 0;
+        if(true){
+          int f = 0;
+          e=1;
+        } else {
+          e=2;
+        }
+        int f = 2;
         """; // */
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());
@@ -78,10 +80,10 @@ public class EmitterTest {
   public void shouldEvalToTrue()
       throws IOException, CompileError {
     String i = """
-          bool a = 6 <= 6;
-          bool b = !!a;
-          bool c = !(a != b);
-          """; // */
+        bool a = 6 <= 6;
+        bool b = !!a;
+        bool c = !(a != b);
+        """; // */
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());
     ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
@@ -92,5 +94,33 @@ public class EmitterTest {
     Emitter emitter = new Emitter(ast, astf.sTable);
     emitter.generate();
     file.Writer.write("src/test/resources/asm/shouldAllBeTrue.asm", emitter.code.toString());
+  }
+
+  @Test
+  public void ifTests()
+      throws IOException, CompileError {
+    String i = """
+        int a = 0;
+        if(2 % 2 == 0){
+          a = 2;
+        }
+
+        if(true) {
+          int b = 1;
+        } else {
+          int b = 2;
+        }
+        int b = 3;
+        """; // */
+    Lexer l = new Lexer(i);
+    Parser p = new Parser(l.genTokens());
+    ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+    p.program(pt);
+    AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
+
+    AbstractSyntaxTree ast = astf.fromParseTree(pt);
+    Emitter emitter = new Emitter(ast, astf.sTable);
+    emitter.generate();
+    file.Writer.write("src/test/resources/asm/firstVarTwoSecondThree.asm", emitter.code.toString());
   }
 }

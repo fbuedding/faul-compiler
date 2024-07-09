@@ -31,6 +31,25 @@ li $v0, 1
 nor $t0, $v0, $v0
 andi $t0, $t0, 1
 move $s3, $t0
+# initializing s4 with address 16
+move $s4, $0
+addi $s4, $0, 0
+# Loading value 1
+li $v0, 1
+beqz $v0, label_1
+nop
+# initializing s5 with address 20
+move $s5, $0
+addi $s5, $0, 0
+addi $s4, $0, 1
+b label_0
+nop
+label_1:
+addi $s4, $0, 2
+label_0:
+# initializing s6 with address 20
+move $s6, $0
+addi $s6, $0, 2
 # unloading all vars
 # unloading s0 and storing in address 0
 sw $s0, 0($gp)
@@ -40,6 +59,10 @@ sw $s1, 4($gp)
 sw $s2, 8($gp)
 # unloading s3 and storing in address 12
 sw $s3, 12($gp)
+# unloading s4 and storing in address 16
+sw $s4, 16($gp)
+# unloading s6 and storing in address 20
+sw $s6, 20($gp)
 # Exit
 li $v0, 10
 syscall

@@ -12,10 +12,11 @@ public class AbstractSyntaxTree {
   public AstNodeTypes type;
   public AstNodeTypes resultType;
   public LinkedList<AbstractSyntaxTree> children;
-  int line;
-  int linePos;
-  public String value = null;
 
+  public int line;
+  public int linePos;
+
+  public String value = null;
   public AbstractSyntaxTree(AstNodeKinds k, AstNodeTypes t, AstNodeTypes rT, int line, int linePos) {
     this.kind = k;
     this.type = t;
@@ -23,6 +24,14 @@ public class AbstractSyntaxTree {
     this.line = line;
     this.linePos = linePos;
     children = new LinkedList<>();
+  }
+
+  public LinkedList<AbstractSyntaxTree> getChildren() {
+    return children;
+  }
+
+  public int getChildrenCount() {
+    return children.size();
   }
 
   public AstNodeKinds getKind() {
@@ -57,7 +66,7 @@ public class AbstractSyntaxTree {
 
           }
         }
-        //checkTypes();
+        // checkTypes();
 
         break;
       default:
@@ -67,7 +76,7 @@ public class AbstractSyntaxTree {
             if (type != child.resultType) {
               throw new TypeError(type, child.resultType, child.line, child.linePos);
             }
-          }else {
+          } else {
             if (type != child.resultType) {
               throw new TypeError(type, child.resultType, child.line, child.linePos);
             }

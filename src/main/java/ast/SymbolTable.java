@@ -24,14 +24,37 @@ public class SymbolTable {
 
   }
 
+  public SymbolTable popScopedSymbolTable() {
+    return children.removeFirst();
+  }
+
+  public int getAddress(String name) {
+    Symbol s = this.symbols.get(name);
+    if (s == null) {
+      for (SymbolTable symbolTable : children) {
+        int address = symbolTable.getAddress(name);
+        if (address != -1) {
+          return address;
+        }
+      }
+      return -1;
+    }
+
+    return s.adress + this.memoryOffset;
+
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder buffer = new StringBuilder();
+    print(buffer, 0);
+    return buffer.toString();
+  }
+
   SymbolTable getScopedSymbolTable() {
     SymbolTable st = new SymbolTable(this, (memoryOffset + symbols.size()));
     children.add(st);
     return st;
-  }
-
-  SymbolTable getNextScopedSymbolTable() {
-    return children.removeFirst();
   }
 
   int insert(String name, AstNodeTypes ant) {
@@ -63,29 +86,6 @@ public class SymbolTable {
 
     return null;
 
-  }
-
-  public int getAddress(String name) {
-    Symbol s = this.symbols.get(name);
-    if (s == null) {
-      for (SymbolTable symbolTable : children) {
-        int address = symbolTable.getAddress(name);
-        if (address != -1) {
-          return address;
-        }
-      }
-      return -1;
-    }
-
-    return s.adress + this.memoryOffset;
-
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder buffer = new StringBuilder();
-    print(buffer, 0);
-    return buffer.toString();
   }
 
   private void print(StringBuilder buffer, int indentation) {
