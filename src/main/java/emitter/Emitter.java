@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import ast.AbstractSyntaxTree;
 import ast.AstNodeKinds;
+import ast.AstNodeTypes;
 import ast.SymbolTable;
 
 /**
@@ -68,27 +69,29 @@ public class Emitter {
     generate(ast, sTable);
   }
 
-  private String initWord(int address) {
+  private String initVar(int address) {
+    // if it's there it's out of scope
+    loaded.remove(address);
     String reg = "";
     if (!available.isEmpty()) {
       reg = available.pop();
     } else {
-      reg = freeLoadedWord();
+      reg = freeLoadedVar();
     }
     loaded.putFirst(address, reg);
-    emit("# initializing %s from address %d", reg, address * wordLength);
+    emit("# initializing %s with address %d", reg, address * wordLength);
     emit("move $%s, $0", reg);
     return reg;
   }
 
-  private String loadWord(int address) {
+  private String loadVar(int address) {
     String reg = loaded.remove(address);
     if (reg == null && available.size() > 0) {
       reg = available.pop();
       emit("# loading %s from address %d", reg, address * wordLength);
       emitLw(reg, address);
     } else if (reg == null && available.size() == 0) {
-      reg = freeLoadedWord();
+      reg = freeLoadedVar();
     }
     loaded.putFirst(address, reg);
 
@@ -96,12 +99,12 @@ public class Emitter {
 
   }
 
-  private void assignWord(int address, String thatReg) {
+  private void assignVar(int address, String thatReg) {
     String reg = loaded.remove(address);
     if (reg == null && !available.isEmpty()) {
       reg = available.pop();
     } else if (reg == null && available.size() == 0) {
-      reg = freeLoadedWord();
+      reg = freeLoadedVar();
     }
     loaded.putFirst(address, reg);
 
@@ -109,7 +112,7 @@ public class Emitter {
 
   }
 
-  private String freeLoadedWord() {
+  private String freeLoadedVar() {
     Entry<Integer, String> entry = loaded.pollLastEntry();
     String reg = entry.getValue();
     int address = entry.getKey();
@@ -119,8 +122,32 @@ public class Emitter {
 
   }
 
+  private void saveAllVars() {
+    emit("# unloading all vars");
+    while (!loaded.isEmpty()) {
+      Entry<Integer, String> entry = loaded.pollLastEntry();
+      String reg = entry.getValue();
+      int address = entry.getKey();
+      available.push(reg);
+      emit("# unloading %s and storing in address %d", reg, address * wordLength);
+      emitSw(reg, address);
+
+    }
+  }
+
   private void emit(String s) {
     code.append(s);
+    code.append("\n");
+  }
+
+  private void emitExit() {
+    emitComment("Exit");
+    code.append("li $v0, 10\nsyscall");
+    code.append("\n");
+  }
+
+  private void emitComment(String s, Object... args) {
+    code.append("# " + String.format(s, args));
     code.append("\n");
   }
 
@@ -141,7 +168,7 @@ public class Emitter {
     int address = Integer.parseInt(ast.value);
     // loadWordIntoReg(address);
     // emit("sw $0, %d(%s)", address, memOffsetReg);
-    initWord(address);
+    initVar(address);
 
   }
 
@@ -159,18 +186,23 @@ public class Emitter {
           break;
       }
     }
+    saveAllVars();
+    emitExit();
   }
 
   private void assignment(AbstractSyntaxTree ast, SymbolTable sTable) {
     String ident = ast.getChild(AstNodeKinds.IDENT).value;
     AbstractSyntaxTree secondChild = ast.getChild(1);
-    String reg = "";
+    int address = sTable.getAddress(ident);
+    // TODO make this an error
+    String reg = "MISSING REG";
     if (isBinOp(secondChild)) {
-      reg = op(secondChild, sTable);
+      reg = binOp(secondChild, sTable);
     } else if (isUnOp(secondChild)) {
+      reg = unOp(secondChild, sTable);
 
     } else if (isVal(secondChild)) {
-      reg = getReg(Register.T);
+      reg = loadVar(address);
       switch (secondChild.kind) {
         case BOOLEAN:
           if (secondChild.value.equals("true")) {
@@ -187,14 +219,20 @@ public class Emitter {
         default:
           break;
       }
+      // early return since var is already assigned
+      return;
     }
-    int address = sTable.getAddress(ident);
     decrementRegCounter(reg);
-    assignWord(address, reg);
+    assignVar(address, reg);
     // emit("sw $%s, %d(%s)", reg, address, memOffsetReg);
   }
 
-  private String op(AbstractSyntaxTree ast, SymbolTable sTable) {
+  /**
+   * @param ast
+   * @param sTable
+   * @return register with the result in it
+   */
+  private String binOp(AbstractSyntaxTree ast, SymbolTable sTable) {
     AbstractSyntaxTree leftChild = ast.getChild(0);
     AbstractSyntaxTree rightChild = ast.getChild(1);
     String leftReg = "", rightReg = "";
@@ -220,6 +258,34 @@ public class Emitter {
       case DIV:
         emit("div $%s, $%s, $%s", tempReg, leftReg, rightReg);
         break;
+      case MOD:
+        emit("# Modulo");
+        emit("div $%s, $%s", leftReg, rightReg);
+        emit("mfhi $%s", tempReg);
+        break;
+
+      default:
+        break;
+    }
+    return tempReg;
+  }
+
+  private String unOp(AbstractSyntaxTree ast, SymbolTable sTable) {
+    String reg = handleChild(ast.getChild(0), sTable);
+    decrementRegCounter(reg);
+    String tempReg = getReg(Register.T);
+    switch (ast.getKind()) {
+      case NOT:
+        emit("nor $%s, $%s, $%<s", tempReg, reg);
+        if (ast.resultType == AstNodeTypes.BOOLEAN) {
+          emit("andi $%s, $%<s, 1", tempReg);
+        }
+        break;
+      case NEG:
+        emitComment("negating $s", reg);
+        emit("sub $%s, $0, $%s", tempReg, reg);
+
+        break;
 
       default:
         break;
@@ -228,17 +294,18 @@ public class Emitter {
   }
 
   private String id(AbstractSyntaxTree ast, SymbolTable sTable) {
-    int address = sTable.getAddress(ast.value) * wordLength;
-    String reg = loadWord(address);
+    int address = sTable.getAddress(ast.value);
+    String reg = loadVar(address);
     return reg;
   }
 
   private String handleChild(AbstractSyntaxTree ast, SymbolTable sTable) {
-    String reg = "";
+    // TODO make this an error, but only when everything is implemented
+    String reg = "MISSING REG";
     if (isBinOp(ast)) {
-      reg = op(ast, sTable);
+      reg = binOp(ast, sTable);
     } else if (isUnOp(ast)) {
-
+      reg = unOp(ast, sTable);
     } else if (isId(ast)) {
       reg = id(ast, sTable);
 
@@ -250,7 +317,14 @@ public class Emitter {
 
   private String val(AbstractSyntaxTree ast, SymbolTable sTable) {
     String reg = getReg(Register.V);
-    emit("li $%s, %s", reg, ast.value);
+    String val = ast.value;
+    if (val.equals("true")) {
+      val = "1";
+    } else if (val.equals("false")) {
+      val = "0";
+    }
+    emitComment("Loading value %s", val);
+    emit("li $%s, %s", reg, val);
     return reg;
 
   }
@@ -260,7 +334,8 @@ public class Emitter {
       if (reg.startsWith("t")) {
         tempCount--;
       } else if (reg.startsWith("s")) {
-        savedCount--;
+        // save register werden nur unloaded wenn platz benötigt wird
+        throw new Error("Saved registers are LRU cached organized");
       } else if (reg.startsWith("v")) {
         valCount--;
       }
@@ -272,7 +347,7 @@ public class Emitter {
       case T:
         return String.format("%s%d", r.label, tempCount++);
       case S:
-        return String.format("%s%d", r.label, savedCount++);
+        throw new Error("Saved registers are LRU cached organized");
 
       case V:
         return String.format("%s%d", r.label, valCount++);

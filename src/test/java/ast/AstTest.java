@@ -4,15 +4,12 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
+import error.CompileError;
 import lexer.Lexer;
-import lexer.LexerError;
 import lexer.Token;
 import lexer.TokenKind;
-import parser.IndentifierAlreadyDeclaredError;
-import parser.Parser;
-import parser.SyntaxError;
 import parser.ParseTree;
-import parser.UnknownIdentifierError;
+import parser.Parser;
 
 /**
  * AstTest
@@ -21,7 +18,7 @@ public class AstTest {
 
   @Test
   public void syntaxTree()
-      throws LexerError, SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError, IOException {
+      throws CompileError, IOException {
     String i = """
         int a = -3 + 5;
         bool b = !true;
@@ -41,8 +38,8 @@ public class AstTest {
               int fabian = 0;
             }
           }
-          if((false && false) || (true || false) | 6) {
-            int asd = 5;
+          if((false && false) || (true || false)) {
+            int asd = 0;
           }
         }
         int d = 5 % 3;

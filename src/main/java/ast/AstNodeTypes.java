@@ -5,4 +5,5 @@ public enum AstNodeTypes {
   BOOLEAN,
   MEMORY_ADDRESS,
   NONE,
+  UNKNOWN,
 }

@@ -1,12 +1,10 @@
 package lexer;
 
-public class LexerError extends Exception {
-  public int line;
-  public int linePos;
+import error.CompileError;
+
+public class LexerError extends CompileError {
 
   public LexerError(String errorMessage, int line, int linePos) {
-    super(String.format("Lexical error: %s, at line %d, position %d", errorMessage, line, linePos));
-    this.line = line;
-    this.linePos = linePos;
+    super(String.format("Lexical error: %s", errorMessage), line, linePos);
   }
 }

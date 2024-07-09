@@ -114,4 +114,8 @@ class Symbol {
     this.ant = ant;
     this.adress = adress;
   }
+
+  public AstNodeTypes getType() {
+    return ant;
+  }
 }

@@ -1,11 +1,12 @@
 package parser;
 
+import error.CompileError;
 import lexer.Token;
 
-public class UnknownIdentifierError extends Exception {
+public class UnknownIdentifierError extends CompileError {
 
   public UnknownIdentifierError(Token t) {
-    super(String.format("Unknown Identifier: %s, Line: %d, Position: %d", t.lexem, t.line, t.linePos));
+    super(String.format("Unknown Identifier: %s", t.lexem), t.line, t.linePos);
   }
 
 }
