@@ -63,6 +63,11 @@ public class EmitterTest {
         int a10 = 10;
         int a11 = 11;
         int a12 = 12;
+        if(a1 == 1){
+          int a13 = 13;
+          int a14 = 14;
+          int a15 = 15;
+        }
         int a13 = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9;
           """; // */
     Lexer l = new Lexer(i);
@@ -71,7 +76,6 @@ public class EmitterTest {
     p.program(pt);
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
     AbstractSyntaxTree ast = astf.fromParseTree(pt);
-    System.out.println(ast);
     Emitter emitter = new Emitter(ast, astf.sTable);
     emitter.generate();
     file.Writer.write("src/test/resources/asm/vars.asm", emitter.code.toString());
