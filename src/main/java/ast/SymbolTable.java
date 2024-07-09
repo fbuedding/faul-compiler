@@ -29,14 +29,9 @@ public class SymbolTable {
   }
 
   public int getAddress(String name) {
-    Symbol s = this.symbols.get(name);
+    Symbol s = get(name);
+
     if (s == null) {
-      for (SymbolTable symbolTable : children) {
-        int address = symbolTable.getAddress(name);
-        if (address != -1) {
-          return address;
-        }
-      }
       return -1;
     }
 
