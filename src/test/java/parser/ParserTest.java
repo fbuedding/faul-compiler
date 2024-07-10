@@ -1,9 +1,12 @@
 package parser;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
+import error.CompileError;
 import lexer.Lexer;
 import lexer.LexerError;
 import lexer.Token;
@@ -12,8 +15,7 @@ import lexer.TokenKind;
 public class ParserTest {
 
   @Test
-  public void syntaxTree()
-      throws LexerError, SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError, IOException {
+  public void shouldNotError() {
     String i = """
         int a = 3 + 5;
         int b = a - 6;
@@ -29,15 +31,43 @@ public class ParserTest {
           if((false && false) || (true || false) | 6) {
 
           }
-        } 
+        }
         int d = 5;
         """;
-    Lexer l = new Lexer(i);
-    Parser p = new Parser(l.genTokens());
-    ParseTree st = new ParseTree(new Token(TokenKind.PROGRAM, ""));
-    p.program(st);
+    try {
+      Lexer l = new Lexer(i);
+      Parser p = new Parser(l.genTokens());
+      ParseTree st = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+      p.program(st);
+      file.Writer.write("src/test/resources/tree.txt", st.toString());
 
-    file.Writer.write("src/test/resources/tree.txt", st.toString());
+    } catch (CompileError e) {
+      fail(e);
+    } catch (IOException e) {
+      fail("Couldn't write file");
+    }
+
+  }
+
+  @Test
+  public void functionTests() {
+    String i = """
+        read();
+        print(1);
+        exit();
+        """;
+    Lexer l = new Lexer(i);
+    Parser p;
+    try {
+      p = new Parser(l.genTokens());
+      ParseTree st = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+      p.program(st);
+      file.Writer.write("src/test/resources/tree.txt", st.toString());
+    } catch (CompileError e) {
+      fail(e);
+    } catch (IOException e) {
+      fail("Could not write file");
+    }
 
   }
 }

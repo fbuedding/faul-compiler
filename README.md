@@ -57,6 +57,7 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
                       | "if" "(" <expression> ")" "{" <statement>* "}" ("else" "{" <statement>* "}")?
                       | "while" "(" <expression> ")" "{" <statement>* "}"
                       | <ident> "=" <expression> <semi>
+                      | <expression> <semi>
 <expression>        ::= <equality> ( ("&&" | "||" | "&" | "|") <expression>)?
 <equality>          ::= <comparision> (("!=" | "==") <equality>)?
 <comparision>       ::= <arithmeticExpr> ( (">" | ">=" | "<" | "<=") <comparision>)?
@@ -69,9 +70,10 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
 <vbool>             ::= "true" | "false"
 <vint>              ::= [1-9] [0-9]*
                       | "0"
-<ident>             ::= ("_" | [a-z]) ("_" | [a-z] | [0-9])* (<function_call)?
+<ident>             ::= ("_" | [a-z]) ("_" | [a-z] | [0-9])* (<function_call>)?
 <function_call>     ::= "(" (<expression> ("," <expression>)*)? ")"
 <semi>              ::= ";"+
+
 ```
 
 ### Operatorrangfolge

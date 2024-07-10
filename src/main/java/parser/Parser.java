@@ -1,8 +1,5 @@
 package parser;
 
-import java.util.Stack;
-import java.util.Vector;
-
 import lexer.Token;
 import lexer.TokenKind;
 
@@ -13,15 +10,11 @@ public class Parser {
   private Token[] tokens;
   private int currentToken = 0;
   private int nextToken = 1;
-  private Stack<Integer> scopes = new Stack<Integer>();
-
-  private Vector<String> symbolTable = new Vector<String>();
 
   public Parser(Token[] tokens) {
     this.tokens = tokens;
     if (tokens.length < 2)
       throw new Error("Empty File!");
-    scopes.push(0);
   }
 
   /**
@@ -60,7 +53,7 @@ public class Parser {
    * @throws UnknownIdentifierError
    * @throws IndentifierAlreadyDeclaredError*
    */
-  public void program(ParseTree st) throws SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError {
+  public void program(ParseTree st) throws SyntaxError {
 
     while (!checkToken(TokenKind.EOF)) {
       this.statement(st.insertSubtree(new Token(TokenKind.STATEMENT, "")));
@@ -80,32 +73,22 @@ public class Parser {
    * @throws UnknownIdentifierError
    * @throws IndentifierAlreadyDeclaredError
    */
-  private void statement(ParseTree st) throws SyntaxError, UnknownIdentifierError, IndentifierAlreadyDeclaredError {
+  private void statement(ParseTree st) throws SyntaxError {
     TokenKind[] expected = new TokenKind[] { TokenKind.INT, TokenKind.BOOL, TokenKind.IF, TokenKind.IDENT };
     switch (currentToken().kind) {
       case INT:
         matchToken(TokenKind.INT, st);
-        String ident = currentToken().lexem;
-        if (symbolTable.contains(ident)) {
-          throw new IndentifierAlreadyDeclaredError(currentToken());
-        }
         matchToken(TokenKind.IDENT, st);
         matchToken(TokenKind.EQ, st);
         expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
         matchToken(TokenKind.SEMICOLON, st);
-        symbolTable.add(ident);
         break;
       case BOOL:
         matchToken(TokenKind.BOOL, st);
-        String boolIdent = currentToken().lexem;
-        if (symbolTable.contains(boolIdent)) {
-          throw new IndentifierAlreadyDeclaredError(currentToken());
-        }
         matchToken(TokenKind.IDENT, st);
         matchToken(TokenKind.EQ, st);
         expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
         matchToken(TokenKind.SEMICOLON, st);
-        symbolTable.add(boolIdent);
         break;
       case IF: {
         matchToken(TokenKind.IF, st);
@@ -113,28 +96,18 @@ public class Parser {
         expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
         matchToken(TokenKind.CLOSE_BRACKET, st);
         matchToken(TokenKind.OPEN_PARANTHESES, st);
-        scopes.push(symbolTable.size());
         while (!checkToken(TokenKind.CLOSE_PARANTHESES)) {
           statement(st.insertSubtree(new Token(TokenKind.STATEMENT, "")));
         }
         matchToken(TokenKind.CLOSE_PARANTHESES, st);
-        int elementsToBeRemoved = symbolTable.size() - scopes.pop();
-        for (int i = 0; i < elementsToBeRemoved; i++) {
-          symbolTable.removeLast();
-        }
         // Since I want the else branch to be under the if statement
         if (checkToken(TokenKind.ELSE)) {
           matchToken(TokenKind.ELSE, st);
           matchToken(TokenKind.OPEN_PARANTHESES, st);
-          scopes.push(symbolTable.size());
           while (!checkToken(TokenKind.CLOSE_PARANTHESES)) {
             statement(st.insertSubtree(new Token(TokenKind.STATEMENT, "")));
           }
           matchToken(TokenKind.CLOSE_PARANTHESES, st);
-          elementsToBeRemoved = symbolTable.size() - scopes.pop();
-          for (int i = 0; i < elementsToBeRemoved; i++) {
-            symbolTable.removeLast();
-          }
 
         }
         break;
@@ -145,21 +118,13 @@ public class Parser {
         expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
         matchToken(TokenKind.CLOSE_BRACKET, st);
         matchToken(TokenKind.OPEN_PARANTHESES, st);
-        scopes.push(symbolTable.size());
         while (!checkToken(TokenKind.CLOSE_PARANTHESES)) {
           statement(st.insertSubtree(new Token(TokenKind.STATEMENT, "")));
         }
         matchToken(TokenKind.CLOSE_PARANTHESES, st);
-        int elementsToBeRemoved = symbolTable.size() - scopes.pop();
-        for (int i = 0; i < elementsToBeRemoved; i++) {
-          symbolTable.removeLast();
-        }
         break;
       }
       case IDENT:
-        if (!symbolTable.contains(currentToken().lexem)) {
-          throw new UnknownIdentifierError(currentToken());
-        }
         matchToken(TokenKind.IDENT, st);
         matchToken(TokenKind.EQ, st);
         expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
@@ -180,7 +145,7 @@ public class Parser {
    * @throws SyntaxError
    * @throws UnknownIdentifierError
    */
-  public void expression(ParseTree st) throws SyntaxError, UnknownIdentifierError {
+  public void expression(ParseTree st) throws SyntaxError {
     equality(st.insertSubtree(new Token(TokenKind.EQUALITY, "")));
     if (checkToken(TokenKind.LAND)) {
       matchToken(TokenKind.LAND, st);
@@ -206,7 +171,7 @@ public class Parser {
    * @throws SyntaxError
    * @throws UnknownIdentifierError
    */
-  public void equality(ParseTree st) throws SyntaxError, UnknownIdentifierError {
+  public void equality(ParseTree st) throws SyntaxError {
     comparison(st.insertSubtree(new Token(TokenKind.COMPARISON, "")));
     if (checkToken(TokenKind.NOTEQ)) {
       matchToken(TokenKind.NOTEQ, st);
@@ -227,7 +192,7 @@ public class Parser {
    * @throws SyntaxError
    * @throws UnknownIdentifierError
    */
-  private void comparison(ParseTree st) throws SyntaxError, UnknownIdentifierError {
+  private void comparison(ParseTree st) throws SyntaxError {
     arithmeticExpr(st.insertSubtree(new Token(TokenKind.ARITHMETIC_EXPR, "")));
     if (checkToken(TokenKind.GT)) {
       matchToken(TokenKind.GT, st);
@@ -251,7 +216,7 @@ public class Parser {
    * @throws SyntaxError
    * @throws UnknownIdentifierError
    */
-  private void arithmeticExpr(ParseTree st) throws SyntaxError, UnknownIdentifierError {
+  private void arithmeticExpr(ParseTree st) throws SyntaxError {
     term(st.insertSubtree(new Token(TokenKind.TERM, "")));
     if (checkToken(TokenKind.PLUS)) {
       matchToken(TokenKind.PLUS, st);
@@ -271,7 +236,7 @@ public class Parser {
    * @throws SyntaxError
    * @throws UnknownIdentifierError
    */
-  private void term(ParseTree st) throws SyntaxError, UnknownIdentifierError {
+  private void term(ParseTree st) throws SyntaxError {
     unary(st.insertSubtree(new Token(TokenKind.UNARY, "")));
     if (checkToken(TokenKind.ASTERISK)) {
       matchToken(TokenKind.ASTERISK, st);
@@ -279,7 +244,7 @@ public class Parser {
     } else if (checkToken(TokenKind.SLASH)) {
       matchToken(TokenKind.SLASH, st);
       term(st.insertSubtree(new Token(TokenKind.TERM, "")));
-    }else if (checkToken(TokenKind.PERCENT)) {
+    } else if (checkToken(TokenKind.PERCENT)) {
       matchToken(TokenKind.PERCENT, st);
       term(st.insertSubtree(new Token(TokenKind.TERM, "")));
     }
@@ -296,7 +261,7 @@ public class Parser {
    * @throws SyntaxError
    * @throws UnknownIdentifierError
    */
-  private void unary(ParseTree st) throws SyntaxError, UnknownIdentifierError {
+  private void unary(ParseTree st) throws SyntaxError {
     if (checkToken(TokenKind.NOT)) {
       matchToken(TokenKind.NOT, st);
       unary(st.insertSubtree(new Token(TokenKind.UNARY, "")));
@@ -318,7 +283,7 @@ public class Parser {
    * @throws SyntaxError
    * @throws UnknownIdentifierError
    */
-  private void primary(ParseTree st) throws SyntaxError, UnknownIdentifierError {
+  private void primary(ParseTree st) throws SyntaxError {
     TokenKind[] expected = new TokenKind[] { TokenKind.V_INT, TokenKind.V_BOOL, TokenKind.OPEN_BRACKET,
         TokenKind.IDENT };
     if (checkToken(TokenKind.OPEN_BRACKET)) {
@@ -330,9 +295,6 @@ public class Parser {
     } else if (checkToken(TokenKind.V_INT)) {
       matchToken(TokenKind.V_INT, st);
     } else if (checkToken(TokenKind.IDENT)) {
-      if (!symbolTable.contains(currentToken().lexem)) {
-        throw new UnknownIdentifierError(currentToken());
-      }
       matchToken(TokenKind.IDENT, st);
     } else {
       throw new SyntaxError(currentToken(), expected);
