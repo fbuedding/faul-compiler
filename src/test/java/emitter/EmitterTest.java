@@ -41,7 +41,7 @@ public class EmitterTest {
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
 
     AbstractSyntaxTree ast = astf.fromParseTree(pt);
-    Emitter emitter = new Emitter(ast, astf.sTable);
+    Emitter emitter = new Emitter(ast, astf.symbolTable);
     emitter.generate();
     file.Writer.write("src/test/resources/asm/test.asm", emitter.code.toString());
 
@@ -76,7 +76,7 @@ public class EmitterTest {
     p.program(pt);
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
     AbstractSyntaxTree ast = astf.fromParseTree(pt);
-    Emitter emitter = new Emitter(ast, astf.sTable);
+    Emitter emitter = new Emitter(ast, astf.symbolTable);
     emitter.generate();
     file.Writer.write("src/test/resources/asm/vars.asm", emitter.code.toString());
   }
@@ -96,7 +96,7 @@ public class EmitterTest {
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
 
     AbstractSyntaxTree ast = astf.fromParseTree(pt);
-    Emitter emitter = new Emitter(ast, astf.sTable);
+    Emitter emitter = new Emitter(ast, astf.symbolTable);
     emitter.generate();
     file.Writer.write("src/test/resources/asm/shouldAllBeTrue.asm", emitter.code.toString());
   }
@@ -124,7 +124,7 @@ public class EmitterTest {
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
 
     AbstractSyntaxTree ast = astf.fromParseTree(pt);
-    Emitter emitter = new Emitter(ast, astf.sTable);
+    Emitter emitter = new Emitter(ast, astf.symbolTable);
     emitter.generate();
     file.Writer.write("src/test/resources/asm/firstVarTwoSecondThree.asm", emitter.code.toString());
   }
@@ -147,7 +147,7 @@ public class EmitterTest {
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
 
     AbstractSyntaxTree ast = astf.fromParseTree(pt);
-    Emitter emitter = new Emitter(ast, astf.sTable);
+    Emitter emitter = new Emitter(ast, astf.symbolTable);
     emitter.generate();
     file.Writer.write("src/test/resources/asm/while.asm", emitter.code.toString());
   }
