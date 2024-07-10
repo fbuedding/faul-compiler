@@ -69,7 +69,8 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
 <vbool>             ::= "true" | "false"
 <vint>              ::= [1-9] [0-9]*
                       | "0"
-<ident>             ::= ("_" | [a-z]) ("_" | [a-z] | [0-9])*
+<ident>             ::= ("_" | [a-z]) ("_" | [a-z] | [0-9])* (<function_call)?
+<function_call>     ::= "(" (<expression> ("," <expression>)*)? ")"
 <semi>              ::= ";"+
 ```
 
