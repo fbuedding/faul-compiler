@@ -1,0 +1,47 @@
+PROGRAM
+├── STATEMENT
+│   ├── INT: int
+│   ├── IDENT: a
+│   ├── EQ: =
+│   ├── EXPRESSION
+│   │   └── EQUALITY
+│   │       └── COMPARISON
+│   │           └── ARITHMETIC_EXPR
+│   │               └── TERM
+│   │                   └── UNARY
+│   │                       └── PRIMARY
+│   │                           ├── IDENT: read
+│   │                           └── FUNC_CALL
+│   └── SEMICOLON: ;
+├── STATEMENT
+│   ├── IDENT: print
+│   ├── FUNC_CALL
+│   │   ├── EXPRESSION
+│   │   │   └── EQUALITY
+│   │   │       └── COMPARISON
+│   │   │           └── ARITHMETIC_EXPR
+│   │   │               └── TERM
+│   │   │                   └── UNARY
+│   │   │                       └── PRIMARY
+│   │   │                           └── IDENT: a
+│   │   ├── EXPRESSION
+│   │   │   └── EQUALITY
+│   │   │       └── COMPARISON
+│   │   │           └── ARITHMETIC_EXPR
+│   │   │               └── TERM
+│   │   │                   └── UNARY
+│   │   │                       └── PRIMARY
+│   │   │                           └── V_INT: 1
+│   │   └── EXPRESSION
+│   │       └── EQUALITY
+│   │           └── COMPARISON
+│   │               └── ARITHMETIC_EXPR
+│   │                   └── TERM
+│   │                       └── UNARY
+│   │                           └── PRIMARY
+│   │                               └── IDENT: a
+│   └── SEMICOLON: ;
+└── STATEMENT
+    ├── IDENT: exit
+    ├── FUNC_CALL
+    └── SEMICOLON: ;
