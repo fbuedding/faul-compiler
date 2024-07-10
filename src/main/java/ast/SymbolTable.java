@@ -52,7 +52,7 @@ public class SymbolTable {
     return st;
   }
 
-  int insert(String name, AstNodeTypes ant) {
+  int insert(String name, Types ant) {
     int adress = memoryOffset + symbols.size();
     symbols.put(name, new Symbol(ant, adress));
     return adress;
@@ -101,16 +101,17 @@ public class SymbolTable {
 }
 
 class Symbol {
-  AstNodeTypes ant;
+  Types ant;
 
   int adress;
+  String label;
 
-  Symbol(AstNodeTypes ant, int adress) {
+  Symbol(Types ant, int adress) {
     this.ant = ant;
     this.adress = adress;
   }
 
-  public AstNodeTypes getType() {
+  public Types getType() {
     return ant;
   }
 }

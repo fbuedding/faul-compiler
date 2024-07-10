@@ -87,6 +87,10 @@ public enum TokenKind {
    */
   CLOSE_BRACKET,
   /**
+   * ,
+   */
+  COMMA,
+  /**
    * ==
    */
   EQEQ,
@@ -130,6 +134,11 @@ public enum TokenKind {
    * logical AND
    */
   LAND,
+  // Postfix operator
+  /**
+   * function call
+   */
+  FUNC_CALL,
   // ######## Token types for AST
   PROGRAM,
   STATEMENT,

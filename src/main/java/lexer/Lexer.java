@@ -63,6 +63,10 @@ public class Lexer {
     else if (currentCharacter == ')')
       t = new Token(TokenKind.CLOSE_BRACKET, currentCharacter, currentLine, currentLinePosition);
 
+    else if (currentCharacter == ',')
+      t = new Token(TokenKind.COMMA, currentCharacter, currentLine, currentLinePosition);
+
+
     // Multi character operator
     else if (currentCharacter == '=') {
       if (lookAhead() == '=') {

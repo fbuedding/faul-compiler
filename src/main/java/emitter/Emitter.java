@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 import ast.AbstractSyntaxTree;
 import ast.AstNodeKinds;
-import ast.AstNodeTypes;
+import ast.Types;
 import ast.SymbolTable;
 import error.CompileError;
 import error.UnexpectedError;
@@ -400,7 +400,7 @@ public class Emitter {
     switch (ast.getKind()) {
       case NOT:
         emit("nor $%s, $%s, $%<s", tempReg, reg);
-        if (ast.resultType == AstNodeTypes.BOOLEAN) {
+        if (ast.resultType == Types.BOOLEAN) {
           emit("andi $%s, $%<s, 1", tempReg);
         }
         break;

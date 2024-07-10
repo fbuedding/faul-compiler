@@ -14,6 +14,40 @@ PROGRAM
 │   │                           └── FUNC_CALL
 │   └── SEMICOLON: ;
 ├── STATEMENT
+│   ├── INT: int
+│   ├── IDENT: b
+│   ├── EQ: =
+│   ├── EXPRESSION
+│   │   └── EQUALITY
+│   │       └── COMPARISON
+│   │           └── ARITHMETIC_EXPR
+│   │               └── TERM
+│   │                   ├── UNARY
+│   │                   │   └── PRIMARY
+│   │                   │       └── V_INT: 3
+│   │                   ├── ASTERISK: *
+│   │                   └── TERM
+│   │                       └── UNARY
+│   │                           └── PRIMARY
+│   │                               ├── OPEN_BRACKET: (
+│   │                               ├── EXPRESSION
+│   │                               │   └── EQUALITY
+│   │                               │       └── COMPARISON
+│   │                               │           └── ARITHMETIC_EXPR
+│   │                               │               ├── TERM
+│   │                               │               │   └── UNARY
+│   │                               │               │       └── PRIMARY
+│   │                               │               │           └── V_INT: 5
+│   │                               │               ├── MINUS: -
+│   │                               │               └── ARITHMETIC_EXPR
+│   │                               │                   └── TERM
+│   │                               │                       └── UNARY
+│   │                               │                           └── PRIMARY
+│   │                               │                               ├── IDENT: read
+│   │                               │                               └── FUNC_CALL
+│   │                               └── CLOSE_BRACKET: )
+│   └── SEMICOLON: ;
+├── STATEMENT
 │   ├── IDENT: print
 │   ├── FUNC_CALL
 │   │   ├── EXPRESSION

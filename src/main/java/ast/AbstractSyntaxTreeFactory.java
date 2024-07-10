@@ -28,7 +28,7 @@ public class AbstractSyntaxTreeFactory {
   public SymbolTable symbolTable;
 
   public AbstractSyntaxTreeFactory() {
-    ast = new AbstractSyntaxTree(AstNodeKinds.PROGRAM, AstNodeTypes.NONE, AstNodeTypes.NONE, 0, 0);
+    ast = new AbstractSyntaxTree(AstNodeKinds.PROGRAM, Types.NONE, Types.NONE, 0, 0);
     symbolTable = new SymbolTable();
   }
 
@@ -52,13 +52,13 @@ public class AbstractSyntaxTreeFactory {
     if (sTable.has(ident)) {
       throw new IndentifierAlreadyDeclaredError(ident, t.line, t.linePos);
     }
-    AstNodeTypes type;
+    Types type;
     switch (pt.getChild(DECLARATION_TYPE).token.lexem) {
       case "int":
-        type = AstNodeTypes.INTEGER;
+        type = Types.INTEGER;
         break;
       case "bool":
-        type = AstNodeTypes.BOOLEAN;
+        type = Types.BOOLEAN;
         break;
 
       default:
@@ -66,8 +66,8 @@ public class AbstractSyntaxTreeFactory {
         throw new Error("Every declaration should have a type");
     }
     int adress = sTable.insert(ident, type);
-    ast.insertSubTree(AstNodeKinds.IDENT, type, AstNodeTypes.NONE, t.line, t.linePos, ident);
-    ast.insertSubTree(AstNodeKinds.ADDRESS, AstNodeTypes.MEMORY_ADDRESS, AstNodeTypes.NONE, t.line, t.linePos,
+    ast.insertSubTree(AstNodeKinds.IDENT, type, Types.NONE, t.line, t.linePos, ident);
+    ast.insertSubTree(AstNodeKinds.ADDRESS, Types.MEMORY_ADDRESS, Types.NONE, t.line, t.linePos,
         "" + adress);
   }
 
@@ -107,25 +107,25 @@ public class AbstractSyntaxTreeFactory {
       ParseTree op = pt.getChild(OPERATOR);
       switch (pt.getChild(OPERATOR).getKind()) {
         case LAND:
-          tmp = ast.insertSubTree(AstNodeKinds.LAND, AstNodeTypes.BOOLEAN, AstNodeTypes.BOOLEAN, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.LAND, Types.BOOLEAN, Types.BOOLEAN, op.token.line,
               op.token.linePos);
 
           break;
 
         case LOR:
-          tmp = ast.insertSubTree(AstNodeKinds.LOR, AstNodeTypes.BOOLEAN, AstNodeTypes.BOOLEAN, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.LOR, Types.BOOLEAN, Types.BOOLEAN, op.token.line,
               op.token.linePos);
 
           break;
 
         case OR:
-          tmp = ast.insertSubTree(AstNodeKinds.OR, AstNodeTypes.INTEGER, AstNodeTypes.INTEGER, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.OR, Types.INTEGER, Types.INTEGER, op.token.line,
               op.token.linePos);
 
           break;
 
         case AND:
-          tmp = ast.insertSubTree(AstNodeKinds.AND, AstNodeTypes.INTEGER, AstNodeTypes.INTEGER, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.AND, Types.INTEGER, Types.INTEGER, op.token.line,
               op.token.linePos);
           break;
 
@@ -149,12 +149,12 @@ public class AbstractSyntaxTreeFactory {
       ParseTree op = pt.getChild(OPERATOR);
       switch (op.getKind()) {
         case NOTEQ:
-          tmp = ast.insertSubTree(AstNodeKinds.NOTEQ, AstNodeTypes.UNKNOWN, AstNodeTypes.BOOLEAN, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.NOTEQ, Types.UNKNOWN, Types.BOOLEAN, op.token.line,
               op.token.linePos);
 
           break;
         case EQEQ:
-          tmp = ast.insertSubTree(AstNodeKinds.EQEQ, AstNodeTypes.UNKNOWN, AstNodeTypes.BOOLEAN, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.EQEQ, Types.UNKNOWN, Types.BOOLEAN, op.token.line,
               op.token.linePos);
 
           break;
@@ -179,22 +179,22 @@ public class AbstractSyntaxTreeFactory {
       ParseTree op = pt.getChild(OPERATOR);
       switch (op.getKind()) {
         case LT:
-          tmp = ast.insertSubTree(AstNodeKinds.LT, AstNodeTypes.INTEGER, AstNodeTypes.BOOLEAN, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.LT, Types.INTEGER, Types.BOOLEAN, op.token.line,
               op.token.linePos);
 
           break;
         case LTEQ:
-          tmp = ast.insertSubTree(AstNodeKinds.LTEQ, AstNodeTypes.INTEGER, AstNodeTypes.BOOLEAN, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.LTEQ, Types.INTEGER, Types.BOOLEAN, op.token.line,
               op.token.linePos);
 
           break;
         case GT:
-          tmp = ast.insertSubTree(AstNodeKinds.GT, AstNodeTypes.INTEGER, AstNodeTypes.BOOLEAN, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.GT, Types.INTEGER, Types.BOOLEAN, op.token.line,
               op.token.linePos);
 
           break;
         case GTEQ:
-          tmp = ast.insertSubTree(AstNodeKinds.GTEQ, AstNodeTypes.INTEGER, AstNodeTypes.BOOLEAN, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.GTEQ, Types.INTEGER, Types.BOOLEAN, op.token.line,
               op.token.linePos);
 
           break;
@@ -219,12 +219,12 @@ public class AbstractSyntaxTreeFactory {
       ParseTree op = pt.getChild(OPERATOR);
       switch (op.getKind()) {
         case PLUS:
-          tmp = ast.insertSubTree(AstNodeKinds.PLUS, AstNodeTypes.INTEGER, AstNodeTypes.INTEGER, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.PLUS, Types.INTEGER, Types.INTEGER, op.token.line,
               op.token.linePos);
 
           break;
         case MINUS:
-          tmp = ast.insertSubTree(AstNodeKinds.MINUS, AstNodeTypes.INTEGER, AstNodeTypes.INTEGER, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.MINUS, Types.INTEGER, Types.INTEGER, op.token.line,
               op.token.linePos);
 
           break;
@@ -249,17 +249,17 @@ public class AbstractSyntaxTreeFactory {
       ParseTree op = pt.getChild(OPERATOR);
       switch (op.getKind()) {
         case ASTERISK:
-          tmp = ast.insertSubTree(AstNodeKinds.MUL, AstNodeTypes.INTEGER, AstNodeTypes.INTEGER, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.MUL, Types.INTEGER, Types.INTEGER, op.token.line,
               op.token.linePos);
 
           break;
         case SLASH:
-          tmp = ast.insertSubTree(AstNodeKinds.DIV, AstNodeTypes.INTEGER, AstNodeTypes.INTEGER, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.DIV, Types.INTEGER, Types.INTEGER, op.token.line,
               op.token.linePos);
 
           break;
         case PERCENT:
-          tmp = ast.insertSubTree(AstNodeKinds.MOD, AstNodeTypes.INTEGER, AstNodeTypes.INTEGER, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.MOD, Types.INTEGER, Types.INTEGER, op.token.line,
               op.token.linePos);
 
           break;
@@ -284,14 +284,14 @@ public class AbstractSyntaxTreeFactory {
       switch (op.getKind()) {
         case NOT:
           unary(
-              ast.insertSubTree(AstNodeKinds.NOT, AstNodeTypes.UNKNOWN, AstNodeTypes.UNKNOWN, op.token.line,
+              ast.insertSubTree(AstNodeKinds.NOT, Types.UNKNOWN, Types.UNKNOWN, op.token.line,
                   op.token.linePos),
               pt.getChild(UNARY), sTable);
 
           break;
         case MINUS:
           unary(
-              ast.insertSubTree(AstNodeKinds.NEG, AstNodeTypes.INTEGER, AstNodeTypes.INTEGER, op.token.line,
+              ast.insertSubTree(AstNodeKinds.NEG, Types.INTEGER, Types.INTEGER, op.token.line,
                   op.token.linePos),
               pt.getChild(UNARY),
               sTable);
@@ -333,13 +333,13 @@ public class AbstractSyntaxTreeFactory {
   }
 
   void vbool(AbstractSyntaxTree ast, ParseTree pt, SymbolTable sTable) {
-    ast.insertSubTree(AstNodeKinds.BOOLEAN, AstNodeTypes.BOOLEAN, AstNodeTypes.BOOLEAN, pt.token.line, pt.token.linePos,
+    ast.insertSubTree(AstNodeKinds.BOOLEAN, Types.BOOLEAN, Types.BOOLEAN, pt.token.line, pt.token.linePos,
         pt.token.lexem);
 
   }
 
   void vint(AbstractSyntaxTree ast, ParseTree pt, SymbolTable sTable) {
-    ast.insertSubTree(AstNodeKinds.INTEGER, AstNodeTypes.INTEGER, AstNodeTypes.INTEGER, pt.token.line, pt.token.linePos,
+    ast.insertSubTree(AstNodeKinds.INTEGER, Types.INTEGER, Types.INTEGER, pt.token.line, pt.token.linePos,
         pt.token.lexem);
   }
 
@@ -386,14 +386,14 @@ public class AbstractSyntaxTreeFactory {
   private void statement(ParseTree pt, AbstractSyntaxTree ast, SymbolTable sTable) throws CompileError {
     switch (pt.getChild(STATEMENT_TYPE).getKind()) {
       case IF:
-        AbstractSyntaxTree if_node = ast.insertSubTree(AstNodeKinds.IF, AstNodeTypes.NONE, AstNodeTypes.NONE,
+        AbstractSyntaxTree if_node = ast.insertSubTree(AstNodeKinds.IF, Types.NONE, Types.NONE,
             pt.token.line,
             pt.token.linePos);
         ParseTree if_condition = pt.getChild(IF_EXPRESSION);
-        expression(if_node.insertSubTree(AstNodeKinds.CONDITION, AstNodeTypes.BOOLEAN, AstNodeTypes.NONE,
+        expression(if_node.insertSubTree(AstNodeKinds.CONDITION, Types.BOOLEAN, Types.NONE,
             if_condition.token.line, if_condition.token.linePos), if_condition, sTable);
         branch(pt,
-            if_node.insertSubTree(AstNodeKinds.BRANCH, AstNodeTypes.NONE, AstNodeTypes.NONE, pt.token.line,
+            if_node.insertSubTree(AstNodeKinds.BRANCH, Types.NONE, Types.NONE, pt.token.line,
                 pt.token.linePos),
             sTable.getScopedSymbolTable());
 
@@ -401,27 +401,27 @@ public class AbstractSyntaxTreeFactory {
         if (pt.getChildIndex(TokenKind.ELSE) != -1
             && pt.getChildIndex(TokenKind.ELSE) != pt.getChildCount() - EMPTY_BLOCK_SIZE - 1) {
           elseBranch(pt,
-              if_node.insertSubTree(AstNodeKinds.BRANCH, AstNodeTypes.NONE, AstNodeTypes.NONE, pt.token.line,
+              if_node.insertSubTree(AstNodeKinds.BRANCH, Types.NONE, Types.NONE, pt.token.line,
                   pt.token.linePos),
               sTable.getScopedSymbolTable());
         }
         break;
       case WHILE:
-        AbstractSyntaxTree while_node = ast.insertSubTree(AstNodeKinds.WHILE, AstNodeTypes.NONE, AstNodeTypes.NONE,
+        AbstractSyntaxTree while_node = ast.insertSubTree(AstNodeKinds.WHILE, Types.NONE, Types.NONE,
             pt.token.line,
             pt.token.linePos);
         ParseTree while_condition = pt.getChild(WHILE_EXPRESSION);
-        expression(while_node.insertSubTree(AstNodeKinds.CONDITION, AstNodeTypes.BOOLEAN, AstNodeTypes.NONE,
+        expression(while_node.insertSubTree(AstNodeKinds.CONDITION, Types.BOOLEAN, Types.NONE,
             while_condition.token.line, while_condition.token.linePos), while_condition, sTable);
         branch(pt,
-            while_node.insertSubTree(AstNodeKinds.BRANCH, AstNodeTypes.NONE, AstNodeTypes.NONE, pt.token.line,
+            while_node.insertSubTree(AstNodeKinds.BRANCH, Types.NONE, Types.NONE, pt.token.line,
                 pt.token.linePos),
             sTable.getScopedSymbolTable());
 
         // check if else branch is present and if the else branch is not empty
         if (pt.getChildIndex(TokenKind.ELSE) != -1 && pt.getChildIndex(TokenKind.ELSE) != pt.getChildCount() - 3) {
           elseBranch(pt,
-              while_node.insertSubTree(AstNodeKinds.BRANCH, AstNodeTypes.NONE, AstNodeTypes.NONE, pt.token.line,
+              while_node.insertSubTree(AstNodeKinds.BRANCH, Types.NONE, Types.NONE, pt.token.line,
                   pt.token.linePos),
               sTable.getScopedSymbolTable());
         }
@@ -430,11 +430,11 @@ public class AbstractSyntaxTreeFactory {
       case BOOL: {
         ParseTree expression = pt.getChild(DECLARERATION_EXPRESSION);
         declaration(
-            ast.insertSubTree(AstNodeKinds.DECLARATION, AstNodeTypes.NONE, AstNodeTypes.NONE, pt.token.line,
+            ast.insertSubTree(AstNodeKinds.DECLARATION, Types.NONE, Types.NONE, pt.token.line,
                 pt.token.linePos),
             pt, sTable);
         assignment(
-            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, AstNodeTypes.BOOLEAN, AstNodeTypes.NONE,
+            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, Types.BOOLEAN, Types.NONE,
                 expression.token.line, expression.token.linePos),
             pt.removeFirst(), sTable);
         break;
@@ -442,11 +442,11 @@ public class AbstractSyntaxTreeFactory {
       case INT: {
         ParseTree expression = pt.getChild(DECLARERATION_EXPRESSION);
         declaration(
-            ast.insertSubTree(AstNodeKinds.DECLARATION, AstNodeTypes.NONE, AstNodeTypes.NONE, pt.token.line,
+            ast.insertSubTree(AstNodeKinds.DECLARATION, Types.NONE, Types.NONE, pt.token.line,
                 pt.token.linePos),
             pt, sTable);
         assignment(
-            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, AstNodeTypes.INTEGER, AstNodeTypes.NONE,
+            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, Types.INTEGER, Types.NONE,
                 expression.token.line, expression.token.linePos),
             pt.removeFirst(), sTable);
         break;
@@ -454,7 +454,7 @@ public class AbstractSyntaxTreeFactory {
       // Assignment
       case IDENT:
         assignment(
-            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, AstNodeTypes.NONE, AstNodeTypes.NONE,
+            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, Types.NONE, Types.NONE,
                 pt.token.line, pt.token.linePos),
             pt, sTable);
 

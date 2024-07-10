@@ -7,10 +7,17 @@ public class Token {
   public int line;
   public int linePos;
 
+  public Token(Token t, TokenKind kind) {
+    this(kind, "", t.line, t.linePos);
+  }
+
+  // TODO remove these to force setting the position
   public Token(TokenKind token) {
     this.kind = token;
     this.lexem = "";
   }
+
+  // TODO remove these to force setting the position
   public Token(TokenKind token, String lexem) {
     this.kind = token;
     this.lexem = lexem;

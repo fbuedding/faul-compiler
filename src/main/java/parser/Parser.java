@@ -28,7 +28,26 @@ public class Parser {
     return tokens[currentToken].kind == tt;
   }
 
-  private void matchToken(TokenKind tt, ParseTree st) throws SyntaxError {
+  /**
+   * Matches token but doesn't insert it in the ParseTree
+   * 
+   * @param tt
+   * @throws SyntaxError
+   */
+  private void matchToken(TokenKind tt) throws SyntaxError {
+    if (!checkToken(tt)) {
+      throw new SyntaxError(currentToken(), tt);
+    }
+    nextToken();
+  }
+
+  /**
+   * Matches {@link Token} and inserts in {@link ParseTree}
+ * @param tt
+ * @param st
+ * @throws SyntaxError
+ */
+private void matchToken(TokenKind tt, ParseTree st) throws SyntaxError {
     if (!checkToken(tt)) {
       throw new SyntaxError(currentToken(), tt);
     }
@@ -125,9 +144,11 @@ public class Parser {
         break;
       }
       case IDENT:
-        matchToken(TokenKind.IDENT, st);
-        matchToken(TokenKind.EQ, st);
-        expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
+        ident(st);
+        if (checkToken(TokenKind.EQ)) {
+          matchToken(TokenKind.EQ, st);
+          expression(st.insertSubtree(new Token(TokenKind.EXPRESSION, "")));
+        }
         matchToken(TokenKind.SEMICOLON, st);
         break;
       default:
@@ -295,10 +316,45 @@ public class Parser {
     } else if (checkToken(TokenKind.V_INT)) {
       matchToken(TokenKind.V_INT, st);
     } else if (checkToken(TokenKind.IDENT)) {
-      matchToken(TokenKind.IDENT, st);
+      ident(st);
     } else {
       throw new SyntaxError(currentToken(), expected);
     }
+  }
+
+  /**
+   * <ident> ::= ("_" | [a-z]) ("_" | [a-z] | [0-9])* (<function_call>)?
+   * 
+   * @param st
+   * @throws SyntaxError
+   */
+  private void ident(ParseTree st) throws SyntaxError {
+    matchToken(TokenKind.IDENT, st);
+    if (checkToken(TokenKind.OPEN_BRACKET)) {
+      functionCall(st.insertSubtree(new Token(currentToken(), TokenKind.FUNC_CALL)));
+    }
+  }
+
+  /**
+   * <function_call> ::= "(" (<expression> ("," <expression>)*)? ")"
+   * 
+   * @param st
+   * @throws SyntaxError
+   */
+  private void functionCall(ParseTree st) throws SyntaxError {
+    matchToken(TokenKind.OPEN_BRACKET);
+    // no args
+    if (checkToken(TokenKind.CLOSE_BRACKET)) {
+      matchToken(TokenKind.CLOSE_BRACKET);
+      return;
+    }
+
+    expression(st.insertSubtree(new Token(TokenKind.EXPRESSION)));
+    while (checkToken(TokenKind.COMMA)) {
+      matchToken(TokenKind.COMMA);
+      expression(st.insertSubtree(new Token(TokenKind.EXPRESSION)));
+    }
+    matchToken(TokenKind.CLOSE_BRACKET);
   }
 
 }

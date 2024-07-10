@@ -9,8 +9,8 @@ import java.util.LinkedList;
  */
 public class AbstractSyntaxTree {
   public AstNodeKinds kind;
-  public AstNodeTypes type;
-  public AstNodeTypes resultType;
+  public Types type;
+  public Types resultType;
   public LinkedList<AbstractSyntaxTree> children;
 
   public int line;
@@ -18,7 +18,7 @@ public class AbstractSyntaxTree {
 
   public String value = null;
 
-  public AbstractSyntaxTree(AstNodeKinds k, AstNodeTypes t, AstNodeTypes rT, int line, int linePos) {
+  public AbstractSyntaxTree(AstNodeKinds k, Types t, Types rT, int line, int linePos) {
     this.kind = k;
     this.type = t;
     this.resultType = rT;
@@ -54,13 +54,13 @@ public class AbstractSyntaxTree {
       case UNKNOWN:
         if (hasChildren()) {
           for (AbstractSyntaxTree ast : children) {
-            if (ast.resultType == AstNodeTypes.UNKNOWN) {
+            if (ast.resultType == Types.UNKNOWN) {
               ast.checkTypes();
             }
-            if (type == AstNodeTypes.UNKNOWN) {
+            if (type == Types.UNKNOWN) {
               type = ast.resultType;
             }
-            if (resultType == AstNodeTypes.UNKNOWN) {
+            if (resultType == Types.UNKNOWN) {
               resultType = ast.resultType;
             }
             ast.checkTypes();
@@ -72,7 +72,7 @@ public class AbstractSyntaxTree {
         break;
       default:
         for (AbstractSyntaxTree child : children) {
-          if (child.resultType == AstNodeTypes.UNKNOWN) {
+          if (child.resultType == Types.UNKNOWN) {
             child.checkTypes();
             if (type != child.resultType) {
               throw new TypeError(type, child.resultType, child.line, child.linePos);
@@ -107,13 +107,13 @@ public class AbstractSyntaxTree {
 
   }
 
-  public AbstractSyntaxTree insertSubTree(AstNodeKinds k, AstNodeTypes t, AstNodeTypes rt, int line, int linePos) {
+  public AbstractSyntaxTree insertSubTree(AstNodeKinds k, Types t, Types rt, int line, int linePos) {
     AbstractSyntaxTree node = new AbstractSyntaxTree(k, t, rt, line, linePos);
     children.add(node);
     return node;
   }
 
-  public AbstractSyntaxTree insertSubTree(AstNodeKinds k, AstNodeTypes t, AstNodeTypes rt, int line, int linePos,
+  public AbstractSyntaxTree insertSubTree(AstNodeKinds k, Types t, Types rt, int line, int linePos,
       String value) {
     AbstractSyntaxTree node = new AbstractSyntaxTree(k, t, rt, line, linePos);
     node.value = value;

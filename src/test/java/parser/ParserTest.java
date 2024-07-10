@@ -52,8 +52,9 @@ public class ParserTest {
   @Test
   public void functionTests() {
     String i = """
-        read();
-        print(1);
+        int a = read();
+        int b = 3 * (5 - read());
+        print(a, 1, a);
         exit();
         """;
     Lexer l = new Lexer(i);
@@ -62,7 +63,7 @@ public class ParserTest {
       p = new Parser(l.genTokens());
       ParseTree st = new ParseTree(new Token(TokenKind.PROGRAM, ""));
       p.program(st);
-      file.Writer.write("src/test/resources/tree.txt", st.toString());
+      file.Writer.write("src/test/resources/functionParseTree.txt", st.toString());
     } catch (CompileError e) {
       fail(e);
     } catch (IOException e) {
