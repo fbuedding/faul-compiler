@@ -1,4 +1,4 @@
-package ast;
+package types;
 
 import error.CompileError;
 
@@ -8,7 +8,7 @@ import error.CompileError;
 
 public class TypeError extends CompileError {
 
-  public TypeError(Types expected, Types got, int line, int linePos) {
+  public TypeError(Type expected, Type got, int line, int linePos) {
     super(String.format("TypeError: expected: %s, got: %s", expected, got), line, linePos);
   }
 

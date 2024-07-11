@@ -19,18 +19,20 @@ import static parser.Constants.UNARY_OPERATOR;
 import static parser.Constants.WHILE_EXPRESSION;
 
 import error.CompileError;
+import error.UnexpectedError;
 import lexer.Token;
 import lexer.TokenKind;
 import parser.ParseTree;
+import types.*;
 
 public class AbstractSyntaxTreeFactory {
   public AbstractSyntaxTree ast;
   public SymbolTable symbolTable;
 
   public AbstractSyntaxTreeFactory() {
-    ast = new AbstractSyntaxTree(AstNodeKinds.PROGRAM, Types.VOID, Types.VOID, 0, 0);
+    ast = new AbstractSyntaxTree(AstNodeKinds.PROGRAM, Type.tVoid(), 0, 0);
     symbolTable = new SymbolTable();
-    symbolTable.insert("read", Types.FUNCTION.setSubType(Types.INTEGER));
+    symbolTable.initStd();
   }
 
   public AbstractSyntaxTree fromParseTree(ParseTree st) throws CompileError {
@@ -53,22 +55,23 @@ public class AbstractSyntaxTreeFactory {
     if (sTable.has(ident)) {
       throw new IndentifierAlreadyDeclaredError(ident, t.line, t.linePos);
     }
-    Types type;
-    switch (pt.getChild(DECLARATION_TYPE).token.lexem) {
+    Type type = new Type(Types.VAR);
+    Token declarationType = pt.getChild(DECLARATION_TYPE).token;
+    switch (declarationType.lexem) {
       case "int":
-        type = Types.INTEGER;
+        type.setRetType(Types.INTEGER);
         break;
       case "bool":
-        type = Types.BOOLEAN;
+        type.setRetType(Types.BOOLEAN);
         break;
 
       default:
-        // TODO: Meaningfull Error
-        throw new Error("Every declaration should have a type");
+        throw new UnexpectedError("Every declaration should have a type", declarationType.line,
+            declarationType.linePos);
     }
     int adress = sTable.insert(ident, type);
-    ast.insertSubTree(AstNodeKinds.IDENT, type, Types.VOID, t.line, t.linePos, ident);
-    ast.insertSubTree(AstNodeKinds.ADDRESS, Types.MEMORY_ADDRESS, Types.VOID, t.line, t.linePos,
+    ast.insertSubTree(AstNodeKinds.IDENT, type, t.line, t.linePos, ident);
+    ast.insertSubTree(AstNodeKinds.ADDRESS, new Type(Types.MEMORY_ADDRESS, Types.MEMORY_ADDRESS), t.line, t.linePos,
         "" + adress);
   }
 
@@ -87,9 +90,10 @@ public class AbstractSyntaxTreeFactory {
     if (s == null) {
       throw new UnknownIdentifierError(ident.token.lexem, ident.token.line, ident.token.linePos);
     }
-    ast.type = s.getType();
+    ast.type = new Type(s.getType().getRetType());
     // insert ident child
-    ast.insertSubTree(AstNodeKinds.IDENT, s.getType(), s.getType(), ident.token.line, ident.token.linePos,
+    ast.insertSubTree(AstNodeKinds.IDENT, new Type(Types.VAR, s.getType().getRetType()), ident.token.line,
+        ident.token.linePos,
         ident.token.lexem);
     // handle expression
     expression(ast, pt.getChild(ASSIGNMENT_EXPRESSION), sTable);
@@ -98,6 +102,7 @@ public class AbstractSyntaxTreeFactory {
   void expression(AbstractSyntaxTree ast, ParseTree pt, SymbolTable sTable) throws CompileError {
 
     if (!isChildCount1or3(pt)) {
+      System.out.println(pt);
       throw new Error("Invalid Expression child count: " + pt.getChildCount());
     }
 
@@ -108,31 +113,30 @@ public class AbstractSyntaxTreeFactory {
       ParseTree op = pt.getChild(OPERATOR);
       switch (pt.getChild(OPERATOR).getKind()) {
         case LAND:
-          tmp = ast.insertSubTree(AstNodeKinds.LAND, Types.BOOLEAN, Types.BOOLEAN, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.LAND, new Type(Types.BOOLEAN, Types.BOOLEAN), op.token.line,
               op.token.linePos);
 
           break;
 
         case LOR:
-          tmp = ast.insertSubTree(AstNodeKinds.LOR, Types.BOOLEAN, Types.BOOLEAN, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.LOR, new Type(Types.BOOLEAN, Types.BOOLEAN), op.token.line,
               op.token.linePos);
 
           break;
 
         case OR:
-          tmp = ast.insertSubTree(AstNodeKinds.OR, Types.INTEGER, Types.INTEGER, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.OR, new Type(Types.INTEGER, Types.INTEGER), op.token.line,
               op.token.linePos);
 
           break;
 
         case AND:
-          tmp = ast.insertSubTree(AstNodeKinds.AND, Types.INTEGER, Types.INTEGER, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.AND, new Type(Types.INTEGER, Types.INTEGER), op.token.line,
               op.token.linePos);
           break;
 
         default:
-          // TODO: Create real Error
-          throw new Error("Unexpected Operator " + op.token.lexem);
+          throw new UnexpectedError("ParseTree malformed, Operator " + op.token.lexem, op.token.line, op.token.linePos);
       }
       equality(tmp, pt.getChild(FIRST_OPERAND), sTable);
       expression(tmp, pt.getChild(SECOND_OPERAND), sTable);
@@ -150,18 +154,19 @@ public class AbstractSyntaxTreeFactory {
       ParseTree op = pt.getChild(OPERATOR);
       switch (op.getKind()) {
         case NOTEQ:
-          tmp = ast.insertSubTree(AstNodeKinds.NOTEQ, Types.UNKNOWN, Types.BOOLEAN, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.NOTEQ, new Type(Types.UNKNOWN, Types.BOOLEAN), op.token.line,
               op.token.linePos);
 
           break;
         case EQEQ:
-          tmp = ast.insertSubTree(AstNodeKinds.EQEQ, Types.UNKNOWN, Types.BOOLEAN, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.EQEQ, new Type(Types.UNKNOWN, Types.BOOLEAN), op.token.line,
               op.token.linePos);
 
           break;
 
         default:
-          throw new Error("Unexpected Operator " + op.token.lexem);
+          throw new UnexpectedError("ParseTree malformed, Operator: " + op.token.lexem, op.token.line,
+              op.token.linePos);
       }
       comparision(tmp, pt.getChild(FIRST_OPERAND), sTable);
       equality(tmp, pt.getChild(SECOND_OPERAND), sTable);
@@ -180,28 +185,29 @@ public class AbstractSyntaxTreeFactory {
       ParseTree op = pt.getChild(OPERATOR);
       switch (op.getKind()) {
         case LT:
-          tmp = ast.insertSubTree(AstNodeKinds.LT, Types.INTEGER, Types.BOOLEAN, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.LT, new Type(Types.INTEGER, Types.BOOLEAN), op.token.line,
               op.token.linePos);
 
           break;
         case LTEQ:
-          tmp = ast.insertSubTree(AstNodeKinds.LTEQ, Types.INTEGER, Types.BOOLEAN, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.LTEQ, new Type(Types.INTEGER, Types.BOOLEAN), op.token.line,
               op.token.linePos);
 
           break;
         case GT:
-          tmp = ast.insertSubTree(AstNodeKinds.GT, Types.INTEGER, Types.BOOLEAN, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.GT, new Type(Types.INTEGER, Types.BOOLEAN), op.token.line,
               op.token.linePos);
 
           break;
         case GTEQ:
-          tmp = ast.insertSubTree(AstNodeKinds.GTEQ, Types.INTEGER, Types.BOOLEAN, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.GTEQ, new Type(Types.INTEGER, Types.BOOLEAN), op.token.line,
               op.token.linePos);
 
           break;
 
         default:
-          throw new Error("Unexpected Operator " + op.token.lexem);
+          throw new UnexpectedError("ParseTree malformed, Operator: " + op.token.lexem, op.token.line,
+              op.token.linePos);
       }
       arithmeticExpr(tmp, pt.getChild(FIRST_OPERAND), sTable);
       comparision(tmp, pt.getChild(SECOND_OPERAND), sTable);
@@ -220,18 +226,19 @@ public class AbstractSyntaxTreeFactory {
       ParseTree op = pt.getChild(OPERATOR);
       switch (op.getKind()) {
         case PLUS:
-          tmp = ast.insertSubTree(AstNodeKinds.PLUS, Types.INTEGER, Types.INTEGER, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.PLUS, new Type(Types.INTEGER, Types.INTEGER), op.token.line,
               op.token.linePos);
 
           break;
         case MINUS:
-          tmp = ast.insertSubTree(AstNodeKinds.MINUS, Types.INTEGER, Types.INTEGER, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.MINUS, new Type(Types.INTEGER, Types.INTEGER), op.token.line,
               op.token.linePos);
 
           break;
 
         default:
-          throw new Error("Unexpected Operator " + op.token.lexem);
+          throw new UnexpectedError("ParseTree malformed, Operator: " + op.token.lexem, op.token.line,
+              op.token.linePos);
       }
       term(tmp, pt.getChild(FIRST_OPERAND), sTable);
       arithmeticExpr(tmp, pt.getChild(SECOND_OPERAND), sTable);
@@ -250,23 +257,24 @@ public class AbstractSyntaxTreeFactory {
       ParseTree op = pt.getChild(OPERATOR);
       switch (op.getKind()) {
         case ASTERISK:
-          tmp = ast.insertSubTree(AstNodeKinds.MUL, Types.INTEGER, Types.INTEGER, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.MUL, new Type(Types.INTEGER, Types.INTEGER), op.token.line,
               op.token.linePos);
 
           break;
         case SLASH:
-          tmp = ast.insertSubTree(AstNodeKinds.DIV, Types.INTEGER, Types.INTEGER, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.DIV, new Type(Types.INTEGER, Types.INTEGER), op.token.line,
               op.token.linePos);
 
           break;
         case PERCENT:
-          tmp = ast.insertSubTree(AstNodeKinds.MOD, Types.INTEGER, Types.INTEGER, op.token.line,
+          tmp = ast.insertSubTree(AstNodeKinds.MOD, new Type(Types.INTEGER, Types.INTEGER), op.token.line,
               op.token.linePos);
 
           break;
 
         default:
-          throw new Error("Unexpected Operator " + op.token.lexem);
+          throw new UnexpectedError("ParseTree malformed, Operator: " + op.token.lexem, op.token.line,
+              op.token.linePos);
       }
       unary(tmp, pt.getChild(FIRST_OPERAND), sTable);
       term(tmp, pt.getChild(SECOND_OPERAND), sTable);
@@ -285,14 +293,14 @@ public class AbstractSyntaxTreeFactory {
       switch (op.getKind()) {
         case NOT:
           unary(
-              ast.insertSubTree(AstNodeKinds.NOT, Types.UNKNOWN, Types.UNKNOWN, op.token.line,
+              ast.insertSubTree(AstNodeKinds.NOT, new Type(Types.UNKNOWN, Types.UNKNOWN), op.token.line,
                   op.token.linePos),
               pt.getChild(UNARY), sTable);
 
           break;
         case MINUS:
           unary(
-              ast.insertSubTree(AstNodeKinds.NEG, Types.INTEGER, Types.INTEGER, op.token.line,
+              ast.insertSubTree(AstNodeKinds.NEG, new Type(Types.INTEGER, Types.INTEGER), op.token.line,
                   op.token.linePos),
               pt.getChild(UNARY),
               sTable);
@@ -300,17 +308,20 @@ public class AbstractSyntaxTreeFactory {
           break;
 
         default:
-          throw new Error("Invalid Expression child count: " + pt.getChildCount());
+          throw new UnexpectedError("ParseTree malformed, Operator: " + op.token.lexem, op.token.line,
+              op.token.linePos);
       }
 
     }
   }
 
   void primary(AbstractSyntaxTree ast, ParseTree pt, SymbolTable sTable) throws CompileError {
-    if (!isChildCount1or3(pt)) {
-      throw new Error("Invalid Expression child count: " + pt.getChildCount());
+    int childCount = pt.getChildCount();
+    if (childCount < 1 || childCount > 3) {
+      throw new UnexpectedError("ParseTree malformed, Childcount: " + childCount, pt.token.line,
+          pt.token.linePos);
     }
-    if (pt.getChildCount() == 1) {
+    if (childCount == 1) {
       ParseTree tmp = pt.getChild(PRIMARY_VALUE);
       switch (pt.getChild(0).getKind()) {
         case V_BOOL:
@@ -328,19 +339,22 @@ public class AbstractSyntaxTreeFactory {
         default:
           break;
       }
-    } else {
+    } else if (childCount == 3) {
       expression(ast, pt.getChild(PRIMARY_EXPRESSION), sTable);
+    } else {
+      functionCall(ast.insertSubTree(AstNodeKinds.FUNC_CALL, new Type(Types.FUNCTION, Types.UNKNOWN), pt.token.line,
+          pt.token.linePos), pt, sTable);
     }
   }
 
   void vbool(AbstractSyntaxTree ast, ParseTree pt, SymbolTable sTable) {
-    ast.insertSubTree(AstNodeKinds.BOOLEAN, Types.BOOLEAN, Types.BOOLEAN, pt.token.line, pt.token.linePos,
+    ast.insertSubTree(AstNodeKinds.BOOLEAN, new Type(Types.BOOLEAN, Types.BOOLEAN), pt.token.line, pt.token.linePos,
         pt.token.lexem);
 
   }
 
   void vint(AbstractSyntaxTree ast, ParseTree pt, SymbolTable sTable) {
-    ast.insertSubTree(AstNodeKinds.INTEGER, Types.INTEGER, Types.INTEGER, pt.token.line, pt.token.linePos,
+    ast.insertSubTree(AstNodeKinds.INTEGER, new Type(Types.INTEGER, Types.INTEGER), pt.token.line, pt.token.linePos,
         pt.token.lexem);
   }
 
@@ -349,7 +363,7 @@ public class AbstractSyntaxTreeFactory {
       throw new UnknownIdentifierError(pt.token);
     }
     Symbol s = sTable.get(pt.token.lexem);
-    ast.insertSubTree(AstNodeKinds.IDENT, s.getType(), s.getType(), pt.token.line, pt.token.linePos,
+    ast.insertSubTree(AstNodeKinds.IDENT, s.getType(), pt.token.line, pt.token.linePos,
         pt.token.lexem);
   }
 
@@ -385,16 +399,17 @@ public class AbstractSyntaxTreeFactory {
   }
 
   private void statement(ParseTree pt, AbstractSyntaxTree ast, SymbolTable sTable) throws CompileError {
-    switch (pt.getChild(STATEMENT_TYPE).getKind()) {
+    TokenKind tk = pt.getChild(STATEMENT_TYPE).getKind();
+    switch (tk) {
       case IF:
-        AbstractSyntaxTree if_node = ast.insertSubTree(AstNodeKinds.IF, Types.VOID, Types.VOID,
+        AbstractSyntaxTree if_node = ast.insertSubTree(AstNodeKinds.IF, new Type(Types.VOID, Types.VOID),
             pt.token.line,
             pt.token.linePos);
         ParseTree if_condition = pt.getChild(IF_EXPRESSION);
-        expression(if_node.insertSubTree(AstNodeKinds.CONDITION, Types.BOOLEAN, Types.VOID,
+        expression(if_node.insertSubTree(AstNodeKinds.CONDITION, new Type(Types.BOOLEAN, Types.VOID),
             if_condition.token.line, if_condition.token.linePos), if_condition, sTable);
         branch(pt,
-            if_node.insertSubTree(AstNodeKinds.BRANCH, Types.VOID, Types.VOID, pt.token.line,
+            if_node.insertSubTree(AstNodeKinds.BRANCH, new Type(Types.VOID, Types.VOID), pt.token.line,
                 pt.token.linePos),
             sTable.getScopedSymbolTable());
 
@@ -402,27 +417,27 @@ public class AbstractSyntaxTreeFactory {
         if (pt.getChildIndex(TokenKind.ELSE) != -1
             && pt.getChildIndex(TokenKind.ELSE) != pt.getChildCount() - EMPTY_BLOCK_SIZE - 1) {
           elseBranch(pt,
-              if_node.insertSubTree(AstNodeKinds.BRANCH, Types.VOID, Types.VOID, pt.token.line,
+              if_node.insertSubTree(AstNodeKinds.BRANCH, new Type(Types.VOID, Types.VOID), pt.token.line,
                   pt.token.linePos),
               sTable.getScopedSymbolTable());
         }
         break;
       case WHILE:
-        AbstractSyntaxTree while_node = ast.insertSubTree(AstNodeKinds.WHILE, Types.VOID, Types.VOID,
+        AbstractSyntaxTree while_node = ast.insertSubTree(AstNodeKinds.WHILE, new Type(Types.VOID, Types.VOID),
             pt.token.line,
             pt.token.linePos);
         ParseTree while_condition = pt.getChild(WHILE_EXPRESSION);
-        expression(while_node.insertSubTree(AstNodeKinds.CONDITION, Types.BOOLEAN, Types.VOID,
+        expression(while_node.insertSubTree(AstNodeKinds.CONDITION, new Type(Types.BOOLEAN, Types.VOID),
             while_condition.token.line, while_condition.token.linePos), while_condition, sTable);
         branch(pt,
-            while_node.insertSubTree(AstNodeKinds.BRANCH, Types.VOID, Types.VOID, pt.token.line,
+            while_node.insertSubTree(AstNodeKinds.BRANCH, new Type(Types.VOID, Types.VOID), pt.token.line,
                 pt.token.linePos),
             sTable.getScopedSymbolTable());
 
         // check if else branch is present and if the else branch is not empty
         if (pt.getChildIndex(TokenKind.ELSE) != -1 && pt.getChildIndex(TokenKind.ELSE) != pt.getChildCount() - 3) {
           elseBranch(pt,
-              while_node.insertSubTree(AstNodeKinds.BRANCH, Types.VOID, Types.VOID, pt.token.line,
+              while_node.insertSubTree(AstNodeKinds.BRANCH, new Type(Types.VOID, Types.VOID), pt.token.line,
                   pt.token.linePos),
               sTable.getScopedSymbolTable());
         }
@@ -431,11 +446,11 @@ public class AbstractSyntaxTreeFactory {
       case BOOL: {
         ParseTree expression = pt.getChild(DECLARERATION_EXPRESSION);
         declaration(
-            ast.insertSubTree(AstNodeKinds.DECLARATION, Types.VOID, Types.VOID, pt.token.line,
+            ast.insertSubTree(AstNodeKinds.DECLARATION, new Type(Types.VOID, Types.VOID), pt.token.line,
                 pt.token.linePos),
             pt, sTable);
         assignment(
-            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, Types.BOOLEAN, Types.VOID,
+            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, new Type(Types.BOOLEAN, Types.VOID),
                 expression.token.line, expression.token.linePos),
             pt.removeFirst(), sTable);
         break;
@@ -443,27 +458,42 @@ public class AbstractSyntaxTreeFactory {
       case INT: {
         ParseTree expression = pt.getChild(DECLARERATION_EXPRESSION);
         declaration(
-            ast.insertSubTree(AstNodeKinds.DECLARATION, Types.VOID, Types.VOID, pt.token.line,
+            ast.insertSubTree(AstNodeKinds.DECLARATION, new Type(Types.VOID, Types.VOID), pt.token.line,
                 pt.token.linePos),
             pt, sTable);
         assignment(
-            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, Types.INTEGER, Types.VOID,
+            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, new Type(Types.INTEGER, Types.VOID),
                 expression.token.line, expression.token.linePos),
             pt.removeFirst(), sTable);
         break;
       }
       // Assignment
       case IDENT:
-        assignment(
-            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, Types.VOID, Types.VOID,
-                pt.token.line, pt.token.linePos),
-            pt, sTable);
+        if (pt.getChildIndex(TokenKind.FUNC_CALL) != -1) {
+          functionCall(ast.insertSubTree(AstNodeKinds.FUNC_CALL, new Type(Types.FUNCTION, Types.UNKNOWN),
+              pt.token.line, pt.token.linePos), pt, sTable);
+
+        } else {
+          assignment(
+              ast.insertSubTree(AstNodeKinds.ASSIGNMENT, new Type(Types.VOID, Types.VOID),
+                  pt.token.line, pt.token.linePos),
+              pt, sTable);
+        }
 
         break;
 
       default:
-        break;
+        throw new UnexpectedError("Unexpected statement type: " + tk, pt.token.line, pt.token.linePos);
     }
+  }
+
+  private void functionCall(AbstractSyntaxTree ast, ParseTree pt, SymbolTable sTable) throws UnknownIdentifierError {
+    Token t = pt.getChild(0).token;
+    Symbol s = sTable.get(t.lexem);
+    if (s == null) {
+      throw new UnknownIdentifierError(t);
+    }
+    ast.insertSubTree(AstNodeKinds.IDENT, s.getType(), t.line, t.linePos, t.lexem);
   }
 
 }

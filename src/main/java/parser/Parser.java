@@ -85,6 +85,7 @@ private void matchToken(TokenKind tt, ParseTree st) throws SyntaxError {
    * | "bool" <ident> "=" <expression> <semi>
    * | "if" "(" <expression> ")" "{" <statement>* "}"
    * | <ident> "=" <expression> <semi>
+   * | <ident> <function_call> <semi>
    * ```
    * 
    * @param st

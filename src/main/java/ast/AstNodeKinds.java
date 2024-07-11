@@ -21,6 +21,10 @@ public enum AstNodeKinds {
    */
   NEG,
   /**
+   * function call operator
+   */
+  FUNC_CALL,
+  /**
    * -
    */
   MINUS,

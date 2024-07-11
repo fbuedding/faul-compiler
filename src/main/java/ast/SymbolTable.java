@@ -3,6 +3,7 @@ package ast;
 import java.util.Hashtable;
 import java.util.Map.Entry;
 import java.util.Vector;
+import types.*;
 
 /**
  * SymbolTable
@@ -52,13 +53,13 @@ public class SymbolTable {
     return st;
   }
 
-  int insert(String name, Types type) {
+  int insert(String name, Type type) {
     int adress = memoryOffset + symbols.size();
     symbols.put(name, new Symbol(type, adress));
     return adress;
   }
 
-  String insert(String name, Types type, String label) {
+  String insert(String name, Type type, String label) {
     symbols.put(name, new Symbol(type, label));
     return label;
   }
@@ -103,26 +104,33 @@ public class SymbolTable {
       sTable.print(buffer, indentation);
     }
   }
+
+public void initStd() {
+  insert("print", new Type(Types.VOID, Types.FUNCTION), "print");
+  insert("exit", new Type(Types.VOID, Types.FUNCTION), "exit");
+  insert("readI", new Type(Types.INTEGER, Types.FUNCTION), "readi");
+  insert("readB", new Type(Types.BOOLEAN, Types.FUNCTION), "readb");
+}
 }
 
 class Symbol {
-  Types type;
+  Type type;
 
   int adress;
   String label;
 
-  Symbol(Types type, int adress) {
+  Symbol(Type type, int adress) {
     this.type = type;
     this.adress = adress;
   }
 
-  Symbol(Types ant, String label) {
+  Symbol(Type ant, String label) {
     this.type = ant;
     this.label = label;
     this.adress = -1;
   }
 
-  public Types getType() {
+  public Type getType() {
     return type;
   }
 }

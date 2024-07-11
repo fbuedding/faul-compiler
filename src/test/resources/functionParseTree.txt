@@ -10,7 +10,7 @@ PROGRAM
 │   │               └── TERM
 │   │                   └── UNARY
 │   │                       └── PRIMARY
-│   │                           ├── IDENT: read
+│   │                           ├── IDENT: readI
 │   │                           └── FUNC_CALL
 │   └── SEMICOLON: ;
 ├── STATEMENT
@@ -43,7 +43,7 @@ PROGRAM
 │   │                               │                   └── TERM
 │   │                               │                       └── UNARY
 │   │                               │                           └── PRIMARY
-│   │                               │                               ├── IDENT: read
+│   │                               │                               ├── IDENT: readI
 │   │                               │                               └── FUNC_CALL
 │   │                               └── CLOSE_BRACKET: )
 │   └── SEMICOLON: ;

@@ -3,14 +3,15 @@ package ast;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import types.*;
+
 /**
  * Abstract Syntax Tree a simplified and annotated version of the
  * {@link parser.ParseTree}
  */
 public class AbstractSyntaxTree {
   public AstNodeKinds kind;
-  public Types type;
-  public Types resultType;
+  public Type type;
   public LinkedList<AbstractSyntaxTree> children;
 
   public int line;
@@ -18,10 +19,9 @@ public class AbstractSyntaxTree {
 
   public String value = null;
 
-  public AbstractSyntaxTree(AstNodeKinds k, Types t, Types rT, int line, int linePos) {
+  public AbstractSyntaxTree(AstNodeKinds k, Type type, int line, int linePos) {
     this.kind = k;
-    this.type = t;
-    this.resultType = rT;
+    this.type = type;
     this.line = line;
     this.linePos = linePos;
     children = new LinkedList<>();
@@ -40,7 +40,7 @@ public class AbstractSyntaxTree {
   }
 
   public void checkTypes() throws TypeError {
-    switch (type) {
+    switch (type.getType()) {
       case MEMORY_ADDRESS:
         // Do nothing should be a leaf
         return;
@@ -53,17 +53,17 @@ public class AbstractSyntaxTree {
       }
       case UNKNOWN:
         if (hasChildren()) {
-          for (AbstractSyntaxTree ast : children) {
-            if (ast.resultType == Types.UNKNOWN) {
-              ast.checkTypes();
+          for (AbstractSyntaxTree child : children) {
+            if (child.type.isRetUnknown()) {
+              child.checkTypes();
             }
-            if (type == Types.UNKNOWN) {
-              type = ast.resultType;
+            if (type.isUnknown()) {
+              type.inferType(child.type);
             }
-            if (resultType == Types.UNKNOWN) {
-              resultType = ast.resultType;
+            if (type.isRetUnknown()) {
+              type.setRetType(type);
             }
-            ast.checkTypes();
+            child.checkTypes();
 
           }
         }
@@ -72,17 +72,21 @@ public class AbstractSyntaxTree {
         break;
       default:
         for (AbstractSyntaxTree child : children) {
-          if (child.resultType == Types.UNKNOWN) {
+          if (child.type.isRetUnknown()) {
+            System.out.println("Child ret is unknown");
             child.checkTypes();
-            if (type != child.resultType) {
-              throw new TypeError(type, child.resultType, child.line, child.linePos);
+            if (!type.checkType(child.type)) {
+              throw new TypeError(type, child.type, child.line, child.linePos);
             }
           } else {
-            if (type != child.resultType) {
-              throw new TypeError(type, child.resultType, child.line, child.linePos);
+            
+            if (type.isRetUnknown() && type.getType() == Types.FUNCTION) {
+              type.setRetType(child.type.getType());
+            }
+            if (!type.checkType(child.type)) {
+              throw new TypeError(type, child.type, child.line, child.linePos);
             }
             child.checkTypes();
-
           }
 
         }
@@ -107,15 +111,15 @@ public class AbstractSyntaxTree {
 
   }
 
-  public AbstractSyntaxTree insertSubTree(AstNodeKinds k, Types t, Types rt, int line, int linePos) {
-    AbstractSyntaxTree node = new AbstractSyntaxTree(k, t, rt, line, linePos);
+  public AbstractSyntaxTree insertSubTree(AstNodeKinds k, Type t, int line, int linePos) {
+    AbstractSyntaxTree node = new AbstractSyntaxTree(k, t, line, linePos);
     children.add(node);
     return node;
   }
 
-  public AbstractSyntaxTree insertSubTree(AstNodeKinds k, Types t, Types rt, int line, int linePos,
+  public AbstractSyntaxTree insertSubTree(AstNodeKinds k, Type t, int line, int linePos,
       String value) {
-    AbstractSyntaxTree node = new AbstractSyntaxTree(k, t, rt, line, linePos);
+    AbstractSyntaxTree node = new AbstractSyntaxTree(k, t, line, linePos);
     node.value = value;
     children.add(node);
     return node;
@@ -149,7 +153,6 @@ public class AbstractSyntaxTree {
 
     }
     buffer.append(", Type: " + type);
-    buffer.append(", Result type: " + resultType);
     buffer.append(",  Position: " + line + ":" + linePos);
 
     buffer.append('\n');

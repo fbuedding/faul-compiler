@@ -1,5 +1,7 @@
 package ast;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
@@ -10,6 +12,7 @@ import lexer.Token;
 import lexer.TokenKind;
 import parser.ParseTree;
 import parser.Parser;
+import types.TypeError;
 
 /**
  * AstTest
@@ -58,8 +61,39 @@ public class AstTest {
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
 
     file.Writer.write("src/test/resources/treeForAst.txt", pt.toString());
-    AbstractSyntaxTree ast = astf.fromParseTree(pt);
-    file.Writer.write("src/test/resources/Ast.txt", ast.toString());
+    try {
+      AbstractSyntaxTree ast = astf.fromParseTree(pt);
+      file.Writer.write("src/test/resources/Ast.txt", ast.toString());
+
+    } catch (CompileError e) {
+      fail(e);
+    }
+
+  }
+
+  @Test
+  public void functionTests() {
+    String i = """
+        int a = readI();
+        int b = 3 * (5 - readI());
+        print(a, 1, a);
+        exit();
+        """;
+    Lexer l = new Lexer(i);
+    Parser p;
+    try {
+      p = new Parser(l.genTokens());
+      ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+      p.program(pt);
+      AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
+      AbstractSyntaxTree ast = astf.fromParseTree(pt);
+      file.Writer.write("src/test/resources/functionAST.txt", ast.toString());
+
+    } catch (CompileError e) {
+      fail(e.getMessage(), e);
+    } catch (IOException e) {
+      fail("Could not write file");
+    }
 
   }
 

@@ -52,8 +52,8 @@ public class ParserTest {
   @Test
   public void functionTests() {
     String i = """
-        int a = read();
-        int b = 3 * (5 - read());
+        int a = readI();
+        int b = 3 * (5 - readI());
         print(a, 1, a);
         exit();
         """;

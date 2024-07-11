@@ -1,0 +1,23 @@
+PROGRAM, Type: T: VOID; rT: null,  Position: 0:0
+├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+│   ├── IDENT: a, Type: T: VAR; rT: INTEGER,  Position: 1:5
+│   └── ADDRESS: 4, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 1:5
+├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 0:0
+│   ├── IDENT: a, Type: T: VAR; rT: INTEGER,  Position: 1:5
+│   └── FUNC_CALL, Type: T: FUNCTION; rT: INTEGER,  Position: 0:0
+│       └── IDENT: readI, Type: T: INTEGER; rT: FUNCTION,  Position: 1:9
+├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+│   ├── IDENT: b, Type: T: VAR; rT: INTEGER,  Position: 2:5
+│   └── ADDRESS: 5, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 2:5
+├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 0:0
+│   ├── IDENT: b, Type: T: VAR; rT: INTEGER,  Position: 2:5
+│   └── MUL, Type: T: INTEGER; rT: INTEGER,  Position: 2:11
+│       ├── INTEGER: 3, Type: T: INTEGER; rT: INTEGER,  Position: 2:9
+│       └── MINUS, Type: T: INTEGER; rT: INTEGER,  Position: 2:16
+│           ├── INTEGER: 5, Type: T: INTEGER; rT: INTEGER,  Position: 2:14
+│           └── FUNC_CALL, Type: T: FUNCTION; rT: INTEGER,  Position: 0:0
+│               └── IDENT: readI, Type: T: INTEGER; rT: FUNCTION,  Position: 2:18
+├── FUNC_CALL, Type: T: FUNCTION; rT: VOID,  Position: 0:0
+│   └── IDENT: print, Type: T: VOID; rT: FUNCTION,  Position: 3:1
+└── FUNC_CALL, Type: T: FUNCTION; rT: VOID,  Position: 0:0
+    └── IDENT: exit, Type: T: VOID; rT: FUNCTION,  Position: 4:1

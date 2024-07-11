@@ -1,8 +1,8 @@
 main:
-# initializing s0 with address 0
+# initializing s0 with address 16
 move $s0, $0
 addi $s0, $0, 1
-# initializing s1 with address 4
+# initializing s1 with address 20
 move $s1, $0
 addi $s1, $0, 0
 # While start
@@ -26,10 +26,10 @@ nop
 # While end
 label_0:
 # unloading all vars
-# unloading s0 and storing in address 0
-sw $s0, 0($gp)
-# unloading s1 and storing in address 4
-sw $s1, 4($gp)
+# unloading s0 and storing in address 16
+sw $s0, 16($gp)
+# unloading s1 and storing in address 20
+sw $s1, 20($gp)
 # Exit
 li $v0, 10
 syscall
