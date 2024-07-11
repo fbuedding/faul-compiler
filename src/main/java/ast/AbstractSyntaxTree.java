@@ -44,7 +44,7 @@ public class AbstractSyntaxTree {
       case MEMORY_ADDRESS:
         // Do nothing should be a leaf
         return;
-      case NONE: {
+      case VOID: {
         for (AbstractSyntaxTree abstractSyntaxTree : children) {
           abstractSyntaxTree.checkTypes();
         }

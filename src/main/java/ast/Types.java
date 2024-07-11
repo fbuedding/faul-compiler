@@ -4,7 +4,7 @@ public enum Types {
   INTEGER,
   BOOLEAN,
   MEMORY_ADDRESS,
-  NONE,
+  VOID,
   UNKNOWN,
   FUNCTION;
 
@@ -14,12 +14,13 @@ public enum Types {
     return subType;
   }
 
-  public void setSubType(Types subType) {
+  public Types setSubType(Types subType) {
     this.subType = subType;
+    return this;
   }
 
   public void setSubTypeNone() {
-    this.subType = NONE;
+    this.subType = VOID;
   }
 
   Types() {

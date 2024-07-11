@@ -28,8 +28,9 @@ public class AbstractSyntaxTreeFactory {
   public SymbolTable symbolTable;
 
   public AbstractSyntaxTreeFactory() {
-    ast = new AbstractSyntaxTree(AstNodeKinds.PROGRAM, Types.NONE, Types.NONE, 0, 0);
+    ast = new AbstractSyntaxTree(AstNodeKinds.PROGRAM, Types.VOID, Types.VOID, 0, 0);
     symbolTable = new SymbolTable();
+    symbolTable.insert("read", Types.FUNCTION.setSubType(Types.INTEGER));
   }
 
   public AbstractSyntaxTree fromParseTree(ParseTree st) throws CompileError {
@@ -66,8 +67,8 @@ public class AbstractSyntaxTreeFactory {
         throw new Error("Every declaration should have a type");
     }
     int adress = sTable.insert(ident, type);
-    ast.insertSubTree(AstNodeKinds.IDENT, type, Types.NONE, t.line, t.linePos, ident);
-    ast.insertSubTree(AstNodeKinds.ADDRESS, Types.MEMORY_ADDRESS, Types.NONE, t.line, t.linePos,
+    ast.insertSubTree(AstNodeKinds.IDENT, type, Types.VOID, t.line, t.linePos, ident);
+    ast.insertSubTree(AstNodeKinds.ADDRESS, Types.MEMORY_ADDRESS, Types.VOID, t.line, t.linePos,
         "" + adress);
   }
 
@@ -386,14 +387,14 @@ public class AbstractSyntaxTreeFactory {
   private void statement(ParseTree pt, AbstractSyntaxTree ast, SymbolTable sTable) throws CompileError {
     switch (pt.getChild(STATEMENT_TYPE).getKind()) {
       case IF:
-        AbstractSyntaxTree if_node = ast.insertSubTree(AstNodeKinds.IF, Types.NONE, Types.NONE,
+        AbstractSyntaxTree if_node = ast.insertSubTree(AstNodeKinds.IF, Types.VOID, Types.VOID,
             pt.token.line,
             pt.token.linePos);
         ParseTree if_condition = pt.getChild(IF_EXPRESSION);
-        expression(if_node.insertSubTree(AstNodeKinds.CONDITION, Types.BOOLEAN, Types.NONE,
+        expression(if_node.insertSubTree(AstNodeKinds.CONDITION, Types.BOOLEAN, Types.VOID,
             if_condition.token.line, if_condition.token.linePos), if_condition, sTable);
         branch(pt,
-            if_node.insertSubTree(AstNodeKinds.BRANCH, Types.NONE, Types.NONE, pt.token.line,
+            if_node.insertSubTree(AstNodeKinds.BRANCH, Types.VOID, Types.VOID, pt.token.line,
                 pt.token.linePos),
             sTable.getScopedSymbolTable());
 
@@ -401,27 +402,27 @@ public class AbstractSyntaxTreeFactory {
         if (pt.getChildIndex(TokenKind.ELSE) != -1
             && pt.getChildIndex(TokenKind.ELSE) != pt.getChildCount() - EMPTY_BLOCK_SIZE - 1) {
           elseBranch(pt,
-              if_node.insertSubTree(AstNodeKinds.BRANCH, Types.NONE, Types.NONE, pt.token.line,
+              if_node.insertSubTree(AstNodeKinds.BRANCH, Types.VOID, Types.VOID, pt.token.line,
                   pt.token.linePos),
               sTable.getScopedSymbolTable());
         }
         break;
       case WHILE:
-        AbstractSyntaxTree while_node = ast.insertSubTree(AstNodeKinds.WHILE, Types.NONE, Types.NONE,
+        AbstractSyntaxTree while_node = ast.insertSubTree(AstNodeKinds.WHILE, Types.VOID, Types.VOID,
             pt.token.line,
             pt.token.linePos);
         ParseTree while_condition = pt.getChild(WHILE_EXPRESSION);
-        expression(while_node.insertSubTree(AstNodeKinds.CONDITION, Types.BOOLEAN, Types.NONE,
+        expression(while_node.insertSubTree(AstNodeKinds.CONDITION, Types.BOOLEAN, Types.VOID,
             while_condition.token.line, while_condition.token.linePos), while_condition, sTable);
         branch(pt,
-            while_node.insertSubTree(AstNodeKinds.BRANCH, Types.NONE, Types.NONE, pt.token.line,
+            while_node.insertSubTree(AstNodeKinds.BRANCH, Types.VOID, Types.VOID, pt.token.line,
                 pt.token.linePos),
             sTable.getScopedSymbolTable());
 
         // check if else branch is present and if the else branch is not empty
         if (pt.getChildIndex(TokenKind.ELSE) != -1 && pt.getChildIndex(TokenKind.ELSE) != pt.getChildCount() - 3) {
           elseBranch(pt,
-              while_node.insertSubTree(AstNodeKinds.BRANCH, Types.NONE, Types.NONE, pt.token.line,
+              while_node.insertSubTree(AstNodeKinds.BRANCH, Types.VOID, Types.VOID, pt.token.line,
                   pt.token.linePos),
               sTable.getScopedSymbolTable());
         }
@@ -430,11 +431,11 @@ public class AbstractSyntaxTreeFactory {
       case BOOL: {
         ParseTree expression = pt.getChild(DECLARERATION_EXPRESSION);
         declaration(
-            ast.insertSubTree(AstNodeKinds.DECLARATION, Types.NONE, Types.NONE, pt.token.line,
+            ast.insertSubTree(AstNodeKinds.DECLARATION, Types.VOID, Types.VOID, pt.token.line,
                 pt.token.linePos),
             pt, sTable);
         assignment(
-            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, Types.BOOLEAN, Types.NONE,
+            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, Types.BOOLEAN, Types.VOID,
                 expression.token.line, expression.token.linePos),
             pt.removeFirst(), sTable);
         break;
@@ -442,11 +443,11 @@ public class AbstractSyntaxTreeFactory {
       case INT: {
         ParseTree expression = pt.getChild(DECLARERATION_EXPRESSION);
         declaration(
-            ast.insertSubTree(AstNodeKinds.DECLARATION, Types.NONE, Types.NONE, pt.token.line,
+            ast.insertSubTree(AstNodeKinds.DECLARATION, Types.VOID, Types.VOID, pt.token.line,
                 pt.token.linePos),
             pt, sTable);
         assignment(
-            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, Types.INTEGER, Types.NONE,
+            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, Types.INTEGER, Types.VOID,
                 expression.token.line, expression.token.linePos),
             pt.removeFirst(), sTable);
         break;
@@ -454,7 +455,7 @@ public class AbstractSyntaxTreeFactory {
       // Assignment
       case IDENT:
         assignment(
-            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, Types.NONE, Types.NONE,
+            ast.insertSubTree(AstNodeKinds.ASSIGNMENT, Types.VOID, Types.VOID,
                 pt.token.line, pt.token.linePos),
             pt, sTable);
 

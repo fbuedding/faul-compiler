@@ -52,10 +52,15 @@ public class SymbolTable {
     return st;
   }
 
-  int insert(String name, Types ant) {
+  int insert(String name, Types type) {
     int adress = memoryOffset + symbols.size();
-    symbols.put(name, new Symbol(ant, adress));
+    symbols.put(name, new Symbol(type, adress));
     return adress;
+  }
+
+  String insert(String name, Types type, String label) {
+    symbols.put(name, new Symbol(type, label));
+    return label;
   }
 
   boolean has(String name) {
@@ -90,7 +95,7 @@ public class SymbolTable {
       }
       buffer.append(entry.getKey());
       buffer.append(":  ");
-      buffer.append(String.format("Type: %s, Memory-Adress: %d", entry.getValue().ant, entry.getValue().adress));
+      buffer.append(String.format("Type: %s, Memory-Adress: %d", entry.getValue().type, entry.getValue().adress));
       buffer.append("\n");
     }
     indentation++;
@@ -101,17 +106,23 @@ public class SymbolTable {
 }
 
 class Symbol {
-  Types ant;
+  Types type;
 
   int adress;
   String label;
 
-  Symbol(Types ant, int adress) {
-    this.ant = ant;
+  Symbol(Types type, int adress) {
+    this.type = type;
     this.adress = adress;
   }
 
+  Symbol(Types ant, String label) {
+    this.type = ant;
+    this.label = label;
+    this.adress = -1;
+  }
+
   public Types getType() {
-    return ant;
+    return type;
   }
 }
