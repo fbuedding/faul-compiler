@@ -46,7 +46,6 @@ public class Type {
 
   @Override
   public int hashCode() {
-    System.out.println("calling equals");
     return Arrays.hashCode(new Object[] {
         type, // auto-boxed
         retType, // auto-boxed
@@ -75,6 +74,7 @@ public class Type {
    * @return true if {@link Type}s return type is euqal
    */
   public boolean checkType(Type that) {
+
     return this.type == that.retType;
   }
 
@@ -102,8 +102,8 @@ public class Type {
     return this.type == that;
   }
 
-public boolean isRetUnknown() {
-  return retType == Types.UNKNOWN;
-}
+  public boolean isRetUnknown() {
+    return retType == Types.UNKNOWN;
+  }
 
 }

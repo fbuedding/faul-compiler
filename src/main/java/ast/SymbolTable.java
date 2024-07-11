@@ -2,6 +2,7 @@ package ast;
 
 import java.util.Hashtable;
 import java.util.Map.Entry;
+import java.util.UUID;
 import java.util.Vector;
 import types.*;
 
@@ -11,22 +12,25 @@ import types.*;
 public class SymbolTable {
   int memoryOffset = 0;
   SymbolTable parent = null;
-  Vector<SymbolTable> children = new Vector<SymbolTable>();
+  Vector<SymbolTable> children;
   Hashtable<String, Symbol> symbols;
+  UUID uuid = UUID.randomUUID();
 
   public SymbolTable() {
     symbols = new Hashtable<String, Symbol>();
+    children = new Vector<SymbolTable>();
   }
 
   SymbolTable(SymbolTable parent, int memoryOffset) {
     this.parent = parent;
     this.memoryOffset = memoryOffset;
     symbols = new Hashtable<String, Symbol>();
-
+    children = new Vector<SymbolTable>();
   }
 
   public SymbolTable popScopedSymbolTable() {
-    return children.removeFirst();
+    SymbolTable st = children.removeFirst();
+    return st;
   }
 
   public int getAddress(String name) {
@@ -36,7 +40,7 @@ public class SymbolTable {
       return -1;
     }
 
-    return s.adress + this.memoryOffset;
+    return s.adress ;
 
   }
 
@@ -90,6 +94,12 @@ public class SymbolTable {
   }
 
   private void print(StringBuilder buffer, int indentation) {
+
+    for (int i = 0; i < indentation; i++) {
+      buffer.append("  ");
+    }
+    buffer.append("Symbol Table: " + uuid);
+    buffer.append("\n");
     for (Entry<String, Symbol> entry : symbols.entrySet()) {
       for (int i = 0; i < indentation; i++) {
         buffer.append("  ");
@@ -105,12 +115,19 @@ public class SymbolTable {
     }
   }
 
-public void initStd() {
-  insert("print", new Type(Types.VOID, Types.FUNCTION), "print");
-  insert("exit", new Type(Types.VOID, Types.FUNCTION), "exit");
-  insert("readI", new Type(Types.INTEGER, Types.FUNCTION), "readi");
-  insert("readB", new Type(Types.BOOLEAN, Types.FUNCTION), "readb");
-}
+  public void initStd() {
+    insert("print", new Type(Types.VOID, Types.FUNCTION), "print");
+    insert("exit", new Type(Types.VOID, Types.FUNCTION), "exit");
+    insert("readI", new Type(Types.INTEGER, Types.FUNCTION), "readI");
+    insert("readB", new Type(Types.BOOLEAN, Types.FUNCTION), "readB");
+  }
+
+  public String getLabel(String name) {
+    Symbol s = get(name);
+    if (s == null)
+      return null;
+    return s.label;
+  }
 }
 
 class Symbol {

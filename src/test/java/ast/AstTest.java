@@ -74,9 +74,9 @@ public class AstTest {
   @Test
   public void functionTests() {
     String i = """
-        int a = readI();
+        int a =readI();
         int b = 3 * (5 - readI());
-        print(a, 1, a);
+        print(a);
         exit();
         """;
     Lexer l = new Lexer(i);

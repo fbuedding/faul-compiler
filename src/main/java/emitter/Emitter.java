@@ -73,6 +73,7 @@ public class Emitter {
   }
 
   public void generate() throws CompileError {
+
     generate(ast, sTable);
   }
 
@@ -113,10 +114,12 @@ public class Emitter {
 
   private void assignVar(int address, String thatReg) {
     String reg = loaded.remove(address);
+    emitComment("Assgining reg %s with address %s", reg, address);
     if (reg == null && !available.isEmpty()) {
       reg = available.pop();
     } else if (reg == null && available.size() == 0) {
       reg = freeLoadedVar();
+      emitLw(reg, address);
     }
     loaded.putFirst(address, reg);
 
@@ -172,12 +175,61 @@ public class Emitter {
     code.append("\n");
   }
 
+  private void emitMv(String reg, String reg2) {
+    emit("move $%s, $%s", reg, reg2);
+  }
+
+  private void emitStackPush(String reg) {
+    emit("addi $sp, $sp, -4");
+    emit("sw $%s, 0($sp)", reg);
+
+  }
+
+  private void emitStackPop(String reg) {
+    emit("lw $%s, 0($sp)", reg);
+    emit("addi $sp, $sp, 4");
+  }
+
   private void emitLw(String reg, int address) {
     emit("lw $%s, %d(%s)", reg, address * wordLength, memOffsetReg);
   }
 
   private void emitSw(String reg, int address) {
     emit("sw $%s, %d(%s)", reg, address * wordLength, memOffsetReg);
+  }
+
+  private void emitPrint() {
+    emitLabel("print");
+    emitStackPush("ra");
+    emit("li $v0, 1");
+    emit("syscall");
+    emitNop();
+    emitStackPop("ra");
+    emit("jr $ra");
+    emitNop();
+  }
+
+  private void emitReadI() {
+    emitLabel("readI");
+    emitStackPush("ra");
+    emit("li $v0, 5");
+    emit("syscall");
+    emitNop();
+    emitStackPop("ra");
+    emit("jr $ra");
+    emitNop();
+  }
+
+  private void emitReadB() {
+    emitLabel("readB");
+    emitStackPush("ra");
+    emit("li $v0, 5");
+    emit("syscall");
+    emitNop();
+    emit("andi $v0, $v0, 1");
+    emitStackPop("ra");
+    emit("jr $ra");
+    emitNop();
   }
 
   private void emitInitVar(AbstractSyntaxTree ast) {
@@ -192,6 +244,12 @@ public class Emitter {
     branch(ast, sTable, "main");
     saveAllVars();
     emitExit();
+
+    emitReadI();
+    emitReadB();
+    emitPrint();
+    emitLabel("exit");
+    emitExit();
   }
 
   private void branch(AbstractSyntaxTree ast, SymbolTable sTable, String label) throws CompileError {
@@ -199,7 +257,7 @@ public class Emitter {
     branch(ast, sTable);
   }
 
-  private void branch(AbstractSyntaxTree ast, SymbolTable nTable) throws CompileError {
+  private void branch(AbstractSyntaxTree ast, SymbolTable sTable) throws CompileError {
     // saveAllVars();
     for (AbstractSyntaxTree currentAst : ast.children) {
       switch (currentAst.kind) {
@@ -216,12 +274,36 @@ public class Emitter {
           whileNode(currentAst, sTable);
 
           break;
+        case FUNC_CALL:
+          funcCall(currentAst, sTable);
+          break;
         default:
           throw new UnexpectedError("Unknown or unimplemented statement kind " + currentAst.kind, currentAst.line,
               currentAst.linePos);
       }
     }
     // saveAllVars();
+  }
+
+  private String funcCall(AbstractSyntaxTree ast, SymbolTable sTable) throws UnexpectedError {
+    String ident = ast.getChild(AstNodeKinds.IDENT).value;
+    String label = sTable.getLabel(ident);
+    if (label == null) {
+      throw new UnexpectedError("Function undefined", ast.line, ast.linePos);
+    }
+    String[] paramRegs = { "a0", "a1", "a2", "a3" };
+    for (int i = 1; i < ast.getChildrenCount(); i++) {
+      String reg = expression(ast.getChild(i).getChild(0), sTable);
+      decrementRegCounter(reg);
+      try {
+        emit("move $%s, $%s", paramRegs[i - 1], reg);
+      } catch (IndexOutOfBoundsException e) {
+        throw new UnexpectedError("Function regs out of bounce (only parameters are possible)", ast.line, ast.linePos);
+      }
+    }
+    emit("jal %s", label);
+    emitNop();
+    return "v0";
   }
 
   private void whileNode(AbstractSyntaxTree ast, SymbolTable sTable) throws CompileError {
@@ -423,7 +505,6 @@ public class Emitter {
   }
 
   private String expression(AbstractSyntaxTree ast, SymbolTable sTable) throws UnexpectedError {
-    // TODO make this an error, but only when everything is implemented
     String reg;
     if (isBinOp(ast)) {
       reg = binOp(ast, sTable);
@@ -433,14 +514,20 @@ public class Emitter {
       reg = id(ast, sTable);
     } else if (isVal(ast)) {
       reg = val(ast, sTable);
+    } else if (isFunc(ast)) {
+      reg = funcCall(ast, sTable);
     } else {
       throw new UnexpectedError("Unknown operator: " + ast.value, ast.line, ast.linePos);
     }
     return reg;
   }
 
+  private boolean isFunc(AbstractSyntaxTree ast) {
+    return ast.kind == AstNodeKinds.FUNC_CALL;
+  }
+
   private String val(AbstractSyntaxTree ast, SymbolTable sTable) {
-    String reg = getReg(Register.V);
+    String reg = getReg(Register.T);
     String val = ast.value;
     if (val.equals("true")) {
       val = "1";

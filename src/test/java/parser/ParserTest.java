@@ -54,7 +54,7 @@ public class ParserTest {
     String i = """
         int a = readI();
         int b = 3 * (5 - readI());
-        print(a, 1, a);
+        print(a);
         exit();
         """;
     Lexer l = new Lexer(i);

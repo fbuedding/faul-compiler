@@ -1,5 +1,7 @@
 package emitter;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
@@ -150,5 +152,90 @@ public class EmitterTest {
     Emitter emitter = new Emitter(ast, astf.symbolTable);
     emitter.generate();
     file.Writer.write("src/test/resources/asm/while.asm", emitter.code.toString());
+  }
+
+  @Test
+  public void functionTests() {
+    String i = """
+        int a = readI();
+        int b = readI();
+        print(a * b);
+        exit();
+        """;
+    Lexer l = new Lexer(i);
+    Parser p;
+    try {
+      p = new Parser(l.genTokens());
+      ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+      p.program(pt);
+      AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
+      AbstractSyntaxTree ast = astf.fromParseTree(pt);
+      Emitter emitter = new Emitter(ast, astf.symbolTable);
+      emitter.generate();
+      file.Writer.write("src/test/resources/asm/functions.asm", emitter.code.toString());
+
+    } catch (CompileError e) {
+      fail(e.getMessage(), e);
+    } catch (IOException e) {
+      fail("Could not write file");
+    }
+
+  }
+
+  @Test
+  public void littleCalcTest() {
+    String i = """
+        int a = 0;
+        int b = 0;
+        int erg = 0;
+        while(readB()){
+         int option = readI();
+         a = readI();
+         b = readI();
+
+         if(option == 0){
+          erg = a + b;
+         }
+         if(option == 1){
+          erg = a - b;
+         }
+         if(option == 2){
+          erg = a * b;
+         }
+         if(option == 4){
+           if(a == 0){
+            exit();
+           }
+          erg = a / b;
+         }
+         if(option == 5){
+           if(a == 0){
+            exit();
+           }
+          erg = a % b;
+         }
+         print(erg);
+        }
+        exit();
+        """;
+    Lexer l = new Lexer(i);
+    Parser p;
+    try {
+      p = new Parser(l.genTokens());
+      ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+      p.program(pt);
+      AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
+      AbstractSyntaxTree ast = astf.fromParseTree(pt);
+      System.out.println(astf.symbolTable);
+      Emitter emitter = new Emitter(ast, astf.symbolTable);
+      emitter.generate();
+      file.Writer.write("src/test/resources/asm/calc.asm", emitter.code.toString());
+
+    } catch (CompileError e) {
+      fail(e.getMessage(), e);
+    } catch (IOException e) {
+      fail("Could not write file");
+    }
+
   }
 }

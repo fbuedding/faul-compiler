@@ -50,22 +50,6 @@ PROGRAM
 ├── STATEMENT
 │   ├── IDENT: print
 │   ├── FUNC_CALL
-│   │   ├── EXPRESSION
-│   │   │   └── EQUALITY
-│   │   │       └── COMPARISON
-│   │   │           └── ARITHMETIC_EXPR
-│   │   │               └── TERM
-│   │   │                   └── UNARY
-│   │   │                       └── PRIMARY
-│   │   │                           └── IDENT: a
-│   │   ├── EXPRESSION
-│   │   │   └── EQUALITY
-│   │   │       └── COMPARISON
-│   │   │           └── ARITHMETIC_EXPR
-│   │   │               └── TERM
-│   │   │                   └── UNARY
-│   │   │                       └── PRIMARY
-│   │   │                           └── V_INT: 1
 │   │   └── EXPRESSION
 │   │       └── EQUALITY
 │   │           └── COMPARISON

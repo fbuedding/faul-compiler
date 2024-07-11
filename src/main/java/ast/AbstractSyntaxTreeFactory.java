@@ -102,7 +102,6 @@ public class AbstractSyntaxTreeFactory {
   void expression(AbstractSyntaxTree ast, ParseTree pt, SymbolTable sTable) throws CompileError {
 
     if (!isChildCount1or3(pt)) {
-      System.out.println(pt);
       throw new Error("Invalid Expression child count: " + pt.getChildCount());
     }
 
@@ -467,7 +466,7 @@ public class AbstractSyntaxTreeFactory {
             pt.removeFirst(), sTable);
         break;
       }
-      // Assignment
+      // Assignment or function call
       case IDENT:
         if (pt.getChildIndex(TokenKind.FUNC_CALL) != -1) {
           functionCall(ast.insertSubTree(AstNodeKinds.FUNC_CALL, new Type(Types.FUNCTION, Types.UNKNOWN),
@@ -487,13 +486,22 @@ public class AbstractSyntaxTreeFactory {
     }
   }
 
-  private void functionCall(AbstractSyntaxTree ast, ParseTree pt, SymbolTable sTable) throws UnknownIdentifierError {
+  private void functionCall(AbstractSyntaxTree ast, ParseTree pt, SymbolTable sTable) throws CompileError {
     Token t = pt.getChild(0).token;
     Symbol s = sTable.get(t.lexem);
     if (s == null) {
       throw new UnknownIdentifierError(t);
     }
     ast.insertSubTree(AstNodeKinds.IDENT, s.getType(), t.line, t.linePos, t.lexem);
+    int index = pt.getChild(1).getChildIndex(TokenKind.EXPRESSION);
+    while (index != -1) {
+      ParseTree expression = pt.getChild(1).getChild(index);
+      expression(ast.insertSubTree(AstNodeKinds.PARAM, new Type(Types.VOID, Types.FUNCTION), expression.token.line,
+          expression.token.linePos), expression, sTable);
+      index = pt.getChild(1).getChildIndex(TokenKind.EXPRESSION, index + 1);
+
+    }
+
   }
 
 }

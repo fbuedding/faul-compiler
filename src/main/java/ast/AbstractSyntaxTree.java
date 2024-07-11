@@ -73,7 +73,6 @@ public class AbstractSyntaxTree {
       default:
         for (AbstractSyntaxTree child : children) {
           if (child.type.isRetUnknown()) {
-            System.out.println("Child ret is unknown");
             child.checkTypes();
             if (!type.checkType(child.type)) {
               throw new TypeError(type, child.type, child.line, child.linePos);

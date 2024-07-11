@@ -48,9 +48,9 @@ addi $s3, $0, 12
 sw $s4, 32($gp)
 lw $s4, 16($gp)
 # Loading value 1
-li $v0, 1
+li $t0, 1
 # Equals
-seq $t0, $s4, $v0
+seq $t0, $s4, $t0
 beqz $t0, label_0
 nop
 # unloading s5 and storing in address 36
@@ -62,74 +62,108 @@ addi $s5, $0, 13
 sw $s6, 40($gp)
 # initializing s6 with address 68
 move $s6, $0
+addi $s6, $0, 14
 # unloading s7 and storing in address 44
 sw $s7, 44($gp)
-lw $s7, -4($gp)
-addi $s7, $0, 14
-# unloading s0 and storing in address 48
-sw $s0, 48($gp)
-# initializing s0 with address 72
-move $s0, $0
+# initializing s7 with address 72
+move $s7, $0
 addi $s7, $0, 15
 # If end
 label_0:
+# unloading s0 and storing in address 48
+sw $s0, 48($gp)
+# initializing s0 with address 64
+move $s0, $0
 # unloading s1 and storing in address 52
 sw $s1, 52($gp)
-# initializing s1 with address 64
-move $s1, $0
+lw $s1, 44($gp)
 # unloading s2 and storing in address 56
 sw $s2, 56($gp)
-lw $s2, 44($gp)
+lw $s2, 48($gp)
+add $t1, $s1, $s2
 # unloading s3 and storing in address 60
 sw $s3, 60($gp)
-lw $s3, 48($gp)
-add $t1, $s2, $s3
+lw $s3, 40($gp)
+add $t1, $s3, $t1
 # unloading s4 and storing in address 16
 sw $s4, 16($gp)
-lw $s4, 40($gp)
+lw $s4, 36($gp)
 add $t1, $s4, $t1
 # unloading s6 and storing in address 68
 sw $s6, 68($gp)
-lw $s6, 36($gp)
+lw $s6, 32($gp)
 add $t1, $s6, $t1
-# unloading s0 and storing in address 72
-sw $s0, 72($gp)
-lw $s0, 32($gp)
-add $t1, $s0, $t1
-# unloading s7 and storing in address -4
-sw $s7, -4($gp)
+# unloading s7 and storing in address 72
+sw $s7, 72($gp)
 lw $s7, 28($gp)
 add $t1, $s7, $t1
-# unloading s1 and storing in address 64
-sw $s1, 64($gp)
-lw $s1, 24($gp)
+# unloading s0 and storing in address 64
+sw $s0, 64($gp)
+lw $s0, 24($gp)
+add $t1, $s0, $t1
+# unloading s1 and storing in address 44
+sw $s1, 44($gp)
+lw $s1, 20($gp)
 add $t1, $s1, $t1
-# unloading s2 and storing in address 44
-sw $s2, 44($gp)
-lw $s2, 20($gp)
+# unloading s2 and storing in address 48
+sw $s2, 48($gp)
+lw $s2, 16($gp)
 add $t1, $s2, $t1
-# unloading s3 and storing in address 48
-sw $s3, 48($gp)
-lw $s3, 16($gp)
-add $t1, $s3, $t1
-# unloading s4 and storing in address 40
-sw $s4, 40($gp)
-move $s4, $t1
+# Assgining reg null with address 16
+# unloading s3 and storing in address 40
+sw $s3, 40($gp)
+lw $s3, 64($gp)
+move $s3, $t1
 # unloading all vars
-# unloading s6 and storing in address 36
-sw $s6, 36($gp)
-# unloading s0 and storing in address 32
-sw $s0, 32($gp)
+# unloading s4 and storing in address 36
+sw $s4, 36($gp)
+# unloading s6 and storing in address 32
+sw $s6, 32($gp)
 # unloading s7 and storing in address 28
 sw $s7, 28($gp)
-# unloading s1 and storing in address 24
-sw $s1, 24($gp)
-# unloading s2 and storing in address 20
-sw $s2, 20($gp)
-# unloading s3 and storing in address 16
-sw $s3, 16($gp)
-# unloading s4 and storing in address 64
-sw $s4, 64($gp)
+# unloading s0 and storing in address 24
+sw $s0, 24($gp)
+# unloading s1 and storing in address 20
+sw $s1, 20($gp)
+# unloading s2 and storing in address 16
+sw $s2, 16($gp)
+# unloading s3 and storing in address 64
+sw $s3, 64($gp)
+# Exit
+li $v0, 10
+syscall
+readI:
+addi $sp, $sp, -4
+sw $ra, 0($sp)
+li $v0, 5
+syscall
+nop
+lw $ra, 0($sp)
+addi $sp, $sp, 4
+jr $ra
+nop
+readB:
+addi $sp, $sp, -4
+sw $ra, 0($sp)
+li $v0, 5
+syscall
+nop
+andi $v0, $v0, 1
+lw $ra, 0($sp)
+addi $sp, $sp, 4
+jr $ra
+nop
+print:
+addi $sp, $sp, -4
+sw $ra, 0($sp)
+li $v0, 1
+syscall
+nop
+lw $ra, 0($sp)
+addi $sp, $sp, 4
+jr $ra
+nop
+exit:
 # Exit
 li $v0, 10
 syscall
