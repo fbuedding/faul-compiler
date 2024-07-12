@@ -55,7 +55,6 @@ public class IntegrationTest {
     int exitCode = 0;
 
     public AsmRunner(String file) throws IOException {
-      Runtime.getRuntime().
       this.p = Runtime.getRuntime().exec(getCommand(file), null, null);
       stdInputReader = new BufferedReader(new InputStreamReader(p.getInputStream()));
       errOutReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
