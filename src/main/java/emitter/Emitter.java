@@ -7,10 +7,10 @@ import java.util.Map.Entry;
 
 import ast.AbstractSyntaxTree;
 import ast.AstNodeKinds;
-import types.*;
 import ast.SymbolTable;
 import error.CompileError;
 import error.UnexpectedError;
+import types.Types;
 
 /**
  * Emmiter
@@ -38,7 +38,11 @@ public class Emitter {
   }
 
   StringBuilder code;
-  int tempCount = 0;
+  public StringBuilder getCode() {
+	return code;
+}
+
+int tempCount = 0;
   int valCount = 0;
   int labelCount = 0;
   AbstractSyntaxTree ast;

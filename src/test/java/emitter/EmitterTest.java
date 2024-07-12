@@ -226,7 +226,6 @@ public class EmitterTest {
       p.program(pt);
       AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
       AbstractSyntaxTree ast = astf.fromParseTree(pt);
-      System.out.println(astf.symbolTable);
       Emitter emitter = new Emitter(ast, astf.symbolTable);
       emitter.generate();
       file.Writer.write("src/test/resources/asm/calc.asm", emitter.code.toString());

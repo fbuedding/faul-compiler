@@ -40,7 +40,7 @@ public class SymbolTable {
       return -1;
     }
 
-    return s.adress ;
+    return s.adress;
 
   }
 
