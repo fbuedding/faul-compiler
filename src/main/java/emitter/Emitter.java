@@ -38,11 +38,12 @@ public class Emitter {
   }
 
   StringBuilder code;
-  public StringBuilder getCode() {
-	return code;
-}
 
-int tempCount = 0;
+  public StringBuilder getCode() {
+    return code;
+  }
+
+  int tempCount = 0;
   int valCount = 0;
   int labelCount = 0;
   AbstractSyntaxTree ast;
@@ -82,6 +83,7 @@ int tempCount = 0;
   }
 
   private void emitNop() {
+
     emit("nop");
   }
 
@@ -95,8 +97,8 @@ int tempCount = 0;
       reg = freeLoadedVar();
     }
     loaded.putFirst(address, reg);
-    emit("# initializing %s with address %d", reg, address * wordLength);
-    emit("move $%s, $0", reg);
+    emitComment("initializing %s with address %d", reg, address * wordLength);
+    emitMv(reg, "0");
     return reg;
   }
 
@@ -104,7 +106,7 @@ int tempCount = 0;
     String reg = loaded.remove(address);
     if (reg == null && available.size() > 0) {
       reg = available.pop();
-      emit("# loading %s from address %d", reg, address * wordLength);
+      emitComment("loading %s from address %d", reg, address * wordLength);
       emitLw(reg, address);
     } else if (reg == null && available.size() == 0) {
       reg = freeLoadedVar();
@@ -127,46 +129,54 @@ int tempCount = 0;
     }
     loaded.putFirst(address, reg);
 
-    emit("move $%s, $%s", reg, thatReg);
-
+    emitMv(reg, thatReg);
   }
 
   private String freeLoadedVar() {
     Entry<Integer, String> entry = loaded.pollLastEntry();
     String reg = entry.getValue();
     int address = entry.getKey();
-    emit("# unloading %s and storing in address %d", reg, address * wordLength);
+    emitComment("unloading %s and storing in address %d", reg, address * wordLength);
     emitSw(reg, address);
     return reg;
 
   }
 
   private void saveAllVars() {
-    emit("# unloading all vars");
+    emitComment("unloading all vars");
     while (!loaded.isEmpty()) {
       Entry<Integer, String> entry = loaded.pollLastEntry();
       String reg = entry.getValue();
       int address = entry.getKey();
       available.push(reg);
-      emit("# unloading %s and storing in address %d", reg, address * wordLength);
+      emitComment("unloading %s and storing in address %d", reg, address * wordLength);
       emitSw(reg, address);
 
     }
   }
 
+  private void emitTab() {
+    code.append("\t");
+    code.append("\t");
+  }
+
   private void emit(String s) {
+    emitTab();
     code.append(s);
     code.append("\n");
   }
 
   private void emitLabel(String label) {
-    emit("%s:", label);
+    code.append(String.format("%s:", label));
+    code.append("\n");
   }
 
   private void emitExit() {
     emitComment("Exit");
-    code.append("li $v0, 10\nsyscall");
-    code.append("\n");
+
+    emit("li $v0, 10");
+
+    emit("syscall");
   }
 
   private void emitComment(String s, Object... args) {
@@ -175,30 +185,38 @@ int tempCount = 0;
   }
 
   private void emit(String s, Object... args) {
+    emitTab();
     code.append(String.format(s, args));
     code.append("\n");
   }
 
   private void emitMv(String reg, String reg2) {
+
     emit("move $%s, $%s", reg, reg2);
   }
 
   private void emitStackPush(String reg) {
+
     emit("addi $sp, $sp, -4");
+
     emit("sw $%s, 0($sp)", reg);
 
   }
 
   private void emitStackPop(String reg) {
+
     emit("lw $%s, 0($sp)", reg);
+
     emit("addi $sp, $sp, 4");
   }
 
   private void emitLw(String reg, int address) {
+
     emit("lw $%s, %d(%s)", reg, address * wordLength, memOffsetReg);
   }
 
   private void emitSw(String reg, int address) {
+
     emit("sw $%s, %d(%s)", reg, address * wordLength, memOffsetReg);
   }
 
@@ -209,6 +227,7 @@ int tempCount = 0;
     emit("syscall");
     emitNop();
     emitStackPop("ra");
+
     emit("jr $ra");
     emitNop();
   }
@@ -300,7 +319,7 @@ int tempCount = 0;
       String reg = expression(ast.getChild(i).getChild(0), sTable);
       decrementRegCounter(reg);
       try {
-        emit("move $%s, $%s", paramRegs[i - 1], reg);
+        emitMv(paramRegs[i - 1], reg);
       } catch (IndexOutOfBoundsException e) {
         throw new UnexpectedError("Function regs out of bounce (only parameters are possible)", ast.line, ast.linePos);
       }
@@ -436,32 +455,32 @@ int tempCount = 0;
         emit("div $%s, $%s, $%s", tempReg, leftReg, rightReg);
         break;
       case MOD:
-        emit("# Modulo");
+        emitComment("Modulo");
         emit("div $%s, $%s", leftReg, rightReg);
         emit("mfhi $%s", tempReg);
         break;
       case EQEQ:
-        emit("# Equals");
+        emitComment("Equals");
         emit("seq $%s, $%s, $%s", tempReg, leftReg, rightReg);
         break;
       case NOTEQ:
-        emit("# Not equals");
+        emitComment("Not equals");
         emit("sne $%s, $%s, $%s", tempReg, leftReg, rightReg);
         break;
       case GT:
-        emit("# Greater than");
+        emitComment("Greater than");
         emit("sgt $%s, $%s, $%s", tempReg, leftReg, rightReg);
         break;
       case GTEQ:
-        emit("# Greater than equal");
+        emitComment("Greater than equal");
         emit("sge $%s, $%s, $%s", tempReg, leftReg, rightReg);
         break;
       case LT:
-        emit("# Less than");
+        emitComment("Less than");
         emit("slt $%s, $%s, $%s", tempReg, leftReg, rightReg);
         break;
       case LTEQ:
-        emit("# Less than equals");
+        emitComment("Less than equals");
         emit("sle $%s, $%s, $%s", tempReg, leftReg, rightReg);
         break;
 
