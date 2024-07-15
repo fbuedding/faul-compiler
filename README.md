@@ -423,7 +423,7 @@ Zum ausführen kann [MARS MIPS simulator - Missouri State University](https://co
 
 #### Variablen-Register Strategie
 
-Die Register $s0 - $s7 sind per Konvention dazu da, Werte über lange Zeit zu speichern. Prozeduren, also funktionen müssen (bzw. sollten) diese vor dem return wiederherstellen. Daher werden dort geladene Variablen gspeichert.
+Die Register $s0 - $s7 sind per Konvention dazu da, Werte über lange Zeit zu speichern. Prozeduren, also funktionen müssen (bzw. sollten) diese vor dem return wiederherstellen. Daher werden dort geladene Variablen gespeichert.
 
 Natürlich können in einem Pogramm mehr als acht Variablen existieren, weshalb es eine Strategie geben muss, nach der entschieden wird wann welche Variable in welches Register geladen wird und wann sie in den Speicher gescrhieben wird.
 
