@@ -19,12 +19,12 @@
       - [Lexer](#lexer)
       - [Parser](#parser)
       - [Semantische Analyse](#semantische-analyse)
-  - [Backend](#backend)
-    - [Programmoptimierung](#programmoptimierung)
-    - [Codegenerierung](#codegenerierung)
-      - [MIPS32](#mips32)
-      - [Variablen-Register Strategie](#variablen-register-strategie)
-      - [Generierte Code](#generierte-code)
+    - [Backend](#backend)
+      - [Programmoptimierung](#programmoptimierung)
+      - [Codegenerierung](#codegenerierung)
+        - [MIPS32](#mips32)
+        - [Variablen-Register Strategie](#variablen-register-strategie)
+        - [Generierte Code](#generierte-code)
   - [Finite State Machines](#finite-state-machines)
     - [Integer](#integer)
     - [Word](#word)
@@ -95,12 +95,13 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
 
 ### Operatorrangfolge
 
-1. Klammerungen
-2. `-` `!`
-3. `*` `/`
-4. `+` `-`
-5. `>` `>=` `<` `<=`
-6. `&&` `||` `|` `&`
+1. Funktionsaufrufe
+2. Klammerungen
+3. `-` `!`
+4. `*` `/`
+5. `+` `-`
+6. `>` `>=` `<` `<=`
+7. `&&` `||` `|` `&`
 
 ### Token 
 Tokens der Faul-Lang.
@@ -412,9 +413,9 @@ PROGRAM, Type: T: VOID; rT: null,  Position: 0:0
 
 ```
 
-## Backend
+### Backend
 
-### Programmoptimierung
+#### Programmoptimierung
 
 Zururzeit finden keine großen optimierungen. Leere "else"-Statements werden ignoriert.
 
@@ -425,19 +426,19 @@ Mögliche optimierungen wären jedoch:
 - Bei Ausdrücken die immer `true` bzw. `false` sind nicht branchen oder Branch entfernen
 - Statische variablen mit ihrem Value ersetzen
 
-### Codegenerierung
+#### Codegenerierung
 
 Die Codegenerierung findet naiv über das Traversieren des AST statt. Bei `Expressions` wird ein modifizierter Depth-first search (DFS) eingetzt um sie in der richtigen Reihenfolge zu evaluieren.
 Der DFS ist so angepasst, dass er statt immer den linken oder rechten Ast des Binary Trees zu erst zu besuchen, den wählt, der tiefer ist. Dies führt dazu, dass nie mehr als zwei Zwischenergebnis Register benötigt werden.
 
-#### MIPS32
+##### MIPS32
 
 Der genierierte Code ist MIPS32 Assembler. [MIPS32 Instruction Set Quick Reference](https://s3-eu-west-1.amazonaws.com/downloads-mips/documents/MD00565-2B-MIPS32-QRC-01.01.pdf)
 
 Zum ausführen kann [MARS MIPS simulator - Missouri State University](https://courses.missouristate.edu/KenVollmar/MARS/) genutzt werden. Dieser unterstützt auch einige Pseudo Instructions, wie zum Beispiel `li`.
 
 
-#### Variablen-Register Strategie
+##### Variablen-Register Strategie
 
 Die Register $s0 - $s7 sind per Konvention dazu da, Werte über lange Zeit zu speichern. Prozeduren, also funktionen müssen (bzw. sollten) diese vor dem return wiederherstellen. Daher werden dort geladene Variablen gespeichert.
 
@@ -445,7 +446,7 @@ Natürlich können in einem Pogramm mehr als acht Variablen existieren, weshalb 
 
 Wenn eine Variable benötigt wird, sie nicht bereits in einem Register steht und alle Register belegt sind, wird die Variable, die am längsten nicht mehr genutzt wurde, in den Speicher verschoben. Danach ist ein Register frei für die Variable. 
 
-#### Generierte Code
+##### Generierte Code
 
 
 ```asm
