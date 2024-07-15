@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import error.CompileError;
 import lexer.Lexer;
-import lexer.LexerError;
 import lexer.Token;
 import lexer.TokenKind;
 
