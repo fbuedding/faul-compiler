@@ -270,8 +270,11 @@ public class IntegrationTest {
     AbstractSyntaxTree ast = astf.fromParseTree(pt);
     Emitter emitter = new Emitter(ast, astf.symbolTable);
     emitter.generate();
+    String dir = "src/test/resources/";
     String f = "src/test/resources/asm/integration/isPrime.asm";
     file.Writer.write(f, emitter.getCode().toString());
+    file.Writer.write(dir+"isPrimeParseTree.txt", pt.toString());
+    file.Writer.write(dir+"isPrimeAST.txt", ast.toString());
     Result r = new AsmRunner(f).writeLine("" + randomNum).readLine().readAllErr().waitFor();
 
     assertEquals("", r.errOut());

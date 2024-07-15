@@ -1,0 +1,55 @@
+PROGRAM, Type: T: VOID; rT: null,  Position: 0:0
+├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 1:1
+│   ├── IDENT: n, Type: T: VAR; rT: INTEGER,  Position: 1:5
+│   └── ADDRESS: 4, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 1:5
+├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 1:9
+│   ├── IDENT: n, Type: T: VAR; rT: INTEGER,  Position: 1:5
+│   └── FUNC_CALL, Type: T: FUNCTION; rT: INTEGER,  Position: 1:9
+│       └── IDENT: readI, Type: T: INTEGER; rT: FUNCTION,  Position: 1:9
+├── IF, Type: T: VOID; rT: VOID,  Position: 2:1
+│   ├── CONDITION, Type: T: BOOLEAN; rT: VOID,  Position: 2:4
+│   │   └── LTEQ, Type: T: INTEGER; rT: BOOLEAN,  Position: 2:6
+│   │       ├── IDENT: n, Type: T: VAR; rT: INTEGER,  Position: 2:4
+│   │       └── INTEGER: 1, Type: T: INTEGER; rT: INTEGER,  Position: 2:9
+│   └── BRANCH, Type: T: VOID; rT: VOID,  Position: 2:1
+│       ├── FUNC_CALL, Type: T: FUNCTION; rT: VOID,  Position: 3:3
+│       │   ├── IDENT: print, Type: T: VOID; rT: FUNCTION,  Position: 3:3
+│       │   └── PARAM, Type: T: VOID; rT: FUNCTION,  Position: 3:9
+│       │       └── BOOLEAN: false, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 3:9
+│       └── FUNC_CALL, Type: T: FUNCTION; rT: VOID,  Position: 4:3
+│           └── IDENT: exit, Type: T: VOID; rT: FUNCTION,  Position: 4:3
+├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 6:1
+│   ├── IDENT: i, Type: T: VAR; rT: INTEGER,  Position: 6:5
+│   └── ADDRESS: 5, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 6:5
+├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 6:9
+│   ├── IDENT: i, Type: T: VAR; rT: INTEGER,  Position: 6:5
+│   └── INTEGER: 2, Type: T: INTEGER; rT: INTEGER,  Position: 6:9
+├── WHILE, Type: T: VOID; rT: VOID,  Position: 7:1
+│   ├── CONDITION, Type: T: BOOLEAN; rT: VOID,  Position: 7:7
+│   │   └── LT, Type: T: INTEGER; rT: BOOLEAN,  Position: 7:8
+│   │       ├── IDENT: i, Type: T: VAR; rT: INTEGER,  Position: 7:7
+│   │       └── IDENT: n, Type: T: VAR; rT: INTEGER,  Position: 7:9
+│   └── BRANCH, Type: T: VOID; rT: VOID,  Position: 7:1
+│       ├── IF, Type: T: VOID; rT: VOID,  Position: 8:3
+│       │   ├── CONDITION, Type: T: BOOLEAN; rT: VOID,  Position: 8:6
+│       │   │   └── EQEQ, Type: T: INTEGER; rT: BOOLEAN,  Position: 8:12
+│       │   │       ├── MOD, Type: T: INTEGER; rT: INTEGER,  Position: 8:8
+│       │   │       │   ├── IDENT: n, Type: T: VAR; rT: INTEGER,  Position: 8:6
+│       │   │       │   └── IDENT: i, Type: T: VAR; rT: INTEGER,  Position: 8:10
+│       │   │       └── INTEGER: 0, Type: T: INTEGER; rT: INTEGER,  Position: 8:15
+│       │   └── BRANCH, Type: T: VOID; rT: VOID,  Position: 8:3
+│       │       ├── FUNC_CALL, Type: T: FUNCTION; rT: VOID,  Position: 9:5
+│       │       │   ├── IDENT: print, Type: T: VOID; rT: FUNCTION,  Position: 9:5
+│       │       │   └── PARAM, Type: T: VOID; rT: FUNCTION,  Position: 9:11
+│       │       │       └── BOOLEAN: false, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 9:11
+│       │       └── FUNC_CALL, Type: T: FUNCTION; rT: VOID,  Position: 10:5
+│       │           └── IDENT: exit, Type: T: VOID; rT: FUNCTION,  Position: 10:5
+│       └── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 12:3
+│           ├── IDENT: i, Type: T: VAR; rT: INTEGER,  Position: 12:3
+│           └── PLUS, Type: T: INTEGER; rT: INTEGER,  Position: 12:9
+│               ├── IDENT: i, Type: T: VAR; rT: INTEGER,  Position: 12:7
+│               └── INTEGER: 1, Type: T: INTEGER; rT: INTEGER,  Position: 12:10
+└── FUNC_CALL, Type: T: FUNCTION; rT: VOID,  Position: 14:1
+    ├── IDENT: print, Type: T: VOID; rT: FUNCTION,  Position: 14:1
+    └── PARAM, Type: T: VOID; rT: FUNCTION,  Position: 14:7
+        └── BOOLEAN: true, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 14:7

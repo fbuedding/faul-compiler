@@ -1,3 +1,4 @@
+
 # Faul-Lang compiler
 
 <!--toc:start-->
@@ -39,7 +40,6 @@ Damit soll möglich sein einfach Statements zu formulieren:
 ```
 Statements werden durch ein Semicolon terminiert.
 
-Block-Statements sind auch geplant. Zunächst soll dies nur `if` beinhalten.
 
 
 ## Sprache
@@ -57,7 +57,7 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
                       | "if" "(" <expression> ")" "{" <statement>* "}" ("else" "{" <statement>* "}")?
                       | "while" "(" <expression> ")" "{" <statement>* "}"
                       | <ident> "=" <expression> <semi>
-                      | <expression> <semi>
+                      | <ident> <function_call> <semi>
 <expression>        ::= <equality> ( ("&&" | "||" | "&" | "|") <expression>)?
 <equality>          ::= <comparision> (("!=" | "==") <equality>)?
 <comparision>       ::= <arithmeticExpr> ( (">" | ">=" | "<" | "<=") <comparision>)?
@@ -73,6 +73,7 @@ Im spezielleren wird der Syntax benutzt, der hier definiert ist: [BNF Playground
 <ident>             ::= ("_" | [a-z]) ("_" | [a-z] | [0-9])* (<function_call>)?
 <function_call>     ::= "(" (<expression> ("," <expression>)*)? ")"
 <semi>              ::= ";"+
+
 
 ```
 
@@ -140,31 +141,20 @@ Tokens der Faul-Lang.
 #### Input
 
 ```c
-int a = -3 + 5;
-bool b = !true;
-int c = 5 * ( 5 + 6 * 3);
-bool e = true && false;
-bool g = 5 == 8 - 5*3;
-bool z = 4 >= 5*6;
-if(g && true){
-    int d = 6;
-    if(true) {
-        z = 4 >= 5*6;
-        int asd = 5;
-    }
-    else {
-        int paul = 0;
-        while(true){
-            int fabian = 0;
-        }
-    }
-    if((false && false) || (true || false)) {
-        int asd = 0;
-    }
+int n = readI();
+if(n <= 1) {
+  print(false);
+  exit();
 }
-int d = 5 % 3;
-int and = 5 & 5;
-int z1 = !(3-4);
+int i = 2;
+while(i<n){
+  if(n % i == 0){
+    print(false);
+    exit();
+  }
+  i = i +1;
+}
+print(true);
 ```
 
 #### Lexer
@@ -181,29 +171,7 @@ Parse Tree (Syntax Tree)
 
 PROGRAM
 ├── STATEMENT
-│   ├── INT: int
-│   ├── IDENT: a
-│   ├── EQ: =
-│   ├── EXPRESSION
-│   │   └── EQUALITY
-│   │       └── COMPARISON
-│   │           └── ARITHMETIC_EXPR
-│   │               ├── TERM
-│   │               │   └── UNARY
-│   │               │       ├── MINUS: -
-│   │               │       └── UNARY
-│   │               │           └── PRIMARY
-│   │               │               └── V_INT: 3
-│   │               ├── PLUS: +
-│   │               └── ARITHMETIC_EXPR
-│   │                   └── TERM
-│   │                       └── UNARY
-│   │                           └── PRIMARY
-│   │                               └── V_INT: 5
-│   └── SEMICOLON: ;
-├── STATEMENT
-│   ├── BOOL: bool
-│   ├── IDENT: b
+│   ├── IDENT: n
 │   ├── EQ: =
 │   ├── EXPRESSION
 │   │   └── EQUALITY
@@ -211,107 +179,13 @@ PROGRAM
 │   │           └── ARITHMETIC_EXPR
 │   │               └── TERM
 │   │                   └── UNARY
-│   │                       ├── NOT: !
-│   │                       └── UNARY
-│   │                           └── PRIMARY
-│   │                               └── V_BOOL: true
+│   │                       └── PRIMARY
+│   │                           ├── IDENT: readI
+│   │                           └── FUNC_CALL
 │   └── SEMICOLON: ;
 ├── STATEMENT
-│   ├── INT: int
-│   ├── IDENT: c
-│   ├── EQ: =
-│   ├── EXPRESSION
-│   │   └── EQUALITY
-│   │       └── COMPARISON
-│   │           └── ARITHMETIC_EXPR
-│   │               └── TERM
-│   │                   ├── UNARY
-│   │                   │   └── PRIMARY
-│   │                   │       └── V_INT: 5
-│   │                   ├── ASTERISK: *
-│   │                   └── TERM
-│   │                       └── UNARY
-│   │                           └── PRIMARY
-│   │                               ├── OPEN_BRACKET: (
-│   │                               ├── EXPRESSION
-│   │                               │   └── EQUALITY
-│   │                               │       └── COMPARISON
-│   │                               │           └── ARITHMETIC_EXPR
-│   │                               │               ├── TERM
-│   │                               │               │   └── UNARY
-│   │                               │               │       └── PRIMARY
-│   │                               │               │           └── V_INT: 5
-│   │                               │               ├── PLUS: +
-│   │                               │               └── ARITHMETIC_EXPR
-│   │                               │                   └── TERM
-│   │                               │                       ├── UNARY
-│   │                               │                       │   └── PRIMARY
-│   │                               │                       │       └── V_INT: 6
-│   │                               │                       ├── ASTERISK: *
-│   │                               │                       └── TERM
-│   │                               │                           └── UNARY
-│   │                               │                               └── PRIMARY
-│   │                               │                                   └── V_INT: 3
-│   │                               └── CLOSE_BRACKET: )
-│   └── SEMICOLON: ;
-├── STATEMENT
-│   ├── BOOL: bool
-│   ├── IDENT: e
-│   ├── EQ: =
-│   ├── EXPRESSION
-│   │   ├── EQUALITY
-│   │   │   └── COMPARISON
-│   │   │       └── ARITHMETIC_EXPR
-│   │   │           └── TERM
-│   │   │               └── UNARY
-│   │   │                   └── PRIMARY
-│   │   │                       └── V_BOOL: true
-│   │   ├── LAND: &&
-│   │   └── EXPRESSION
-│   │       └── EQUALITY
-│   │           └── COMPARISON
-│   │               └── ARITHMETIC_EXPR
-│   │                   └── TERM
-│   │                       └── UNARY
-│   │                           └── PRIMARY
-│   │                               └── V_BOOL: false
-│   └── SEMICOLON: ;
-├── STATEMENT
-│   ├── BOOL: bool
-│   ├── IDENT: g
-│   ├── EQ: =
-│   ├── EXPRESSION
-│   │   └── EQUALITY
-│   │       ├── COMPARISON
-│   │       │   └── ARITHMETIC_EXPR
-│   │       │       └── TERM
-│   │       │           └── UNARY
-│   │       │               └── PRIMARY
-│   │       │                   └── V_INT: 5
-│   │       ├── EQEQ: ==
-│   │       └── EQUALITY
-│   │           └── COMPARISON
-│   │               └── ARITHMETIC_EXPR
-│   │                   ├── TERM
-│   │                   │   └── UNARY
-│   │                   │       └── PRIMARY
-│   │                   │           └── V_INT: 8
-│   │                   ├── MINUS: -
-│   │                   └── ARITHMETIC_EXPR
-│   │                       └── TERM
-│   │                           ├── UNARY
-│   │                           │   └── PRIMARY
-│   │                           │       └── V_INT: 5
-│   │                           ├── ASTERISK: *
-│   │                           └── TERM
-│   │                               └── UNARY
-│   │                                   └── PRIMARY
-│   │                                       └── V_INT: 3
-│   └── SEMICOLON: ;
-├── STATEMENT
-│   ├── BOOL: bool
-│   ├── IDENT: z
-│   ├── EQ: =
+│   ├── IF: if
+│   ├── OPEN_BRACKET: (
 │   ├── EXPRESSION
 │   │   └── EQUALITY
 │   │       └── COMPARISON
@@ -319,179 +193,19 @@ PROGRAM
 │   │           │   └── TERM
 │   │           │       └── UNARY
 │   │           │           └── PRIMARY
-│   │           │               └── V_INT: 4
-│   │           ├── GTEQ: >=
-│   │           └── COMPARISON
-│   │               └── ARITHMETIC_EXPR
-│   │                   └── TERM
-│   │                       ├── UNARY
-│   │                       │   └── PRIMARY
-│   │                       │       └── V_INT: 5
-│   │                       ├── ASTERISK: *
-│   │                       └── TERM
-│   │                           └── UNARY
-│   │                               └── PRIMARY
-│   │                                   └── V_INT: 6
-│   └── SEMICOLON: ;
-├── STATEMENT
-│   ├── IF: if
-│   ├── OPEN_BRACKET: (
-│   ├── EXPRESSION
-│   │   ├── EQUALITY
-│   │   │   └── COMPARISON
-│   │   │       └── ARITHMETIC_EXPR
-│   │   │           └── TERM
-│   │   │               └── UNARY
-│   │   │                   └── PRIMARY
-│   │   │                       └── IDENT: g
-│   │   ├── LAND: &&
-│   │   └── EXPRESSION
-│   │       └── EQUALITY
+│   │           │               └── IDENT: n
+│   │           ├── LTEQ: <=
 │   │           └── COMPARISON
 │   │               └── ARITHMETIC_EXPR
 │   │                   └── TERM
 │   │                       └── UNARY
 │   │                           └── PRIMARY
-│   │                               └── V_BOOL: true
+│   │                               └── V_INT: 1
 │   ├── CLOSE_BRACKET: )
 │   ├── OPEN_PARANTHESES: {
 │   ├── STATEMENT
-│   │   ├── INT: int
-│   │   ├── IDENT: d
-│   │   ├── EQ: =
-│   │   ├── EXPRESSION
-│   │   │   └── EQUALITY
-│   │   │       └── COMPARISON
-│   │   │           └── ARITHMETIC_EXPR
-│   │   │               └── TERM
-│   │   │                   └── UNARY
-│   │   │                       └── PRIMARY
-│   │   │                           └── V_INT: 6
-│   │   └── SEMICOLON: ;
-│   ├── STATEMENT
-│   │   ├── IF: if
-│   │   ├── OPEN_BRACKET: (
-│   │   ├── EXPRESSION
-│   │   │   └── EQUALITY
-│   │   │       └── COMPARISON
-│   │   │           └── ARITHMETIC_EXPR
-│   │   │               └── TERM
-│   │   │                   └── UNARY
-│   │   │                       └── PRIMARY
-│   │   │                           └── V_BOOL: true
-│   │   ├── CLOSE_BRACKET: )
-│   │   ├── OPEN_PARANTHESES: {
-│   │   ├── STATEMENT
-│   │   │   ├── IDENT: z
-│   │   │   ├── EQ: =
-│   │   │   ├── EXPRESSION
-│   │   │   │   └── EQUALITY
-│   │   │   │       └── COMPARISON
-│   │   │   │           ├── ARITHMETIC_EXPR
-│   │   │   │           │   └── TERM
-│   │   │   │           │       └── UNARY
-│   │   │   │           │           └── PRIMARY
-│   │   │   │           │               └── V_INT: 4
-│   │   │   │           ├── GTEQ: >=
-│   │   │   │           └── COMPARISON
-│   │   │   │               └── ARITHMETIC_EXPR
-│   │   │   │                   └── TERM
-│   │   │   │                       ├── UNARY
-│   │   │   │                       │   └── PRIMARY
-│   │   │   │                       │       └── V_INT: 5
-│   │   │   │                       ├── ASTERISK: *
-│   │   │   │                       └── TERM
-│   │   │   │                           └── UNARY
-│   │   │   │                               └── PRIMARY
-│   │   │   │                                   └── V_INT: 6
-│   │   │   └── SEMICOLON: ;
-│   │   ├── STATEMENT
-│   │   │   ├── INT: int
-│   │   │   ├── IDENT: asd
-│   │   │   ├── EQ: =
-│   │   │   ├── EXPRESSION
-│   │   │   │   └── EQUALITY
-│   │   │   │       └── COMPARISON
-│   │   │   │           └── ARITHMETIC_EXPR
-│   │   │   │               └── TERM
-│   │   │   │                   └── UNARY
-│   │   │   │                       └── PRIMARY
-│   │   │   │                           └── V_INT: 5
-│   │   │   └── SEMICOLON: ;
-│   │   ├── CLOSE_PARANTHESES: }
-│   │   ├── ELSE: else
-│   │   ├── OPEN_PARANTHESES: {
-│   │   ├── STATEMENT
-│   │   │   ├── INT: int
-│   │   │   ├── IDENT: paul
-│   │   │   ├── EQ: =
-│   │   │   ├── EXPRESSION
-│   │   │   │   └── EQUALITY
-│   │   │   │       └── COMPARISON
-│   │   │   │           └── ARITHMETIC_EXPR
-│   │   │   │               └── TERM
-│   │   │   │                   └── UNARY
-│   │   │   │                       └── PRIMARY
-│   │   │   │                           └── V_INT: 0
-│   │   │   └── SEMICOLON: ;
-│   │   ├── STATEMENT
-│   │   │   ├── WHILE: while
-│   │   │   ├── OPEN_BRACKET: (
-│   │   │   ├── EXPRESSION
-│   │   │   │   └── EQUALITY
-│   │   │   │       └── COMPARISON
-│   │   │   │           └── ARITHMETIC_EXPR
-│   │   │   │               └── TERM
-│   │   │   │                   └── UNARY
-│   │   │   │                       └── PRIMARY
-│   │   │   │                           └── V_BOOL: true
-│   │   │   ├── CLOSE_BRACKET: )
-│   │   │   ├── OPEN_PARANTHESES: {
-│   │   │   ├── STATEMENT
-│   │   │   │   ├── INT: int
-│   │   │   │   ├── IDENT: fabian
-│   │   │   │   ├── EQ: =
-│   │   │   │   ├── EXPRESSION
-│   │   │   │   │   └── EQUALITY
-│   │   │   │   │       └── COMPARISON
-│   │   │   │   │           └── ARITHMETIC_EXPR
-│   │   │   │   │               └── TERM
-│   │   │   │   │                   └── UNARY
-│   │   │   │   │                       └── PRIMARY
-│   │   │   │   │                           └── V_INT: 0
-│   │   │   │   └── SEMICOLON: ;
-│   │   │   └── CLOSE_PARANTHESES: }
-│   │   └── CLOSE_PARANTHESES: }
-│   ├── STATEMENT
-│   │   ├── IF: if
-│   │   ├── OPEN_BRACKET: (
-│   │   ├── EXPRESSION
-│   │   │   ├── EQUALITY
-│   │   │   │   └── COMPARISON
-│   │   │   │       └── ARITHMETIC_EXPR
-│   │   │   │           └── TERM
-│   │   │   │               └── UNARY
-│   │   │   │                   └── PRIMARY
-│   │   │   │                       ├── OPEN_BRACKET: (
-│   │   │   │                       ├── EXPRESSION
-│   │   │   │                       │   ├── EQUALITY
-│   │   │   │                       │   │   └── COMPARISON
-│   │   │   │                       │   │       └── ARITHMETIC_EXPR
-│   │   │   │                       │   │           └── TERM
-│   │   │   │                       │   │               └── UNARY
-│   │   │   │                       │   │                   └── PRIMARY
-│   │   │   │                       │   │                       └── V_BOOL: false
-│   │   │   │                       │   ├── LAND: &&
-│   │   │   │                       │   └── EXPRESSION
-│   │   │   │                       │       └── EQUALITY
-│   │   │   │                       │           └── COMPARISON
-│   │   │   │                       │               └── ARITHMETIC_EXPR
-│   │   │   │                       │                   └── TERM
-│   │   │   │                       │                       └── UNARY
-│   │   │   │                       │                           └── PRIMARY
-│   │   │   │                       │                               └── V_BOOL: false
-│   │   │   │                       └── CLOSE_BRACKET: )
-│   │   │   ├── LOR: ||
+│   │   ├── IDENT: print
+│   │   ├── FUNC_CALL
 │   │   │   └── EXPRESSION
 │   │   │       └── EQUALITY
 │   │   │           └── COMPARISON
@@ -499,111 +213,118 @@ PROGRAM
 │   │   │                   └── TERM
 │   │   │                       └── UNARY
 │   │   │                           └── PRIMARY
-│   │   │                               ├── OPEN_BRACKET: (
-│   │   │                               ├── EXPRESSION
-│   │   │                               │   ├── EQUALITY
-│   │   │                               │   │   └── COMPARISON
-│   │   │                               │   │       └── ARITHMETIC_EXPR
-│   │   │                               │   │           └── TERM
-│   │   │                               │   │               └── UNARY
-│   │   │                               │   │                   └── PRIMARY
-│   │   │                               │   │                       └── V_BOOL: true
-│   │   │                               │   ├── LOR: ||
-│   │   │                               │   └── EXPRESSION
-│   │   │                               │       └── EQUALITY
-│   │   │                               │           └── COMPARISON
-│   │   │                               │               └── ARITHMETIC_EXPR
-│   │   │                               │                   └── TERM
-│   │   │                               │                       └── UNARY
-│   │   │                               │                           └── PRIMARY
-│   │   │                               │                               └── V_BOOL: false
-│   │   │                               └── CLOSE_BRACKET: )
-│   │   ├── CLOSE_BRACKET: )
-│   │   ├── OPEN_PARANTHESES: {
-│   │   ├── STATEMENT
-│   │   │   ├── INT: int
-│   │   │   ├── IDENT: asd
-│   │   │   ├── EQ: =
-│   │   │   ├── EXPRESSION
-│   │   │   │   └── EQUALITY
-│   │   │   │       └── COMPARISON
-│   │   │   │           └── ARITHMETIC_EXPR
-│   │   │   │               └── TERM
-│   │   │   │                   └── UNARY
-│   │   │   │                       └── PRIMARY
-│   │   │   │                           └── V_INT: 0
-│   │   │   └── SEMICOLON: ;
-│   │   └── CLOSE_PARANTHESES: }
+│   │   │                               └── V_BOOL: false
+│   │   └── SEMICOLON: ;
+│   ├── STATEMENT
+│   │   ├── IDENT: exit
+│   │   ├── FUNC_CALL
+│   │   └── SEMICOLON: ;
 │   └── CLOSE_PARANTHESES: }
 ├── STATEMENT
-│   ├── INT: int
-│   ├── IDENT: d
+│   ├── IDENT: i
 │   ├── EQ: =
 │   ├── EXPRESSION
 │   │   └── EQUALITY
 │   │       └── COMPARISON
 │   │           └── ARITHMETIC_EXPR
 │   │               └── TERM
-│   │                   ├── UNARY
-│   │                   │   └── PRIMARY
-│   │                   │       └── V_INT: 5
-│   │                   ├── PERCENT: %
-│   │                   └── TERM
-│   │                       └── UNARY
-│   │                           └── PRIMARY
-│   │                               └── V_INT: 3
+│   │                   └── UNARY
+│   │                       └── PRIMARY
+│   │                           └── V_INT: 2
 │   └── SEMICOLON: ;
 ├── STATEMENT
-│   ├── INT: int
-│   ├── IDENT: and
-│   ├── EQ: =
+│   ├── WHILE: while
+│   ├── OPEN_BRACKET: (
 │   ├── EXPRESSION
-│   │   ├── EQUALITY
-│   │   │   └── COMPARISON
-│   │   │       └── ARITHMETIC_EXPR
-│   │   │           └── TERM
-│   │   │               └── UNARY
-│   │   │                   └── PRIMARY
-│   │   │                       └── V_INT: 5
-│   │   ├── AND: &
-│   │   └── EXPRESSION
-│   │       └── EQUALITY
+│   │   └── EQUALITY
+│   │       └── COMPARISON
+│   │           ├── ARITHMETIC_EXPR
+│   │           │   └── TERM
+│   │           │       └── UNARY
+│   │           │           └── PRIMARY
+│   │           │               └── IDENT: i
+│   │           ├── LT: <
 │   │           └── COMPARISON
 │   │               └── ARITHMETIC_EXPR
 │   │                   └── TERM
 │   │                       └── UNARY
 │   │                           └── PRIMARY
-│   │                               └── V_INT: 5
-│   └── SEMICOLON: ;
+│   │                               └── IDENT: n
+│   ├── CLOSE_BRACKET: )
+│   ├── OPEN_PARANTHESES: {
+│   ├── STATEMENT
+│   │   ├── IF: if
+│   │   ├── OPEN_BRACKET: (
+│   │   ├── EXPRESSION
+│   │   │   └── EQUALITY
+│   │   │       ├── COMPARISON
+│   │   │       │   └── ARITHMETIC_EXPR
+│   │   │       │       └── TERM
+│   │   │       │           ├── UNARY
+│   │   │       │           │   └── PRIMARY
+│   │   │       │           │       └── IDENT: n
+│   │   │       │           ├── PERCENT: %
+│   │   │       │           └── TERM
+│   │   │       │               └── UNARY
+│   │   │       │                   └── PRIMARY
+│   │   │       │                       └── IDENT: i
+│   │   │       ├── EQEQ: ==
+│   │   │       └── EQUALITY
+│   │   │           └── COMPARISON
+│   │   │               └── ARITHMETIC_EXPR
+│   │   │                   └── TERM
+│   │   │                       └── UNARY
+│   │   │                           └── PRIMARY
+│   │   │                               └── V_INT: 0
+│   │   ├── CLOSE_BRACKET: )
+│   │   ├── OPEN_PARANTHESES: {
+│   │   ├── STATEMENT
+│   │   │   ├── IDENT: print
+│   │   │   ├── FUNC_CALL
+│   │   │   │   └── EXPRESSION
+│   │   │   │       └── EQUALITY
+│   │   │   │           └── COMPARISON
+│   │   │   │               └── ARITHMETIC_EXPR
+│   │   │   │                   └── TERM
+│   │   │   │                       └── UNARY
+│   │   │   │                           └── PRIMARY
+│   │   │   │                               └── V_BOOL: false
+│   │   │   └── SEMICOLON: ;
+│   │   ├── STATEMENT
+│   │   │   ├── IDENT: exit
+│   │   │   ├── FUNC_CALL
+│   │   │   └── SEMICOLON: ;
+│   │   └── CLOSE_PARANTHESES: }
+│   ├── STATEMENT
+│   │   ├── IDENT: i
+│   │   ├── EQ: =
+│   │   ├── EXPRESSION
+│   │   │   └── EQUALITY
+│   │   │       └── COMPARISON
+│   │   │           └── ARITHMETIC_EXPR
+│   │   │               ├── TERM
+│   │   │               │   └── UNARY
+│   │   │               │       └── PRIMARY
+│   │   │               │           └── IDENT: i
+│   │   │               ├── PLUS: +
+│   │   │               └── ARITHMETIC_EXPR
+│   │   │                   └── TERM
+│   │   │                       └── UNARY
+│   │   │                           └── PRIMARY
+│   │   │                               └── V_INT: 1
+│   │   └── SEMICOLON: ;
+│   └── CLOSE_PARANTHESES: }
 └── STATEMENT
-    ├── INT: int
-    ├── IDENT: z1
-    ├── EQ: =
-    ├── EXPRESSION
-    │   └── EQUALITY
-    │       └── COMPARISON
-    │           └── ARITHMETIC_EXPR
-    │               └── TERM
-    │                   └── UNARY
-    │                       ├── NOT: !
+    ├── IDENT: print
+    ├── FUNC_CALL
+    │   └── EXPRESSION
+    │       └── EQUALITY
+    │           └── COMPARISON
+    │               └── ARITHMETIC_EXPR
+    │                   └── TERM
     │                       └── UNARY
     │                           └── PRIMARY
-    │                               ├── OPEN_BRACKET: (
-    │                               ├── EXPRESSION
-    │                               │   └── EQUALITY
-    │                               │       └── COMPARISON
-    │                               │           └── ARITHMETIC_EXPR
-    │                               │               ├── TERM
-    │                               │               │   └── UNARY
-    │                               │               │       └── PRIMARY
-    │                               │               │           └── V_INT: 3
-    │                               │               ├── MINUS: -
-    │                               │               └── ARITHMETIC_EXPR
-    │                               │                   └── TERM
-    │                               │                       └── UNARY
-    │                               │                           └── PRIMARY
-    │                               │                               └── V_INT: 4
-    │                               └── CLOSE_BRACKET: )
+    │                               └── V_BOOL: true
     └── SEMICOLON: ;
 ```
 #### Semantische Analyse
@@ -617,152 +338,61 @@ Dieser lässt sich auch mit der Methode toString() wie folgt ausgeben:
 ```
 Abstract Syntax Tree
 
-PROGRAM, Type: NONE, Result type: NONE
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: a, Type: INTEGER, Result type: NONE
-│   └── ADDRESS: 0, Type: MEMORY_ADDRESS, Result type: NONE
-├── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│   ├── IDENT: a, Type: INTEGER, Result type: INTEGER
-│   └── PLUS, Type: INTEGER, Result type: INTEGER
-│       ├── NEG, Type: INTEGER, Result type: INTEGER
-│       │   └── INTEGER: 3, Type: INTEGER, Result type: INTEGER
-│       └── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: b, Type: BOOLEAN, Result type: NONE
-│   └── ADDRESS: 1, Type: MEMORY_ADDRESS, Result type: NONE
-├── ASSIGNMENT, Type: BOOLEAN, Result type: NONE
-│   ├── IDENT: b, Type: BOOLEAN, Result type: BOOLEAN
-│   └── NOT, Type: BOOLEAN, Result type: BOOLEAN
-│       └── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: c, Type: INTEGER, Result type: NONE
-│   └── ADDRESS: 2, Type: MEMORY_ADDRESS, Result type: NONE
-├── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│   ├── IDENT: c, Type: INTEGER, Result type: INTEGER
-│   └── MUL, Type: INTEGER, Result type: INTEGER
-│       ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│       └── PLUS, Type: INTEGER, Result type: INTEGER
-│           ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│           └── MUL, Type: INTEGER, Result type: INTEGER
-│               ├── INTEGER: 6, Type: INTEGER, Result type: INTEGER
-│               └── INTEGER: 3, Type: INTEGER, Result type: INTEGER
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: e, Type: BOOLEAN, Result type: NONE
-│   └── ADDRESS: 3, Type: MEMORY_ADDRESS, Result type: NONE
-├── ASSIGNMENT, Type: BOOLEAN, Result type: NONE
-│   ├── IDENT: e, Type: BOOLEAN, Result type: BOOLEAN
-│   └── LAND, Type: BOOLEAN, Result type: BOOLEAN
-│       ├── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN
-│       └── BOOLEAN: false, Type: BOOLEAN, Result type: BOOLEAN
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: g, Type: BOOLEAN, Result type: NONE
-│   └── ADDRESS: 4, Type: MEMORY_ADDRESS, Result type: NONE
-├── ASSIGNMENT, Type: BOOLEAN, Result type: NONE
-│   ├── IDENT: g, Type: BOOLEAN, Result type: BOOLEAN
-│   └── EQEQ, Type: INTEGER, Result type: BOOLEAN
-│       ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│       └── MINUS, Type: INTEGER, Result type: INTEGER
-│           ├── INTEGER: 8, Type: INTEGER, Result type: INTEGER
-│           └── MUL, Type: INTEGER, Result type: INTEGER
-│               ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│               └── INTEGER: 3, Type: INTEGER, Result type: INTEGER
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: z, Type: BOOLEAN, Result type: NONE
-│   └── ADDRESS: 5, Type: MEMORY_ADDRESS, Result type: NONE
-├── ASSIGNMENT, Type: BOOLEAN, Result type: NONE
-│   ├── IDENT: z, Type: BOOLEAN, Result type: BOOLEAN
-│   └── GTEQ, Type: INTEGER, Result type: BOOLEAN
-│       ├── INTEGER: 4, Type: INTEGER, Result type: INTEGER
-│       └── MUL, Type: INTEGER, Result type: INTEGER
-│           ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│           └── INTEGER: 6, Type: INTEGER, Result type: INTEGER
-├── IF, Type: NONE, Result type: NONE
-│   ├── CONDITION, Type: BOOLEAN, Result type: NONE
-│   │   └── LAND, Type: BOOLEAN, Result type: BOOLEAN
-│   │       ├── IDENT: g, Type: BOOLEAN, Result type: BOOLEAN
-│   │       └── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN
-│   └── BRANCH, Type: NONE, Result type: NONE
-│       ├── DECLARATION, Type: NONE, Result type: NONE
-│       │   ├── IDENT: d, Type: INTEGER, Result type: NONE
-│       │   └── ADDRESS: 6, Type: MEMORY_ADDRESS, Result type: NONE
-│       ├── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│       │   ├── IDENT: d, Type: INTEGER, Result type: INTEGER
-│       │   └── INTEGER: 6, Type: INTEGER, Result type: INTEGER
-│       ├── IF, Type: NONE, Result type: NONE
-│       │   ├── CONDITION, Type: BOOLEAN, Result type: NONE
-│       │   │   └── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN
-│       │   ├── BRANCH, Type: NONE, Result type: NONE
-│       │   │   ├── ASSIGNMENT, Type: BOOLEAN, Result type: NONE
-│       │   │   │   ├── IDENT: z, Type: BOOLEAN, Result type: BOOLEAN
-│       │   │   │   └── GTEQ, Type: INTEGER, Result type: BOOLEAN
-│       │   │   │       ├── INTEGER: 4, Type: INTEGER, Result type: INTEGER
-│       │   │   │       └── MUL, Type: INTEGER, Result type: INTEGER
-│       │   │   │           ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│       │   │   │           └── INTEGER: 6, Type: INTEGER, Result type: INTEGER
-│       │   │   ├── DECLARATION, Type: NONE, Result type: NONE
-│       │   │   │   ├── IDENT: asd, Type: INTEGER, Result type: NONE
-│       │   │   │   └── ADDRESS: 7, Type: MEMORY_ADDRESS, Result type: NONE
-│       │   │   └── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│       │   │       ├── IDENT: asd, Type: INTEGER, Result type: INTEGER
-│       │   │       └── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│       │   └── BRANCH, Type: NONE, Result type: NONE
-│       │       ├── DECLARATION, Type: NONE, Result type: NONE
-│       │       │   ├── IDENT: paul, Type: INTEGER, Result type: NONE
-│       │       │   └── ADDRESS: 7, Type: MEMORY_ADDRESS, Result type: NONE
-│       │       ├── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│       │       │   ├── IDENT: paul, Type: INTEGER, Result type: INTEGER
-│       │       │   └── INTEGER: 0, Type: INTEGER, Result type: INTEGER
-│       │       └── WHILE, Type: NONE, Result type: NONE
-│       │           ├── CONDITION, Type: BOOLEAN, Result type: NONE
-│       │           │   └── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN
-│       │           └── BRANCH, Type: NONE, Result type: NONE
-│       │               ├── DECLARATION, Type: NONE, Result type: NONE
-│       │               │   ├── IDENT: fabian, Type: INTEGER, Result type: NONE
-│       │               │   └── ADDRESS: 8, Type: MEMORY_ADDRESS, Result type: NONE
-│       │               └── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│       │                   ├── IDENT: fabian, Type: INTEGER, Result type: INTEGER
-│       │                   └── INTEGER: 0, Type: INTEGER, Result type: INTEGER
-│       └── IF, Type: NONE, Result type: NONE
-│           ├── CONDITION, Type: BOOLEAN, Result type: NONE
-│           │   └── LOR, Type: BOOLEAN, Result type: BOOLEAN
-│           │       ├── LAND, Type: BOOLEAN, Result type: BOOLEAN
-│           │       │   ├── BOOLEAN: false, Type: BOOLEAN, Result type: BOOLEAN
-│           │       │   └── BOOLEAN: false, Type: BOOLEAN, Result type: BOOLEAN
-│           │       └── LOR, Type: BOOLEAN, Result type: BOOLEAN
-│           │           ├── BOOLEAN: true, Type: BOOLEAN, Result type: BOOLEAN
-│           │           └── BOOLEAN: false, Type: BOOLEAN, Result type: BOOLEAN
-│           └── BRANCH, Type: NONE, Result type: NONE
-│               ├── DECLARATION, Type: NONE, Result type: NONE
-│               │   ├── IDENT: asd, Type: INTEGER, Result type: NONE
-│               │   └── ADDRESS: 7, Type: MEMORY_ADDRESS, Result type: NONE
-│               └── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│                   ├── IDENT: asd, Type: INTEGER, Result type: INTEGER
-│                   └── INTEGER: 0, Type: INTEGER, Result type: INTEGER
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: d, Type: INTEGER, Result type: NONE
-│   └── ADDRESS: 6, Type: MEMORY_ADDRESS, Result type: NONE
-├── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│   ├── IDENT: d, Type: INTEGER, Result type: INTEGER
-│   └── MOD, Type: INTEGER, Result type: INTEGER
-│       ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│       └── INTEGER: 3, Type: INTEGER, Result type: INTEGER
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: and, Type: INTEGER, Result type: NONE
-│   └── ADDRESS: 7, Type: MEMORY_ADDRESS, Result type: NONE
-├── ASSIGNMENT, Type: INTEGER, Result type: NONE
-│   ├── IDENT: and, Type: INTEGER, Result type: INTEGER
-│   └── AND, Type: INTEGER, Result type: INTEGER
-│       ├── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-│       └── INTEGER: 5, Type: INTEGER, Result type: INTEGER
-├── DECLARATION, Type: NONE, Result type: NONE
-│   ├── IDENT: z1, Type: INTEGER, Result type: NONE
-│   └── ADDRESS: 8, Type: MEMORY_ADDRESS, Result type: NONE
-└── ASSIGNMENT, Type: INTEGER, Result type: NONE
-    ├── IDENT: z1, Type: INTEGER, Result type: INTEGER
-    └── NOT, Type: INTEGER, Result type: INTEGER
-        └── MINUS, Type: INTEGER, Result type: INTEGER
-            ├── INTEGER: 3, Type: INTEGER, Result type: INTEGER
-            └── INTEGER: 4, Type: INTEGER, Result type: INTEGER
+PROGRAM, Type: T: VOID; rT: null,  Position: 0:0
+├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 1:1
+│   ├── IDENT: n, Type: T: VAR; rT: INTEGER,  Position: 1:5
+│   └── ADDRESS: 4, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 1:5
+├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 1:9
+│   ├── IDENT: n, Type: T: VAR; rT: INTEGER,  Position: 1:5
+│   └── FUNC_CALL, Type: T: FUNCTION; rT: INTEGER,  Position: 1:9
+│       └── IDENT: readI, Type: T: INTEGER; rT: FUNCTION,  Position: 1:9
+├── IF, Type: T: VOID; rT: VOID,  Position: 2:1
+│   ├── CONDITION, Type: T: BOOLEAN; rT: VOID,  Position: 2:4
+│   │   └── LTEQ, Type: T: INTEGER; rT: BOOLEAN,  Position: 2:6
+│   │       ├── IDENT: n, Type: T: VAR; rT: INTEGER,  Position: 2:4
+│   │       └── INTEGER: 1, Type: T: INTEGER; rT: INTEGER,  Position: 2:9
+│   └── BRANCH, Type: T: VOID; rT: VOID,  Position: 2:1
+│       ├── FUNC_CALL, Type: T: FUNCTION; rT: VOID,  Position: 3:3
+│       │   ├── IDENT: print, Type: T: VOID; rT: FUNCTION,  Position: 3:3
+│       │   └── PARAM, Type: T: VOID; rT: FUNCTION,  Position: 3:9
+│       │       └── BOOLEAN: false, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 3:9
+│       └── FUNC_CALL, Type: T: FUNCTION; rT: VOID,  Position: 4:3
+│           └── IDENT: exit, Type: T: VOID; rT: FUNCTION,  Position: 4:3
+├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 6:1
+│   ├── IDENT: i, Type: T: VAR; rT: INTEGER,  Position: 6:5
+│   └── ADDRESS: 5, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 6:5
+├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 6:9
+│   ├── IDENT: i, Type: T: VAR; rT: INTEGER,  Position: 6:5
+│   └── INTEGER: 2, Type: T: INTEGER; rT: INTEGER,  Position: 6:9
+├── WHILE, Type: T: VOID; rT: VOID,  Position: 7:1
+│   ├── CONDITION, Type: T: BOOLEAN; rT: VOID,  Position: 7:7
+│   │   └── LT, Type: T: INTEGER; rT: BOOLEAN,  Position: 7:8
+│   │       ├── IDENT: i, Type: T: VAR; rT: INTEGER,  Position: 7:7
+│   │       └── IDENT: n, Type: T: VAR; rT: INTEGER,  Position: 7:9
+│   └── BRANCH, Type: T: VOID; rT: VOID,  Position: 7:1
+│       ├── IF, Type: T: VOID; rT: VOID,  Position: 8:3
+│       │   ├── CONDITION, Type: T: BOOLEAN; rT: VOID,  Position: 8:6
+│       │   │   └── EQEQ, Type: T: INTEGER; rT: BOOLEAN,  Position: 8:12
+│       │   │       ├── MOD, Type: T: INTEGER; rT: INTEGER,  Position: 8:8
+│       │   │       │   ├── IDENT: n, Type: T: VAR; rT: INTEGER,  Position: 8:6
+│       │   │       │   └── IDENT: i, Type: T: VAR; rT: INTEGER,  Position: 8:10
+│       │   │       └── INTEGER: 0, Type: T: INTEGER; rT: INTEGER,  Position: 8:15
+│       │   └── BRANCH, Type: T: VOID; rT: VOID,  Position: 8:3
+│       │       ├── FUNC_CALL, Type: T: FUNCTION; rT: VOID,  Position: 9:5
+│       │       │   ├── IDENT: print, Type: T: VOID; rT: FUNCTION,  Position: 9:5
+│       │       │   └── PARAM, Type: T: VOID; rT: FUNCTION,  Position: 9:11
+│       │       │       └── BOOLEAN: false, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 9:11
+│       │       └── FUNC_CALL, Type: T: FUNCTION; rT: VOID,  Position: 10:5
+│       │           └── IDENT: exit, Type: T: VOID; rT: FUNCTION,  Position: 10:5
+│       └── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 12:3
+│           ├── IDENT: i, Type: T: VAR; rT: INTEGER,  Position: 12:3
+│           └── PLUS, Type: T: INTEGER; rT: INTEGER,  Position: 12:9
+│               ├── IDENT: i, Type: T: VAR; rT: INTEGER,  Position: 12:7
+│               └── INTEGER: 1, Type: T: INTEGER; rT: INTEGER,  Position: 12:10
+└── FUNC_CALL, Type: T: FUNCTION; rT: VOID,  Position: 14:1
+    ├── IDENT: print, Type: T: VOID; rT: FUNCTION,  Position: 14:1
+    └── PARAM, Type: T: VOID; rT: FUNCTION,  Position: 14:7
+        └── BOOLEAN: true, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 14:7
 
 ```
 
@@ -776,7 +406,7 @@ Mögliche optimierungen wären jedoch:
 
 - Plus und Minus `0` ignorieren
 - Term `0` setzen wenn sie mit Null multipliziert werden
-- Bei Ausdrücken die immer `true` bzw. `false` sind nicht branchen oder BRanch entfernen
+- Bei Ausdrücken die immer `true` bzw. `false` sind nicht branchen oder Branch entfernen
 - Statische variablen mit ihrem Value ersetzen
 
 ### Codegenerierung
@@ -798,6 +428,121 @@ Die Register $s0 - $s7 sind per Konvention dazu da, Werte über lange Zeit zu sp
 Natürlich können in einem Pogramm mehr als acht Variablen existieren, weshalb es eine Strategie geben muss, nach der entschieden wird wann welche Variable in welches Register geladen wird und wann sie in den Speicher gescrhieben wird.
 
 Wenn eine Variable benötigt wird, sie nicht bereits in einem Register steht und alle Register belegt sind, wird die Variable, die am längsten nicht mehr genutzt wurde, in den Speicher verschoben. Danach ist ein Register frei für die Variable. 
+
+#### Generierte Code
+
+
+```asm
+main:
+# initializing s0 with address 16
+		move $s0, $0
+		jal readI
+		nop
+# Assgining reg s0 with address 4
+		move $s0, $v0
+# If start
+# Loading value 1
+		li $t0, 1
+# Less than equals
+		sle $t0, $s0, $t0
+		beqz $t0, label_0
+		nop
+# Loading value 0
+		li $t1, 0
+		move $a0, $t1
+		jal print
+		nop
+		jal exit
+		nop
+# If end
+label_0:
+# initializing s1 with address 20
+		move $s1, $0
+		addi $s1, $0, 2
+# While start
+label_2:
+# Less than
+		slt $t1, $s1, $s0
+		beqz $t1, label_1
+		nop
+# If start
+# Modulo
+		div $s0, $s1
+		mfhi $t2
+# Loading value 0
+		li $t3, 0
+# Equals
+		seq $t2, $t2, $t3
+		beqz $t2, label_3
+		nop
+# Loading value 0
+		li $t3, 0
+		move $a0, $t3
+		jal print
+		nop
+		jal exit
+		nop
+# If end
+label_3:
+# Loading value 1
+		li $t3, 1
+		add $t3, $s1, $t3
+# Assgining reg s1 with address 5
+		move $s1, $t3
+		b label_2
+		nop
+# While end
+label_1:
+# Loading value 1
+		li $t3, 1
+		move $a0, $t3
+		jal print
+		nop
+# unloading all vars
+# unloading s0 and storing in address 16
+		sw $s0, 16($gp)
+# unloading s1 and storing in address 20
+		sw $s1, 20($gp)
+# Exit
+		li $v0, 10
+		syscall
+readI:
+		addi $sp, $sp, -4
+		sw $ra, 0($sp)
+		li $v0, 5
+		syscall
+		nop
+		lw $ra, 0($sp)
+		addi $sp, $sp, 4
+		jr $ra
+		nop
+readB:
+		addi $sp, $sp, -4
+		sw $ra, 0($sp)
+		li $v0, 5
+		syscall
+		nop
+		andi $v0, $v0, 1
+		lw $ra, 0($sp)
+		addi $sp, $sp, 4
+		jr $ra
+		nop
+print:
+		addi $sp, $sp, -4
+		sw $ra, 0($sp)
+		li $v0, 1
+		syscall
+		nop
+		lw $ra, 0($sp)
+		addi $sp, $sp, 4
+		jr $ra
+		nop
+exit:
+# Exit
+		li $v0, 10
+		syscall
+
+```
 
 
 ## Finite State Machines
@@ -833,7 +578,7 @@ stateDiagram-v2
 - [X] Lexer
 - [x] Parser
 - [x] Abstract Syntax Tree (AST)
-- [ ] Semantische Analyse
+- [X] Semantische Analyse
   - Typechecking
-  - Optimierung
-- [ ] Code generation
+  - ~~Optimierung~~
+- [X] Code generation

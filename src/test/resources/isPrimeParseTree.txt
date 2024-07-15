@@ -1,0 +1,157 @@
+PROGRAM
+├── STATEMENT
+│   ├── IDENT: n
+│   ├── EQ: =
+│   ├── EXPRESSION
+│   │   └── EQUALITY
+│   │       └── COMPARISON
+│   │           └── ARITHMETIC_EXPR
+│   │               └── TERM
+│   │                   └── UNARY
+│   │                       └── PRIMARY
+│   │                           ├── IDENT: readI
+│   │                           └── FUNC_CALL
+│   └── SEMICOLON: ;
+├── STATEMENT
+│   ├── IF: if
+│   ├── OPEN_BRACKET: (
+│   ├── EXPRESSION
+│   │   └── EQUALITY
+│   │       └── COMPARISON
+│   │           ├── ARITHMETIC_EXPR
+│   │           │   └── TERM
+│   │           │       └── UNARY
+│   │           │           └── PRIMARY
+│   │           │               └── IDENT: n
+│   │           ├── LTEQ: <=
+│   │           └── COMPARISON
+│   │               └── ARITHMETIC_EXPR
+│   │                   └── TERM
+│   │                       └── UNARY
+│   │                           └── PRIMARY
+│   │                               └── V_INT: 1
+│   ├── CLOSE_BRACKET: )
+│   ├── OPEN_PARANTHESES: {
+│   ├── STATEMENT
+│   │   ├── IDENT: print
+│   │   ├── FUNC_CALL
+│   │   │   └── EXPRESSION
+│   │   │       └── EQUALITY
+│   │   │           └── COMPARISON
+│   │   │               └── ARITHMETIC_EXPR
+│   │   │                   └── TERM
+│   │   │                       └── UNARY
+│   │   │                           └── PRIMARY
+│   │   │                               └── V_BOOL: false
+│   │   └── SEMICOLON: ;
+│   ├── STATEMENT
+│   │   ├── IDENT: exit
+│   │   ├── FUNC_CALL
+│   │   └── SEMICOLON: ;
+│   └── CLOSE_PARANTHESES: }
+├── STATEMENT
+│   ├── IDENT: i
+│   ├── EQ: =
+│   ├── EXPRESSION
+│   │   └── EQUALITY
+│   │       └── COMPARISON
+│   │           └── ARITHMETIC_EXPR
+│   │               └── TERM
+│   │                   └── UNARY
+│   │                       └── PRIMARY
+│   │                           └── V_INT: 2
+│   └── SEMICOLON: ;
+├── STATEMENT
+│   ├── WHILE: while
+│   ├── OPEN_BRACKET: (
+│   ├── EXPRESSION
+│   │   └── EQUALITY
+│   │       └── COMPARISON
+│   │           ├── ARITHMETIC_EXPR
+│   │           │   └── TERM
+│   │           │       └── UNARY
+│   │           │           └── PRIMARY
+│   │           │               └── IDENT: i
+│   │           ├── LT: <
+│   │           └── COMPARISON
+│   │               └── ARITHMETIC_EXPR
+│   │                   └── TERM
+│   │                       └── UNARY
+│   │                           └── PRIMARY
+│   │                               └── IDENT: n
+│   ├── CLOSE_BRACKET: )
+│   ├── OPEN_PARANTHESES: {
+│   ├── STATEMENT
+│   │   ├── IF: if
+│   │   ├── OPEN_BRACKET: (
+│   │   ├── EXPRESSION
+│   │   │   └── EQUALITY
+│   │   │       ├── COMPARISON
+│   │   │       │   └── ARITHMETIC_EXPR
+│   │   │       │       └── TERM
+│   │   │       │           ├── UNARY
+│   │   │       │           │   └── PRIMARY
+│   │   │       │           │       └── IDENT: n
+│   │   │       │           ├── PERCENT: %
+│   │   │       │           └── TERM
+│   │   │       │               └── UNARY
+│   │   │       │                   └── PRIMARY
+│   │   │       │                       └── IDENT: i
+│   │   │       ├── EQEQ: ==
+│   │   │       └── EQUALITY
+│   │   │           └── COMPARISON
+│   │   │               └── ARITHMETIC_EXPR
+│   │   │                   └── TERM
+│   │   │                       └── UNARY
+│   │   │                           └── PRIMARY
+│   │   │                               └── V_INT: 0
+│   │   ├── CLOSE_BRACKET: )
+│   │   ├── OPEN_PARANTHESES: {
+│   │   ├── STATEMENT
+│   │   │   ├── IDENT: print
+│   │   │   ├── FUNC_CALL
+│   │   │   │   └── EXPRESSION
+│   │   │   │       └── EQUALITY
+│   │   │   │           └── COMPARISON
+│   │   │   │               └── ARITHMETIC_EXPR
+│   │   │   │                   └── TERM
+│   │   │   │                       └── UNARY
+│   │   │   │                           └── PRIMARY
+│   │   │   │                               └── V_BOOL: false
+│   │   │   └── SEMICOLON: ;
+│   │   ├── STATEMENT
+│   │   │   ├── IDENT: exit
+│   │   │   ├── FUNC_CALL
+│   │   │   └── SEMICOLON: ;
+│   │   └── CLOSE_PARANTHESES: }
+│   ├── STATEMENT
+│   │   ├── IDENT: i
+│   │   ├── EQ: =
+│   │   ├── EXPRESSION
+│   │   │   └── EQUALITY
+│   │   │       └── COMPARISON
+│   │   │           └── ARITHMETIC_EXPR
+│   │   │               ├── TERM
+│   │   │               │   └── UNARY
+│   │   │               │       └── PRIMARY
+│   │   │               │           └── IDENT: i
+│   │   │               ├── PLUS: +
+│   │   │               └── ARITHMETIC_EXPR
+│   │   │                   └── TERM
+│   │   │                       └── UNARY
+│   │   │                           └── PRIMARY
+│   │   │                               └── V_INT: 1
+│   │   └── SEMICOLON: ;
+│   └── CLOSE_PARANTHESES: }
+└── STATEMENT
+    ├── IDENT: print
+    ├── FUNC_CALL
+    │   └── EXPRESSION
+    │       └── EQUALITY
+    │           └── COMPARISON
+    │               └── ARITHMETIC_EXPR
+    │                   └── TERM
+    │                       └── UNARY
+    │                           └── PRIMARY
+    │                               └── V_BOOL: true
+    └── SEMICOLON: ;
