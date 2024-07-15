@@ -12,7 +12,6 @@ import lexer.Token;
 import lexer.TokenKind;
 import parser.ParseTree;
 import parser.Parser;
-import types.TypeError;
 
 /**
  * AstTest
@@ -56,7 +55,7 @@ public class AstTest {
         """; // */
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());
-    ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+    ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, "", 0, 0));
     p.program(pt);
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
 
@@ -83,7 +82,7 @@ public class AstTest {
     Parser p;
     try {
       p = new Parser(l.genTokens());
-      ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+      ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, "", 0, 0));
       p.program(pt);
       AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
       AbstractSyntaxTree ast = astf.fromParseTree(pt);

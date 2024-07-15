@@ -4,12 +4,9 @@ package integration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +14,6 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -29,8 +25,6 @@ import emitter.Emitter;
 import error.CompileError;
 import integration.IntegrationTest.AsmRunner.Result;
 import lexer.Lexer;
-import lexer.Token;
-import lexer.TokenKind;
 import parser.ParseTree;
 import parser.Parser;
 
@@ -190,7 +184,7 @@ public class IntegrationTest {
       throws IOException, CompileError, InterruptedException {
     Lexer l = new Lexer(input);
     Parser p = new Parser(l.genTokens());
-    ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+    ParseTree pt = new ParseTree();
     p.program(pt);
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
 
@@ -230,7 +224,7 @@ public class IntegrationTest {
         """;
     Lexer l = new Lexer(code);
     Parser p = new Parser(l.genTokens());
-    ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+    ParseTree pt = new ParseTree();
     p.program(pt);
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
 
@@ -269,7 +263,7 @@ public class IntegrationTest {
         """;
     Lexer l = new Lexer(code);
     Parser p = new Parser(l.genTokens());
-    ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+    ParseTree pt = new ParseTree();
     p.program(pt);
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
 

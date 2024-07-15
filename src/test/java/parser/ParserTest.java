@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import error.CompileError;
 import lexer.Lexer;
-import lexer.Token;
-import lexer.TokenKind;
 
 public class ParserTest {
 
@@ -36,7 +34,7 @@ public class ParserTest {
     try {
       Lexer l = new Lexer(i);
       Parser p = new Parser(l.genTokens());
-      ParseTree st = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+      ParseTree st = new ParseTree();
       p.program(st);
       file.Writer.write("src/test/resources/tree.txt", st.toString());
 
@@ -60,7 +58,7 @@ public class ParserTest {
     Parser p;
     try {
       p = new Parser(l.genTokens());
-      ParseTree st = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+      ParseTree st = new ParseTree();
       p.program(st);
       file.Writer.write("src/test/resources/functionParseTree.txt", st.toString());
     } catch (CompileError e) {

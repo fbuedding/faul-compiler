@@ -11,19 +11,14 @@ public class Token {
     this(kind, "", t.line, t.linePos);
   }
 
-  // TODO remove these to force setting the position
-  public Token(TokenKind token) {
+
+  public Token(TokenKind token, int line, int linePos) {
     this.kind = token;
     this.lexem = "";
+    this.line = line;
+    this.linePos = linePos;
   }
-
-  // TODO remove these to force setting the position
-  public Token(TokenKind token, String lexem) {
-    this.kind = token;
-    this.lexem = lexem;
-  }
-
-  Token(TokenKind token, String lexem, int line, int linePos) {
+  public Token(TokenKind token, String lexem, int line, int linePos) {
     this.kind = token;
     this.lexem = lexem;
     this.line = line;

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -69,7 +68,7 @@ class LexerTest {
 
   @Test
   public void shouldBeV_INT() throws LexerError {
-    Token expected = new Token(TokenKind.V_INT, "123456");
+    Token expected = new Token(TokenKind.V_INT, "123456", 0, 0);
     Lexer l = new Lexer(expected.lexem + "+");
     Token is = l.getToken();
     assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
@@ -128,7 +127,7 @@ class LexerTest {
     for (String input : inputs) {
       Lexer l = new Lexer(input);
       Token is = l.getToken();
-      Token expected = new Token(TokenKind.IDENT, input.substring(0, input.length() - 1));
+      Token expected = new Token(TokenKind.IDENT, input.substring(0, input.length() - 1),0,0);
       assertTrue(expected.equals(is), String.format("Expected: %s but is %s", expected, is));
     }
   }
@@ -137,11 +136,11 @@ class LexerTest {
   public void testVaraibleAssignment() throws LexerError {
     String input = "int testInt = 123;";
     Token[] expected = new Token[] {
-        new Token(TokenKind.INT, "int"),
-        new Token(TokenKind.IDENT, "testInt"),
-        new Token(TokenKind.EQ, "="),
-        new Token(TokenKind.V_INT, "123"),
-        new Token(TokenKind.SEMICOLON, ";"),
+        new Token(TokenKind.INT, "int",0,0),
+        new Token(TokenKind.IDENT, "testInt",0,0),
+        new Token(TokenKind.EQ, "=",0,0),
+        new Token(TokenKind.V_INT, "123",0,0),
+        new Token(TokenKind.SEMICOLON, ";",0,0),
     };
     Lexer l = new Lexer(input);
     Token t = l.getToken();
@@ -160,32 +159,32 @@ class LexerTest {
   public void testIfBlock() throws LexerError {
     String input = "if( a == bc){\nint testInt= 1 2 3 ;\nint a=12 3 ;\nbool testBool =true;\n} else{}";
     Token[] expected = new Token[] {
-        new Token(TokenKind.IF, "if"),
-        new Token(TokenKind.OPEN_BRACKET, "("),
-        new Token(TokenKind.IDENT, "a"),
-        new Token(TokenKind.EQEQ, "=="),
-        new Token(TokenKind.IDENT, "bc"),
-        new Token(TokenKind.CLOSE_BRACKET, ")"),
-        new Token(TokenKind.OPEN_PARANTHESES, "{"),
-        new Token(TokenKind.INT, "int"),
-        new Token(TokenKind.IDENT, "testInt"),
-        new Token(TokenKind.EQ, "="),
-        new Token(TokenKind.V_INT, "123"),
-        new Token(TokenKind.SEMICOLON, ";"),
-        new Token(TokenKind.INT, "int"),
-        new Token(TokenKind.IDENT, "a"),
-        new Token(TokenKind.EQ, "="),
-        new Token(TokenKind.V_INT, "123"),
-        new Token(TokenKind.SEMICOLON, ";"),
-        new Token(TokenKind.BOOL, "bool"),
-        new Token(TokenKind.IDENT, "testBool"),
-        new Token(TokenKind.EQ, "="),
-        new Token(TokenKind.V_BOOL, "true"),
-        new Token(TokenKind.SEMICOLON, ";"),
-        new Token(TokenKind.CLOSE_PARANTHESES, "}"),
-        new Token(TokenKind.ELSE, "else"),
-        new Token(TokenKind.OPEN_PARANTHESES, "{"),
-        new Token(TokenKind.CLOSE_PARANTHESES, "}"),
+        new Token(TokenKind.IF, "if",0,0),
+        new Token(TokenKind.OPEN_BRACKET, "(",0,0),
+        new Token(TokenKind.IDENT, "a",0,0),
+        new Token(TokenKind.EQEQ, "==",0,0),
+        new Token(TokenKind.IDENT, "bc",0,0),
+        new Token(TokenKind.CLOSE_BRACKET, ")",0,0),
+        new Token(TokenKind.OPEN_PARANTHESES, "{",0,0),
+        new Token(TokenKind.INT, "int",0,0),
+        new Token(TokenKind.IDENT, "testInt",0,0),
+        new Token(TokenKind.EQ, "=",0,0),
+        new Token(TokenKind.V_INT, "123",0,0),
+        new Token(TokenKind.SEMICOLON, ";",0,0),
+        new Token(TokenKind.INT, "int",0,0),
+        new Token(TokenKind.IDENT, "a",0,0),
+        new Token(TokenKind.EQ, "=",0,0),
+        new Token(TokenKind.V_INT, "123",0,0),
+        new Token(TokenKind.SEMICOLON, ";",0,0),
+        new Token(TokenKind.BOOL, "bool",0,0),
+        new Token(TokenKind.IDENT, "testBool",0,0),
+        new Token(TokenKind.EQ, "=",0,0),
+        new Token(TokenKind.V_BOOL, "true",0,0),
+        new Token(TokenKind.SEMICOLON, ";",0,0),
+        new Token(TokenKind.CLOSE_PARANTHESES, "}",0,0),
+        new Token(TokenKind.ELSE, "else",0,0),
+        new Token(TokenKind.OPEN_PARANTHESES, "{",0,0),
+        new Token(TokenKind.CLOSE_PARANTHESES, "}",0,0),
     };
     Lexer l = new Lexer(input);
     Token t = l.getToken();
@@ -204,12 +203,12 @@ class LexerTest {
   public void testWhileLoop() throws LexerError {
     String input = "while(true){}";
     Token[] expected = new Token[] {
-        new Token(TokenKind.WHILE, "while"),
-        new Token(TokenKind.OPEN_BRACKET, "("),
-        new Token(TokenKind.V_BOOL, "true"),
-        new Token(TokenKind.CLOSE_BRACKET, ")"),
-        new Token(TokenKind.OPEN_PARANTHESES, "{"),
-        new Token(TokenKind.CLOSE_PARANTHESES, "}"),
+        new Token(TokenKind.WHILE, "while",0,0),
+        new Token(TokenKind.OPEN_BRACKET, "(",0,0),
+        new Token(TokenKind.V_BOOL, "true",0,0),
+        new Token(TokenKind.CLOSE_BRACKET, ")",0,0),
+        new Token(TokenKind.OPEN_PARANTHESES, "{",0,0),
+        new Token(TokenKind.CLOSE_PARANTHESES, "}",0,0),
     };
     Lexer l = new Lexer(input);
     Token t = l.getToken();

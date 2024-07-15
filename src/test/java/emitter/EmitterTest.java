@@ -38,7 +38,7 @@ public class EmitterTest {
         """; // */
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());
-    ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+    ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, "", 0, 0));
     p.program(pt);
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
 
@@ -74,7 +74,7 @@ public class EmitterTest {
           """; // */
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());
-    ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+    ParseTree pt = new ParseTree();
     p.program(pt);
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
     AbstractSyntaxTree ast = astf.fromParseTree(pt);
@@ -93,7 +93,7 @@ public class EmitterTest {
         """; // */
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());
-    ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+    ParseTree pt = new ParseTree();
     p.program(pt);
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
 
@@ -121,7 +121,7 @@ public class EmitterTest {
         """; // */
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());
-    ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+    ParseTree pt = new ParseTree();
     p.program(pt);
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
 
@@ -144,7 +144,7 @@ public class EmitterTest {
         """; // */
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());
-    ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+    ParseTree pt = new ParseTree();
     p.program(pt);
     AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
 
@@ -166,7 +166,7 @@ public class EmitterTest {
     Parser p;
     try {
       p = new Parser(l.genTokens());
-      ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+      ParseTree pt = new ParseTree();
       p.program(pt);
       AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
       AbstractSyntaxTree ast = astf.fromParseTree(pt);
@@ -222,7 +222,7 @@ public class EmitterTest {
     Parser p;
     try {
       p = new Parser(l.genTokens());
-      ParseTree pt = new ParseTree(new Token(TokenKind.PROGRAM, ""));
+      ParseTree pt = new ParseTree();
       p.program(pt);
       AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
       AbstractSyntaxTree ast = astf.fromParseTree(pt);

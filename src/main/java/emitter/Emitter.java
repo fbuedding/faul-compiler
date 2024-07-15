@@ -14,11 +14,6 @@ import types.Types;
 
 /**
  * Emmiter
- * TODO it may be clever to give evaluating functions (like expression) the
- * register to store the temp, resulting in less moves
- *
- * Actually this should only be done if it'S a variable other wise to much temp
- * regs are used
  */
 public class Emitter {
   public class Memory {
@@ -392,8 +387,7 @@ public class Emitter {
     String ident = ast.getChild(AstNodeKinds.IDENT).value;
     AbstractSyntaxTree secondChild = ast.getChild(1);
     int address = sTable.getAddress(ident);
-    // TODO make this an error
-    String reg = "MISSING REG";
+    String reg;
     // Special case, if the second child is a value we don't need a temporary reg
     if (isVal(secondChild)) {
       reg = loadVar(address);

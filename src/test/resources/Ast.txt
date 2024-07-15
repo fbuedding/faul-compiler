@@ -1,35 +1,35 @@
 PROGRAM, Type: T: VOID; rT: null,  Position: 0:0
-├── IF, Type: T: VOID; rT: VOID,  Position: 0:0
-│   ├── CONDITION, Type: T: BOOLEAN; rT: VOID,  Position: 0:0
+├── IF, Type: T: VOID; rT: VOID,  Position: 1:1
+│   ├── CONDITION, Type: T: BOOLEAN; rT: VOID,  Position: 1:4
 │   │   └── BOOLEAN: true, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 1:4
-│   ├── BRANCH, Type: T: VOID; rT: VOID,  Position: 0:0
-│   └── BRANCH, Type: T: VOID; rT: VOID,  Position: 0:0
-│       ├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+│   ├── BRANCH, Type: T: VOID; rT: VOID,  Position: 1:1
+│   └── BRANCH, Type: T: VOID; rT: VOID,  Position: 1:1
+│       ├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 4:3
 │       │   ├── IDENT: a, Type: T: VAR; rT: INTEGER,  Position: 4:7
 │       │   └── ADDRESS: 4, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 4:7
-│       └── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 0:0
+│       └── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 4:11
 │           ├── IDENT: a, Type: T: VAR; rT: INTEGER,  Position: 4:7
 │           └── INTEGER: 0, Type: T: INTEGER; rT: INTEGER,  Position: 4:11
-├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 6:1
 │   ├── IDENT: a, Type: T: VAR; rT: INTEGER,  Position: 6:5
 │   └── ADDRESS: 4, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 6:5
-├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 0:0
+├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 6:9
 │   ├── IDENT: a, Type: T: VAR; rT: INTEGER,  Position: 6:5
 │   └── PLUS, Type: T: INTEGER; rT: INTEGER,  Position: 6:12
 │       ├── NEG, Type: T: INTEGER; rT: INTEGER,  Position: 6:9
 │       │   └── INTEGER: 3, Type: T: INTEGER; rT: INTEGER,  Position: 6:10
 │       └── INTEGER: 5, Type: T: INTEGER; rT: INTEGER,  Position: 6:14
-├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 7:1
 │   ├── IDENT: b, Type: T: VAR; rT: BOOLEAN,  Position: 7:6
 │   └── ADDRESS: 5, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 7:6
-├── ASSIGNMENT, Type: T: BOOLEAN; rT: VOID,  Position: 0:0
+├── ASSIGNMENT, Type: T: BOOLEAN; rT: VOID,  Position: 7:10
 │   ├── IDENT: b, Type: T: VAR; rT: BOOLEAN,  Position: 7:6
 │   └── NOT, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 7:10
 │       └── BOOLEAN: true, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 7:11
-├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 8:1
 │   ├── IDENT: c, Type: T: VAR; rT: INTEGER,  Position: 8:5
 │   └── ADDRESS: 6, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 8:5
-├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 0:0
+├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 8:9
 │   ├── IDENT: c, Type: T: VAR; rT: INTEGER,  Position: 8:5
 │   └── MUL, Type: T: INTEGER; rT: INTEGER,  Position: 8:11
 │       ├── INTEGER: 5, Type: T: INTEGER; rT: INTEGER,  Position: 8:9
@@ -38,18 +38,18 @@ PROGRAM, Type: T: VOID; rT: null,  Position: 0:0
 │           └── MUL, Type: T: INTEGER; rT: INTEGER,  Position: 8:21
 │               ├── INTEGER: 6, Type: T: INTEGER; rT: INTEGER,  Position: 8:19
 │               └── INTEGER: 3, Type: T: INTEGER; rT: INTEGER,  Position: 8:23
-├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 9:1
 │   ├── IDENT: e, Type: T: VAR; rT: BOOLEAN,  Position: 9:6
 │   └── ADDRESS: 7, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 9:6
-├── ASSIGNMENT, Type: T: BOOLEAN; rT: VOID,  Position: 0:0
+├── ASSIGNMENT, Type: T: BOOLEAN; rT: VOID,  Position: 9:10
 │   ├── IDENT: e, Type: T: VAR; rT: BOOLEAN,  Position: 9:6
 │   └── LAND, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 9:15
 │       ├── BOOLEAN: true, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 9:10
 │       └── BOOLEAN: false, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 9:18
-├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 10:1
 │   ├── IDENT: g, Type: T: VAR; rT: BOOLEAN,  Position: 10:6
 │   └── ADDRESS: 8, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 10:6
-├── ASSIGNMENT, Type: T: BOOLEAN; rT: VOID,  Position: 0:0
+├── ASSIGNMENT, Type: T: BOOLEAN; rT: VOID,  Position: 10:10
 │   ├── IDENT: g, Type: T: VAR; rT: BOOLEAN,  Position: 10:6
 │   └── EQEQ, Type: T: INTEGER; rT: BOOLEAN,  Position: 10:12
 │       ├── INTEGER: 5, Type: T: INTEGER; rT: INTEGER,  Position: 10:10
@@ -58,64 +58,64 @@ PROGRAM, Type: T: VOID; rT: null,  Position: 0:0
 │           └── MUL, Type: T: INTEGER; rT: INTEGER,  Position: 10:20
 │               ├── INTEGER: 5, Type: T: INTEGER; rT: INTEGER,  Position: 10:19
 │               └── INTEGER: 3, Type: T: INTEGER; rT: INTEGER,  Position: 10:21
-├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 11:1
 │   ├── IDENT: z, Type: T: VAR; rT: BOOLEAN,  Position: 11:6
 │   └── ADDRESS: 9, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 11:6
-├── ASSIGNMENT, Type: T: BOOLEAN; rT: VOID,  Position: 0:0
+├── ASSIGNMENT, Type: T: BOOLEAN; rT: VOID,  Position: 11:10
 │   ├── IDENT: z, Type: T: VAR; rT: BOOLEAN,  Position: 11:6
 │   └── GTEQ, Type: T: INTEGER; rT: BOOLEAN,  Position: 11:12
 │       ├── INTEGER: 4, Type: T: INTEGER; rT: INTEGER,  Position: 11:10
 │       └── MUL, Type: T: INTEGER; rT: INTEGER,  Position: 11:16
 │           ├── INTEGER: 5, Type: T: INTEGER; rT: INTEGER,  Position: 11:15
 │           └── INTEGER: 6, Type: T: INTEGER; rT: INTEGER,  Position: 11:17
-├── IF, Type: T: VOID; rT: VOID,  Position: 0:0
-│   ├── CONDITION, Type: T: BOOLEAN; rT: VOID,  Position: 0:0
+├── IF, Type: T: VOID; rT: VOID,  Position: 12:1
+│   ├── CONDITION, Type: T: BOOLEAN; rT: VOID,  Position: 12:4
 │   │   └── LAND, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 12:6
 │   │       ├── IDENT: g, Type: T: VAR; rT: BOOLEAN,  Position: 12:4
 │   │       └── BOOLEAN: true, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 12:9
-│   └── BRANCH, Type: T: VOID; rT: VOID,  Position: 0:0
-│       ├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+│   └── BRANCH, Type: T: VOID; rT: VOID,  Position: 12:1
+│       ├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 13:3
 │       │   ├── IDENT: d, Type: T: VAR; rT: INTEGER,  Position: 13:7
 │       │   └── ADDRESS: 10, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 13:7
-│       ├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 0:0
+│       ├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 13:11
 │       │   ├── IDENT: d, Type: T: VAR; rT: INTEGER,  Position: 13:7
 │       │   └── INTEGER: 6, Type: T: INTEGER; rT: INTEGER,  Position: 13:11
-│       ├── IF, Type: T: VOID; rT: VOID,  Position: 0:0
-│       │   ├── CONDITION, Type: T: BOOLEAN; rT: VOID,  Position: 0:0
+│       ├── IF, Type: T: VOID; rT: VOID,  Position: 14:3
+│       │   ├── CONDITION, Type: T: BOOLEAN; rT: VOID,  Position: 14:6
 │       │   │   └── BOOLEAN: true, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 14:6
-│       │   ├── BRANCH, Type: T: VOID; rT: VOID,  Position: 0:0
-│       │   │   ├── ASSIGNMENT, Type: T: BOOLEAN; rT: VOID,  Position: 0:0
+│       │   ├── BRANCH, Type: T: VOID; rT: VOID,  Position: 14:3
+│       │   │   ├── ASSIGNMENT, Type: T: BOOLEAN; rT: VOID,  Position: 15:5
 │       │   │   │   ├── IDENT: z, Type: T: VAR; rT: BOOLEAN,  Position: 15:5
 │       │   │   │   └── GTEQ, Type: T: INTEGER; rT: BOOLEAN,  Position: 15:11
 │       │   │   │       ├── INTEGER: 4, Type: T: INTEGER; rT: INTEGER,  Position: 15:9
 │       │   │   │       └── MUL, Type: T: INTEGER; rT: INTEGER,  Position: 15:15
 │       │   │   │           ├── INTEGER: 5, Type: T: INTEGER; rT: INTEGER,  Position: 15:14
 │       │   │   │           └── INTEGER: 6, Type: T: INTEGER; rT: INTEGER,  Position: 15:16
-│       │   │   ├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+│       │   │   ├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 16:5
 │       │   │   │   ├── IDENT: asd, Type: T: VAR; rT: INTEGER,  Position: 16:9
 │       │   │   │   └── ADDRESS: 11, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 16:9
-│       │   │   └── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 0:0
+│       │   │   └── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 16:15
 │       │   │       ├── IDENT: asd, Type: T: VAR; rT: INTEGER,  Position: 16:9
 │       │   │       └── INTEGER: 5, Type: T: INTEGER; rT: INTEGER,  Position: 16:15
-│       │   └── BRANCH, Type: T: VOID; rT: VOID,  Position: 0:0
-│       │       ├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+│       │   └── BRANCH, Type: T: VOID; rT: VOID,  Position: 14:3
+│       │       ├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 19:5
 │       │       │   ├── IDENT: paul, Type: T: VAR; rT: INTEGER,  Position: 19:9
 │       │       │   └── ADDRESS: 11, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 19:9
-│       │       ├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 0:0
+│       │       ├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 19:16
 │       │       │   ├── IDENT: paul, Type: T: VAR; rT: INTEGER,  Position: 19:9
 │       │       │   └── INTEGER: 0, Type: T: INTEGER; rT: INTEGER,  Position: 19:16
-│       │       └── WHILE, Type: T: VOID; rT: VOID,  Position: 0:0
-│       │           ├── CONDITION, Type: T: BOOLEAN; rT: VOID,  Position: 0:0
+│       │       └── WHILE, Type: T: VOID; rT: VOID,  Position: 20:5
+│       │           ├── CONDITION, Type: T: BOOLEAN; rT: VOID,  Position: 20:11
 │       │           │   └── BOOLEAN: true, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 20:11
-│       │           └── BRANCH, Type: T: VOID; rT: VOID,  Position: 0:0
-│       │               ├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+│       │           └── BRANCH, Type: T: VOID; rT: VOID,  Position: 20:5
+│       │               ├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 21:7
 │       │               │   ├── IDENT: fabian, Type: T: VAR; rT: INTEGER,  Position: 21:11
 │       │               │   └── ADDRESS: 12, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 21:11
-│       │               └── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 0:0
+│       │               └── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 21:20
 │       │                   ├── IDENT: fabian, Type: T: VAR; rT: INTEGER,  Position: 21:11
 │       │                   └── INTEGER: 0, Type: T: INTEGER; rT: INTEGER,  Position: 21:20
-│       └── IF, Type: T: VOID; rT: VOID,  Position: 0:0
-│           ├── CONDITION, Type: T: BOOLEAN; rT: VOID,  Position: 0:0
+│       └── IF, Type: T: VOID; rT: VOID,  Position: 24:3
+│           ├── CONDITION, Type: T: BOOLEAN; rT: VOID,  Position: 24:6
 │           │   └── LOR, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 24:23
 │           │       ├── LAND, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 24:13
 │           │       │   ├── BOOLEAN: false, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 24:7
@@ -123,33 +123,33 @@ PROGRAM, Type: T: VOID; rT: null,  Position: 0:0
 │           │       └── LOR, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 24:32
 │           │           ├── BOOLEAN: true, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 24:27
 │           │           └── BOOLEAN: false, Type: T: BOOLEAN; rT: BOOLEAN,  Position: 24:35
-│           └── BRANCH, Type: T: VOID; rT: VOID,  Position: 0:0
-│               ├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+│           └── BRANCH, Type: T: VOID; rT: VOID,  Position: 24:3
+│               ├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 25:5
 │               │   ├── IDENT: asd, Type: T: VAR; rT: INTEGER,  Position: 25:9
 │               │   └── ADDRESS: 11, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 25:9
-│               └── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 0:0
+│               └── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 25:15
 │                   ├── IDENT: asd, Type: T: VAR; rT: INTEGER,  Position: 25:9
 │                   └── INTEGER: 0, Type: T: INTEGER; rT: INTEGER,  Position: 25:15
-├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 28:1
 │   ├── IDENT: d, Type: T: VAR; rT: INTEGER,  Position: 28:5
 │   └── ADDRESS: 10, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 28:5
-├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 0:0
+├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 28:9
 │   ├── IDENT: d, Type: T: VAR; rT: INTEGER,  Position: 28:5
 │   └── MOD, Type: T: INTEGER; rT: INTEGER,  Position: 28:11
 │       ├── INTEGER: 5, Type: T: INTEGER; rT: INTEGER,  Position: 28:9
 │       └── INTEGER: 3, Type: T: INTEGER; rT: INTEGER,  Position: 28:13
-├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 29:1
 │   ├── IDENT: and, Type: T: VAR; rT: INTEGER,  Position: 29:5
 │   └── ADDRESS: 11, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 29:5
-├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 0:0
+├── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 29:11
 │   ├── IDENT: and, Type: T: VAR; rT: INTEGER,  Position: 29:5
 │   └── AND, Type: T: INTEGER; rT: INTEGER,  Position: 29:13
 │       ├── INTEGER: 5, Type: T: INTEGER; rT: INTEGER,  Position: 29:11
 │       └── INTEGER: 5, Type: T: INTEGER; rT: INTEGER,  Position: 29:15
-├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 0:0
+├── DECLARATION, Type: T: VOID; rT: VOID,  Position: 30:1
 │   ├── IDENT: z1, Type: T: VAR; rT: INTEGER,  Position: 30:5
 │   └── ADDRESS: 12, Type: T: MEMORY_ADDRESS; rT: MEMORY_ADDRESS,  Position: 30:5
-└── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 0:0
+└── ASSIGNMENT, Type: T: INTEGER; rT: VOID,  Position: 30:10
     ├── IDENT: z1, Type: T: VAR; rT: INTEGER,  Position: 30:5
     └── NOT, Type: T: INTEGER; rT: INTEGER,  Position: 30:10
         └── MINUS, Type: T: INTEGER; rT: INTEGER,  Position: 30:13

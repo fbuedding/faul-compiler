@@ -3,13 +3,17 @@ package parser;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import ast.AstNodeKinds;
 import lexer.Token;
 import lexer.TokenKind;
 
 public class ParseTree {
   public Token token;
   LinkedList<ParseTree> childNodes;
+
+  public ParseTree() {
+    childNodes = new LinkedList<ParseTree>();
+    this.token = new Token(TokenKind.PROGRAM, "", 0, 0);
+  }
 
   public ParseTree(Token t) {
     childNodes = new LinkedList<ParseTree>();
