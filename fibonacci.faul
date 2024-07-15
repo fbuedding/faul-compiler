@@ -1,0 +1,15 @@
+int n = readI();
+if(n<=1) {
+  print(n);
+  exit();
+}
+int fib = t;
+int prevFib = 1;
+int i = 2;
+while(i<n){
+  int tmp = fib;
+  fib = fib + prevFib;
+  prevFib = tmp;
+  i = i + 1;
+}
+print(fib);
