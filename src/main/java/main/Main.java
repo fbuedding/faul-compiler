@@ -12,12 +12,9 @@ import error.CompileError;
 import file.Reader;
 import file.Writer;
 import lexer.Lexer;
-import lexer.LexerError;
 import parser.ParseTree;
 import parser.Parser;
 
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
 public class Main {
   public static void main(String[] args) throws IOException {
     Options opts = new Options();
@@ -31,6 +28,7 @@ public class Main {
       if (line.hasOption("h")) {
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("faul-compiler <file> [options]", opts);
+        System.exit(0);
       } else {
         if (line.getArgs().length == 0) {
           System.err.println("No file to compile provided");
@@ -47,6 +45,7 @@ public class Main {
               fileName = fileNameSplitted[0];
             }
           }
+          System.out.println("Compiling....");
           String code = Reader.readFile(file);
           Lexer l = new Lexer(code);
           try {
@@ -62,9 +61,13 @@ public class Main {
             String f = fileName + ".asm";
             Writer.write(f, emitter.getCode().toString());
             if (line.hasOption("d")) {
+              System.out.println("Writing parse and abstract syntax tree...");
               Writer.write(fileName + "_parse_tree.txt", pt.toString());
               Writer.write(fileName + "_abstract_syntax_tree.txt", ast.toString());
+              System.out.println("Parse and abstract syntax tree written");
             }
+            System.out.println("Compiled to " + f);
+            System.exit(0);
           } catch (CompileError e) {
             System.err.println(e.getMessage());
             System.err.println();
@@ -81,16 +84,12 @@ public class Main {
                 s += "^";
                 System.err.println(s);
               }
-
             }
             System.err.println("---------------------------");
             System.exit(1);
-
           }
         }
-
       }
-
     } catch (ParseException exp) {
       // oops, something went wrong
       System.err.println("Parsing failed.  Reason: " + exp.getMessage());
@@ -98,6 +97,8 @@ public class Main {
     } catch (FileNotFoundException e) {
       System.err.println("File not found");
       System.exit(1);
+    } finally {
+      System.exit(0);
     }
   }
 
