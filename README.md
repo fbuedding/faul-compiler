@@ -3,6 +3,7 @@
 
 <!--toc:start-->
 - [Faul-Lang compiler](#faul-lang-compiler)
+  - [Usage](#usage)
   - [Aufbau](#aufbau)
     - [Vision](#vision)
   - [Sprache](#sprache)
@@ -31,6 +32,15 @@
 <!--toc:end-->
 
 Ein kleiner compiler, der faul-lang in mips assembler übersetzt.
+
+## Usage
+```bash
+faul-compiler -h
+usage: faul-compiler <file> [options]
+ -d,--debug       Create parse tree and abstract sytntax tree
+ -h,--help        print this message
+ -o,--out <arg>   Output file
+```
 
 ## Aufbau
 ### Vision

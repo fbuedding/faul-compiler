@@ -3,7 +3,7 @@ if(n<=1) {
   print(n);
   exit();
 }
-int fib = t;
+int fib = 1;
 int prevFib = 1;
 int i = 2;
 while(i<n){
