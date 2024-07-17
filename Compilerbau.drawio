@@ -1,88 +1,53 @@
-<mxfile host="app.diagrams.net" modified="2024-07-17T18:20:57.864Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="9YSxCOCWJhRW9qW6Llkf" version="23.0.1" type="github">
+<mxfile host="app.diagrams.net" modified="2024-07-17T18:21:20.215Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="stssvIOSGfEyPFw3jAEe" version="23.0.1" type="github">
   <diagram name="Seite-1" id="4pNDl0hfz-k5kMD19SHL">
-    <mxGraphModel dx="1710" dy="2456" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2034" dy="2077" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="sM32byZcdiO2ZuC8N_kb-4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;noEdgeStyle=1;orthogonal=1;" edge="1" parent="1" source="sM32byZcdiO2ZuC8N_kb-2" target="sM32byZcdiO2ZuC8N_kb-3">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="112" y="30" />
-              <mxPoint x="188" y="30" />
-            </Array>
-          </mxGeometry>
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="sM32byZcdiO2ZuC8N_kb-2" value="Start" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry width="100" height="60" as="geometry" />
         </mxCell>
         <mxCell id="sM32byZcdiO2ZuC8N_kb-18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;noEdgeStyle=1;orthogonal=1;" edge="1" parent="1" source="sM32byZcdiO2ZuC8N_kb-3" target="sM32byZcdiO2ZuC8N_kb-5">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="312" y="30" />
-              <mxPoint x="388" y="30" />
-            </Array>
-          </mxGeometry>
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="sM32byZcdiO2ZuC8N_kb-3" value="Lese Code ein" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="200" y="5" width="100" height="50" as="geometry" />
+          <mxGeometry x="150" y="5" width="100" height="50" as="geometry" />
         </mxCell>
         <mxCell id="sM32byZcdiO2ZuC8N_kb-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;noEdgeStyle=1;orthogonal=1;" edge="1" parent="1" source="sM32byZcdiO2ZuC8N_kb-5" target="sM32byZcdiO2ZuC8N_kb-8">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="512" y="30" />
-              <mxPoint x="588" y="30" />
-            </Array>
-          </mxGeometry>
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="sM32byZcdiO2ZuC8N_kb-5" value="Geniere Tokens" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="400" y="5" width="100" height="50" as="geometry" />
+          <mxGeometry x="300" y="5" width="100" height="50" as="geometry" />
         </mxCell>
         <mxCell id="sM32byZcdiO2ZuC8N_kb-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;noEdgeStyle=1;orthogonal=1;" edge="1" parent="1" source="sM32byZcdiO2ZuC8N_kb-8" target="sM32byZcdiO2ZuC8N_kb-10">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="712" y="30" />
-              <mxPoint x="788" y="30" />
-            </Array>
-          </mxGeometry>
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="sM32byZcdiO2ZuC8N_kb-8" value="Parse Token" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="600" y="5" width="100" height="50" as="geometry" />
+          <mxGeometry x="450" y="5" width="100" height="50" as="geometry" />
         </mxCell>
         <mxCell id="sM32byZcdiO2ZuC8N_kb-13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;noEdgeStyle=1;orthogonal=1;" edge="1" parent="1" source="sM32byZcdiO2ZuC8N_kb-10" target="sM32byZcdiO2ZuC8N_kb-12">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="912" y="30" />
-              <mxPoint x="988" y="30" />
-            </Array>
-          </mxGeometry>
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="sM32byZcdiO2ZuC8N_kb-10" value="Baue&lt;br&gt;AST" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="800" y="5" width="100" height="50" as="geometry" />
+          <mxGeometry x="600" y="5" width="100" height="50" as="geometry" />
         </mxCell>
         <mxCell id="sM32byZcdiO2ZuC8N_kb-15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;noEdgeStyle=1;orthogonal=1;" edge="1" parent="1" source="sM32byZcdiO2ZuC8N_kb-12" target="sM32byZcdiO2ZuC8N_kb-14">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1112" y="30" />
-              <mxPoint x="1188" y="30" />
-            </Array>
-          </mxGeometry>
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="sM32byZcdiO2ZuC8N_kb-12" value="Überprüfe&lt;br&gt;Typen" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="1000" y="5" width="100" height="50" as="geometry" />
+          <mxGeometry x="750" y="5" width="100" height="50" as="geometry" />
         </mxCell>
         <mxCell id="sM32byZcdiO2ZuC8N_kb-17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;noEdgeStyle=1;orthogonal=1;" edge="1" parent="1" source="sM32byZcdiO2ZuC8N_kb-14" target="sM32byZcdiO2ZuC8N_kb-16">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1312" y="30" />
-              <mxPoint x="1388" y="30" />
-            </Array>
-          </mxGeometry>
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="sM32byZcdiO2ZuC8N_kb-14" value="Generiere&amp;nbsp;&lt;br&gt;Assembler" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="1200" y="5" width="100" height="50" as="geometry" />
+          <mxGeometry x="900" y="5" width="100" height="50" as="geometry" />
         </mxCell>
         <mxCell id="sM32byZcdiO2ZuC8N_kb-16" value="Ende" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="1400" width="100" height="60" as="geometry" />
+          <mxGeometry x="1050" width="100" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
