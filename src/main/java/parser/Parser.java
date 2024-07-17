@@ -155,6 +155,9 @@ public class Parser {
         }
         matchToken(TokenKind.SEMICOLON, st);
         break;
+      case SEMICOLON:
+        matchToken(TokenKind.SEMICOLON);
+        break;
       default:
         throw new SyntaxError(currentToken(), expected);
     }

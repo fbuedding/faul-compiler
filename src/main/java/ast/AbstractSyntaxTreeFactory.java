@@ -398,6 +398,10 @@ public class AbstractSyntaxTreeFactory {
   }
 
   private void statement(ParseTree pt, AbstractSyntaxTree ast, SymbolTable sTable) throws CompileError {
+    if (pt.getChildCount() == 0) {
+      return;
+      
+    }
     TokenKind tk = pt.getChild(STATEMENT_TYPE).getKind();
     switch (tk) {
       case IF:

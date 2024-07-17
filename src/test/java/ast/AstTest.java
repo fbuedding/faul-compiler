@@ -27,7 +27,7 @@ public class AstTest {
         } else {
           int a = 0;
         }
-        int a = -3 + 5;
+        int a = -3 + 5;;;;;
         bool b = !true;
         int c = 5 * ( 5 + 6 * 3);
         bool e = true && false;

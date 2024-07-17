@@ -19,6 +19,10 @@ PROGRAM
 │   │                               └── V_INT: 5
 │   └── SEMICOLON: ;
 ├── STATEMENT
+├── STATEMENT
+├── STATEMENT
+├── STATEMENT
+├── STATEMENT
 │   ├── INT: int
 │   ├── IDENT: b
 │   ├── EQ: =

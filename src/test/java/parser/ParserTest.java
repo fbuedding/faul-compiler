@@ -14,7 +14,7 @@ public class ParserTest {
   @Test
   public void shouldNotError() {
     String i = """
-        int a = 3 + 5;
+        int a = 3 + 5;;;;;
         int b = a - 6;
         int c = 5 * ( 5 + 6 * 3);
         bool g = 5 <= -5;

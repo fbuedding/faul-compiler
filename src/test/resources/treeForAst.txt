@@ -51,6 +51,10 @@ PROGRAM
 │   │                               └── V_INT: 5
 │   └── SEMICOLON: ;
 ├── STATEMENT
+├── STATEMENT
+├── STATEMENT
+├── STATEMENT
+├── STATEMENT
 │   ├── BOOL: bool
 │   ├── IDENT: b
 │   ├── EQ: =

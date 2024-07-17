@@ -206,7 +206,7 @@ public class IntegrationTest {
   public void fibonacci(String input, String expected)
       throws IOException, CompileError, InterruptedException {
     String code = """
-        int n = readI();
+        int n = readI();;;;;;
         if(n<=1) {
           print(n);
           exit();
