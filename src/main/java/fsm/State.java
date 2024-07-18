@@ -24,7 +24,7 @@ public class State<T> {
     }
   }
 
-  private Vector<Transition<T>> transitions;
+  private final Vector<Transition<T>> transitions;
 
   private State(Vector<Transition<T>> transitions) {
     this.transitions = transitions;

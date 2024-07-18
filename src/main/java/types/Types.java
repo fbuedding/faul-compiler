@@ -8,6 +8,6 @@ public enum Types {
   TYPE,
   VAR,
   UNKNOWN,
-  FUNCTION;
+  FUNCTION
 }
 

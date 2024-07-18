@@ -58,10 +58,9 @@ public class Type {
     if (obj == this) {
       return true;
     }
-    if (!(obj instanceof Type)) {
+    if (!(obj instanceof Type that)) {
       return false;
     }
-    Type that = (Type) obj;
     return this.type == that.type;
   }
 

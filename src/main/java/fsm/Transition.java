@@ -2,8 +2,8 @@ package fsm;
 
 
 public class Transition<T> {
-  private T[] conditions;
-  private int pointer;
+  private final T[] conditions;
+  private final int pointer;
 
   public Transition(T[] conditions, int pointer) {
     this.conditions = conditions;

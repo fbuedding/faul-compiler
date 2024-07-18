@@ -3,9 +3,9 @@ package parser;
 public  final class Constants {
 
   private Constants() {
-  };
+  }
 
-  // Statements
+    // Statements
   public static final int STATEMENT_TYPE = 0;
   // If
   public static final int IF_EXPRESSION = 2;

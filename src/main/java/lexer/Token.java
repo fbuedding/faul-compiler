@@ -36,9 +36,8 @@ public class Token {
   public boolean equals(Object obj) {
     if (obj == this)
       return true;
-    if (!(obj instanceof Token))
+    if (!(obj instanceof Token t))
       return false;
-    Token t = (Token) obj;
     return t.lexem.equals(this.lexem) && t.kind == this.kind;
   }
 

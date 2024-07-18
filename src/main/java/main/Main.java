@@ -73,7 +73,7 @@ public class Main {
             System.err.println();
 
             System.err.println("---------------------------");
-            String lines[] = code.split("\n");
+            String[] lines = code.split("\n");
             for (int i = Math.max(0, e.line - 2); i < Math.min(e.line + 1, lines.length); i++) {
               System.err.println(lines[i]);
               if (i == e.line - 1) {
@@ -96,6 +96,9 @@ public class Main {
       System.exit(1);
     } catch (FileNotFoundException e) {
       System.err.println("File not found");
+      System.exit(1);
+    } catch (Exception e) {
+      System.err.println("Unexpected error :(");
       System.exit(1);
     } finally {
       System.exit(0);

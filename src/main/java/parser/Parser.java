@@ -7,7 +7,7 @@ import lexer.TokenKind;
  * 
  */
 public class Parser {
-  private Token[] tokens;
+  private final Token[] tokens;
   private int currentToken = 0;
   private int nextToken = 1;
 
@@ -161,7 +161,6 @@ public class Parser {
       default:
         throw new SyntaxError(currentToken(), expected);
     }
-    return;
   }
 
   /**

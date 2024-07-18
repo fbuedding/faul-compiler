@@ -27,7 +27,7 @@ public class Emitter {
 
     public final String label;
 
-    private Register(String label) {
+    Register(String label) {
       this.label = label;
     }
   }

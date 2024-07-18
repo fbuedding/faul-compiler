@@ -8,15 +8,15 @@ import fsm.*;
 public class Lexer {
 
   public static final String WORD_START = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
-  private char[] input;
+  private final char[] input;
   private char currentCharacter;
 
   private int currentPosition = -1;
 
   private int currentLine = 1;
   private int currentLinePosition = 0;
-  private Fsm<Character> intFsm;
-  private Fsm<Character> wordFsm;
+  private final Fsm<Character> intFsm;
+  private final Fsm<Character> wordFsm;
 
   public Lexer(String input) {
     this.input = (input + "\n").toCharArray();
@@ -38,9 +38,9 @@ public class Lexer {
     }
     tokens.add(token);
     return Arrays.copyOf(tokens.toArray(), tokens.size(), Token[].class);
-  };
+  }
 
-  public Token getToken() throws LexerError {
+    public Token getToken() throws LexerError {
     Token t;
     if (currentCharacter == '+')
       t = new Token(TokenKind.PLUS, currentCharacter, currentLine, currentLinePosition);
@@ -185,7 +185,7 @@ public class Lexer {
         t.lexem = t.lexem.concat(String.valueOf(currentCharacter));
       }
     } catch (NoTransitionError e) {
-      throw new LexerError("Invalid character in int: <" + String.valueOf(currentCharacter) + ">",
+      throw new LexerError("Invalid character in int: <" + currentCharacter + ">",
           currentLine,
           currentLinePosition);
     } finally {
@@ -210,7 +210,7 @@ public class Lexer {
         wordFsm.nextState(lookAhead());
       }
     } catch (NoTransitionError e) {
-      throw new LexerError("Invalid character in identifier: <" + String.valueOf(currentCharacter) + ">", currentLine,
+      throw new LexerError("Invalid character in identifier: <" + currentCharacter + ">", currentLine,
           currentLinePosition);
     } finally {
       wordFsm.reset();

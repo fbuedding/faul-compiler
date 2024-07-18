@@ -10,8 +10,8 @@ import java.util.Vector;
 public class Fsm<T> {
   public static class Builder<T> {
     Vector<State<T>> states = new Vector<State<T>>();
-    private int startState;
-    private int endState;
+    private final int startState;
+    private final int endState;
 
     public Builder(int startState, int endState) {
       this.startState = startState;
@@ -28,10 +28,10 @@ public class Fsm<T> {
     }
   }
 
-  private Vector<State<T>> states;
+  private final Vector<State<T>> states;
   private int currentState;
-  private int startState;
-  private int endState;
+  private final int startState;
+  private final int endState;
 
   private Fsm(Vector<State<T>> states, int startState, int endState) {
     this.startState = startState;
