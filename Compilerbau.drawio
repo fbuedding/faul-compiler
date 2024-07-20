@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-07-20T12:13:29.033Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="2_0cS_D2IkhN7sNIMbSz" version="24.7.2" type="github">
+<mxfile host="app.diagrams.net" modified="2024-07-20T12:17:48.429Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="zf5YmdraOBxBwDi1yEk4" version="24.7.2" type="github">
   <diagram name="Seite-1" id="4pNDl0hfz-k5kMD19SHL">
-    <mxGraphModel dx="2034" dy="2077" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1449" dy="1637" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -205,21 +205,26 @@
             <mxPoint y="8" as="offset" />
           </mxGeometry>
         </mxCell>
+        <mxCell id="5los2MfnAyNkd7CFpWIw-43" value="Ja" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;" vertex="1" connectable="0" parent="5los2MfnAyNkd7CFpWIw-4">
+          <mxGeometry y="-2" relative="1" as="geometry">
+            <mxPoint x="53" y="58" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5los2MfnAyNkd7CFpWIw-47" value="Nein" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;" vertex="1" connectable="0" parent="5los2MfnAyNkd7CFpWIw-4">
+          <mxGeometry y="-2" relative="1" as="geometry">
+            <mxPoint x="123" y="8" as="offset" />
+          </mxGeometry>
+        </mxCell>
         <mxCell id="5los2MfnAyNkd7CFpWIw-6" value="Nein" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=none;" edge="1" source="5los2MfnAyNkd7CFpWIw-7" target="5los2MfnAyNkd7CFpWIw-36" parent="1">
-          <mxGeometry x="0.2" y="-15" relative="1" as="geometry">
+          <mxGeometry x="0.2221" y="-15" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="5los2MfnAyNkd7CFpWIw-7" value="Solange Token" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="135" y="680" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="5los2MfnAyNkd7CFpWIw-37" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="5los2MfnAyNkd7CFpWIw-12" target="5los2MfnAyNkd7CFpWIw-23">
+        <mxCell id="5los2MfnAyNkd7CFpWIw-37" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=none;" edge="1" parent="1" source="5los2MfnAyNkd7CFpWIw-12" target="5los2MfnAyNkd7CFpWIw-23">
           <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="5los2MfnAyNkd7CFpWIw-38" value="Nein" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="5los2MfnAyNkd7CFpWIw-37">
-          <mxGeometry x="-0.5995" y="-1" relative="1" as="geometry">
-            <mxPoint x="11" y="9" as="offset" />
-          </mxGeometry>
         </mxCell>
         <mxCell id="5los2MfnAyNkd7CFpWIw-40" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="5los2MfnAyNkd7CFpWIw-12" target="5los2MfnAyNkd7CFpWIw-39">
           <mxGeometry relative="1" as="geometry" />
