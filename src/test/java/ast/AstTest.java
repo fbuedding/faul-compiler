@@ -1,17 +1,24 @@
 package ast;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import emitter.Emitter;
 import error.CompileError;
 import lexer.Lexer;
 import lexer.Token;
 import lexer.TokenKind;
 import parser.ParseTree;
 import parser.Parser;
+import types.TypeError;
 
 /**
  * AstTest
@@ -94,6 +101,66 @@ public class AstTest {
       fail("Could not write file");
     }
 
+  }
+
+  @ParameterizedTest
+  @MethodSource("typeTestCases")
+  public void testTypeChecking(String input, boolean shouldError)
+      throws IOException, InterruptedException, CompileError {
+    Lexer l = new Lexer(input);
+    Parser p = new Parser(l.genTokens());
+    ParseTree pt = new ParseTree();
+    p.program(pt);
+    AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
+
+    try {
+      astf.fromParseTree(pt);
+    } catch (TypeError e) {
+      if (!shouldError) {
+        fail(e);
+      }
+    }
+
+  }
+
+  private static Stream<Arguments> typeTestCases() {
+    return Stream.of(
+        Arguments.of("""
+            int i = (5 - 3) * -4 / (2 - 4);
+            print(i);
+            """, false),
+        Arguments.of("""
+            int i = (5 - 3) * -4 / (2 - readI());
+            print(i);
+            """, false),
+        Arguments.of("""
+            bool i = (5 - 3) * -4 / (2 - !readI()) == 9 == !readB();
+            print(i);
+            """, false),
+        Arguments.of("""
+            bool i = (5 - 3) * -4 / (2 - 4) <= 0;
+            print(i);
+            """, false),
+        Arguments.of("""
+            int i = !true;
+            print(i);
+            """, true),
+        Arguments.of("""
+            int i = !1;
+            i();
+            """, true),
+        Arguments.of("""
+            int a = 7 == 8;
+            a = true == false;
+            int b = 7 != 8;
+            a = true != false;
+            """, true),
+        Arguments.of("""
+            bool a = 7 == 8;
+            a = true == false;
+            bool b = 7 != 8;
+            a = true != false;
+            """, false));
   }
 
 }

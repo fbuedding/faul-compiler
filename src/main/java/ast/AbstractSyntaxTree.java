@@ -52,18 +52,18 @@ public class AbstractSyntaxTree {
         break;
       }
       case UNKNOWN:
+        // ZumBeispiel bei <!> Operator der Fall
         if (hasChildren()) {
           for (AbstractSyntaxTree child : children) {
-            if (child.type.isRetUnknown()) {
-              child.checkTypes();
-            }
-            if (type.isUnknown()) {
-              type.inferType(child.type);
-            }
+            child.checkTypes();
+            // Set the type
+            type.inferType(child.type);
+            // For example the <==> and <!=> operator, they already have a rT, which is
+            // bool. Otherwise, if UNKNOWN set the rT
             if (type.isRetUnknown()) {
               type.setRetType(type);
             }
-            child.checkTypes();
+            // Check child types, slightly inefficant, since type may be checkt twice
 
           }
         }
@@ -72,20 +72,14 @@ public class AbstractSyntaxTree {
         break;
       default:
         for (AbstractSyntaxTree child : children) {
-          if (child.type.isRetUnknown()) {
-            child.checkTypes();
-            if (!type.checkType(child.type)) {
-              throw new TypeError(type, child.type, child.line, child.linePos);
-            }
-          } else {
-            
-            if (type.isRetUnknown() && type.getType() == Types.FUNCTION) {
-              type.setRetType(child.type.getType());
-            }
-            if (!type.checkType(child.type)) {
-              throw new TypeError(type, child.type, child.line, child.linePos);
-            }
-            child.checkTypes();
+          child.checkTypes();
+
+          // Special function case where only the Return Type is unknow, since the return type is encoded in the symbol 
+          if (type.isRetUnknown() && type.getType() == Types.FUNCTION) {
+            type.setRetType(child.type.getType());
+          }
+          if (!type.checkType(child.type)) {
+            throw new TypeError(type, child.type, child.line, child.linePos);
           }
 
         }

@@ -1,0 +1,295 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AbstractSyntaxTree</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">ast</a>
+</div>
+
+<h1>Coverage Summary for Class: AbstractSyntaxTree (ast)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstractSyntaxTree</td>
+<td class="coverageStat">
+  <span class="percent">
+    92,3%
+  </span>
+  <span class="absValue">
+    (12/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97%
+  </span>
+  <span class="absValue">
+    (65/67)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AbstractSyntaxTree$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    92,9%
+  </span>
+  <span class="absValue">
+    (13/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97,1%
+  </span>
+  <span class="absValue">
+    (66/68)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package ast;
+&nbsp;
+&nbsp;import java.util.Iterator;
+&nbsp;import java.util.LinkedList;
+&nbsp;
+&nbsp;import types.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * Abstract Syntax Tree a simplified and annotated version of the
+&nbsp; * {@link parser.ParseTree}
+&nbsp; */
+&nbsp;public class AbstractSyntaxTree {
+&nbsp;  public AstNodeKinds kind;
+&nbsp;  public Type type;
+&nbsp;  public LinkedList&lt;AbstractSyntaxTree&gt; children;
+&nbsp;
+&nbsp;  public int line;
+&nbsp;  public int linePos;
+&nbsp;
+<b class="fc">&nbsp;  public String value = null;</b>
+&nbsp;
+<b class="fc">&nbsp;  public AbstractSyntaxTree(AstNodeKinds k, Type type, int line, int linePos) {</b>
+<b class="fc">&nbsp;    this.kind = k;</b>
+<b class="fc">&nbsp;    this.type = type;</b>
+<b class="fc">&nbsp;    this.line = line;</b>
+<b class="fc">&nbsp;    this.linePos = linePos;</b>
+<b class="fc">&nbsp;    children = new LinkedList&lt;&gt;();</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  public LinkedList&lt;AbstractSyntaxTree&gt; getChildren() {
+<b class="nc">&nbsp;    return children;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  public int getChildrenCount() {
+<b class="fc">&nbsp;    return children.size();</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  public AstNodeKinds getKind() {
+<b class="fc">&nbsp;    return this.kind;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  public void checkTypes() throws TypeError {
+<b class="fc">&nbsp;    switch (type.getType()) {</b>
+&nbsp;      case MEMORY_ADDRESS:
+&nbsp;        // Do nothing should be a leaf
+&nbsp;        return;
+&nbsp;      case VOID: {
+<b class="fc">&nbsp;        for (AbstractSyntaxTree abstractSyntaxTree : children) {</b>
+<b class="fc">&nbsp;          abstractSyntaxTree.checkTypes();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        break;</b>
+&nbsp;      }
+&nbsp;      case UNKNOWN:
+&nbsp;        // ZumBeispiel bei &lt;!&gt; Operator der Fall
+<b class="fc">&nbsp;        if (hasChildren()) {</b>
+<b class="fc">&nbsp;          for (AbstractSyntaxTree child : children) {</b>
+<b class="fc">&nbsp;            child.checkTypes();</b>
+&nbsp;            // Set the type
+<b class="fc">&nbsp;            type.inferType(child.type);</b>
+&nbsp;            // For example the &lt;==&gt; and &lt;!=&gt; operator, they already have a rT, which is
+&nbsp;            // bool. Otherwise, if UNKNOWN set the rT
+<b class="fc">&nbsp;            if (type.isRetUnknown()) {</b>
+<b class="fc">&nbsp;              type.setRetType(type);</b>
+&nbsp;            }
+&nbsp;            // Check child types, slightly inefficant, since type may be checkt twice
+&nbsp;
+<b class="fc">&nbsp;          }</b>
+&nbsp;        }
+&nbsp;        // checkTypes();
+&nbsp;
+&nbsp;        break;
+&nbsp;      default:
+<b class="fc">&nbsp;        for (AbstractSyntaxTree child : children) {</b>
+<b class="fc">&nbsp;          child.checkTypes();</b>
+&nbsp;
+&nbsp;          // Special function case where only the Return Type is unknow, since the return type is encoded in the symbol 
+<b class="fc">&nbsp;          if (type.isRetUnknown() &amp;&amp; type.getType() == Types.FUNCTION) {</b>
+<b class="fc">&nbsp;            type.setRetType(child.type.getType());</b>
+&nbsp;          }
+<b class="fc">&nbsp;          if (!type.checkType(child.type)) {</b>
+<b class="fc">&nbsp;            throw new TypeError(type, child.type, child.line, child.linePos);</b>
+&nbsp;          }
+&nbsp;
+<b class="fc">&nbsp;        }</b>
+&nbsp;        break;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;  }
+&nbsp;
+&nbsp;  public int depth() {
+<b class="fc">&nbsp;    if (children.size() == 0) {</b>
+<b class="fc">&nbsp;      return 0;</b>
+&nbsp;
+&nbsp;    }
+<b class="fc">&nbsp;    int depth = 0;</b>
+<b class="fc">&nbsp;    for (AbstractSyntaxTree abstractSyntaxTree : children) {</b>
+<b class="fc">&nbsp;      if (abstractSyntaxTree.depth() &gt; depth) {</b>
+<b class="fc">&nbsp;        depth = abstractSyntaxTree.depth();</b>
+&nbsp;      }
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;    return depth + 1;</b>
+&nbsp;
+&nbsp;  }
+&nbsp;
+&nbsp;  public AbstractSyntaxTree insertSubTree(AstNodeKinds k, Type t, int line, int linePos) {
+<b class="fc">&nbsp;    AbstractSyntaxTree node = new AbstractSyntaxTree(k, t, line, linePos);</b>
+<b class="fc">&nbsp;    children.add(node);</b>
+<b class="fc">&nbsp;    return node;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  public AbstractSyntaxTree insertSubTree(AstNodeKinds k, Type t, int line, int linePos,
+&nbsp;      String value) {
+<b class="fc">&nbsp;    AbstractSyntaxTree node = new AbstractSyntaxTree(k, t, line, linePos);</b>
+<b class="fc">&nbsp;    node.value = value;</b>
+<b class="fc">&nbsp;    children.add(node);</b>
+<b class="fc">&nbsp;    return node;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  public AbstractSyntaxTree getChild(int i) {
+<b class="fc">&nbsp;    return this.children.get(i);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  public AbstractSyntaxTree getChild(AstNodeKinds kind) {
+<b class="fc">&nbsp;    for (AbstractSyntaxTree abstractSyntaxTree : children) {</b>
+<b class="fc">&nbsp;      if (abstractSyntaxTree.kind == kind) {</b>
+<b class="fc">&nbsp;        return abstractSyntaxTree;</b>
+&nbsp;      }
+<b class="fc">&nbsp;    }</b>
+<b class="nc">&nbsp;    return null;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public String toString() {
+<b class="fc">&nbsp;    StringBuilder buffer = new StringBuilder(50);</b>
+<b class="fc">&nbsp;    print(buffer, &quot;&quot;, &quot;&quot;);</b>
+<b class="fc">&nbsp;    return buffer.toString();</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  public void print(StringBuilder buffer, String prefix, String childrenPrefix) {
+<b class="fc">&nbsp;    buffer.append(prefix);</b>
+<b class="fc">&nbsp;    buffer.append(kind);</b>
+<b class="fc">&nbsp;    if (value != null) {</b>
+<b class="fc">&nbsp;      buffer.append(&quot;: &quot; + value);</b>
+&nbsp;
+&nbsp;    }
+<b class="fc">&nbsp;    buffer.append(&quot;, Type: &quot; + type);</b>
+<b class="fc">&nbsp;    buffer.append(&quot;,  Position: &quot; + line + &quot;:&quot; + linePos);</b>
+&nbsp;
+<b class="fc">&nbsp;    buffer.append(&#39;\n&#39;);</b>
+<b class="fc">&nbsp;    for (Iterator&lt;AbstractSyntaxTree&gt; it = children.iterator(); it.hasNext();) {</b>
+<b class="fc">&nbsp;      AbstractSyntaxTree next = it.next();</b>
+<b class="fc">&nbsp;      if (it.hasNext()) {</b>
+<b class="fc">&nbsp;        next.print(buffer, childrenPrefix + &quot;├── &quot;, childrenPrefix + &quot;│   &quot;);</b>
+&nbsp;      } else {
+<b class="fc">&nbsp;        next.print(buffer, childrenPrefix + &quot;└── &quot;, childrenPrefix + &quot;    &quot;);</b>
+&nbsp;      }
+<b class="fc">&nbsp;    }</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  private boolean hasChildren() {
+<b class="fc">&nbsp;    return !children.isEmpty();</b>
+&nbsp;  }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-22 13:49</div>
+</div>
+</body>
+</html>

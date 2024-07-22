@@ -172,7 +172,7 @@ public class Parser {
    * @throws SyntaxError
    * @throws UnknownIdentifierError
    */
-  public void expression(ParseTree st) throws SyntaxError {
+  private void expression(ParseTree st) throws SyntaxError {
     equality(st.insertSubtree(new Token(TokenKind.EQUALITY, "", currentToken().line, currentToken().linePos)));
     if (checkToken(TokenKind.LAND)) {
       matchToken(TokenKind.LAND, st);
@@ -198,7 +198,7 @@ public class Parser {
    * @throws SyntaxError
    * @throws UnknownIdentifierError
    */
-  public void equality(ParseTree st) throws SyntaxError {
+  private void equality(ParseTree st) throws SyntaxError {
     comparison(st.insertSubtree(new Token(TokenKind.COMPARISON, "", currentToken().line, currentToken().linePos)));
     if (checkToken(TokenKind.NOTEQ)) {
       matchToken(TokenKind.NOTEQ, st);

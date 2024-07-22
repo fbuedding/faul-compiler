@@ -1,0 +1,345 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Lexer</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">lexer</a>
+</div>
+
+<h1>Coverage Summary for Class: Lexer (lexer)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Lexer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97,8%
+  </span>
+  <span class="absValue">
+    (134/137)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package lexer;
+&nbsp;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.Vector;
+&nbsp;
+&nbsp;import fsm.*;
+&nbsp;
+&nbsp;public class Lexer {
+&nbsp;
+&nbsp;  public static final String WORD_START = &quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_&quot;;
+&nbsp;  private final char[] input;
+&nbsp;  private char currentCharacter;
+&nbsp;
+<b class="fc">&nbsp;  private int currentPosition = -1;</b>
+&nbsp;
+<b class="fc">&nbsp;  private int currentLine = 1;</b>
+<b class="fc">&nbsp;  private int currentLinePosition = 0;</b>
+&nbsp;  private final Fsm&lt;Character&gt; intFsm;
+&nbsp;  private final Fsm&lt;Character&gt; wordFsm;
+&nbsp;
+<b class="fc">&nbsp;  public Lexer(String input) {</b>
+<b class="fc">&nbsp;    this.input = (input + &quot;\n&quot;).toCharArray();</b>
+<b class="fc">&nbsp;    intFsm = Fsm.integerFsm();</b>
+<b class="fc">&nbsp;    wordFsm = Fsm.wordFsm();</b>
+<b class="fc">&nbsp;    nextCharacter();</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  public char getCurrentCharacter() {
+<b class="fc">&nbsp;    return currentCharacter;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  public Token[] genTokens() throws LexerError {
+<b class="fc">&nbsp;    Vector&lt;Token&gt; tokens = new Vector&lt;Token&gt;();</b>
+<b class="fc">&nbsp;    Token token = getToken();</b>
+<b class="fc">&nbsp;    while (token.kind != TokenKind.EOF) {</b>
+<b class="fc">&nbsp;      tokens.add(token);</b>
+<b class="fc">&nbsp;      token = getToken();</b>
+&nbsp;    }
+<b class="fc">&nbsp;    tokens.add(token);</b>
+<b class="fc">&nbsp;    return Arrays.copyOf(tokens.toArray(), tokens.size(), Token[].class);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;    public Token getToken() throws LexerError {
+&nbsp;    Token t;
+<b class="fc">&nbsp;    if (currentCharacter == &#39;+&#39;)</b>
+<b class="fc">&nbsp;      t = new Token(TokenKind.PLUS, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;
+<b class="fc">&nbsp;    else if (currentCharacter == &#39;-&#39;)</b>
+<b class="fc">&nbsp;      t = new Token(TokenKind.MINUS, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;
+<b class="fc">&nbsp;    else if (currentCharacter == &#39;*&#39;)</b>
+<b class="fc">&nbsp;      t = new Token(TokenKind.ASTERISK, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;
+<b class="fc">&nbsp;    else if (currentCharacter == &#39;/&#39;)</b>
+<b class="fc">&nbsp;      t = new Token(TokenKind.SLASH, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;
+<b class="fc">&nbsp;    else if (currentCharacter == &#39;%&#39;)</b>
+<b class="fc">&nbsp;      t = new Token(TokenKind.PERCENT, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;
+<b class="fc">&nbsp;    else if (currentCharacter == &#39;(&#39;)</b>
+<b class="fc">&nbsp;      t = new Token(TokenKind.OPEN_BRACKET, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;
+<b class="fc">&nbsp;    else if (currentCharacter == &#39;)&#39;)</b>
+<b class="fc">&nbsp;      t = new Token(TokenKind.CLOSE_BRACKET, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;
+<b class="fc">&nbsp;    else if (currentCharacter == &#39;,&#39;)</b>
+<b class="nc">&nbsp;      t = new Token(TokenKind.COMMA, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;
+&nbsp;
+&nbsp;    // Multi character operator
+<b class="fc">&nbsp;    else if (currentCharacter == &#39;=&#39;) {</b>
+<b class="fc">&nbsp;      if (lookAhead() == &#39;=&#39;) {</b>
+<b class="fc">&nbsp;        t = new Token(TokenKind.EQEQ, &quot;=&quot; + currentCharacter, currentLine, currentLinePosition);</b>
+<b class="fc">&nbsp;        nextCharacter();</b>
+&nbsp;      } else
+<b class="fc">&nbsp;        t = new Token(TokenKind.EQ, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    else if (currentCharacter == &#39;!&#39;) {</b>
+<b class="fc">&nbsp;      if (lookAhead() == &#39;=&#39;) {</b>
+<b class="fc">&nbsp;        t = new Token(TokenKind.NOTEQ, currentCharacter + &quot;=&quot;, currentLine, currentLinePosition);</b>
+<b class="fc">&nbsp;        nextCharacter();</b>
+&nbsp;      } else
+<b class="fc">&nbsp;        t = new Token(TokenKind.NOT, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    else if (currentCharacter == &#39;&lt;&#39;) {</b>
+<b class="fc">&nbsp;      if (lookAhead() == &#39;=&#39;) {</b>
+<b class="fc">&nbsp;        t = new Token(TokenKind.LTEQ, currentCharacter + &quot;=&quot;, currentLine, currentLinePosition);</b>
+<b class="fc">&nbsp;        nextCharacter();</b>
+&nbsp;      } else
+<b class="fc">&nbsp;        t = new Token(TokenKind.LT, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    else if (currentCharacter == &#39;&gt;&#39;) {</b>
+<b class="fc">&nbsp;      if (lookAhead() == &#39;=&#39;) {</b>
+<b class="fc">&nbsp;        t = new Token(TokenKind.GTEQ, currentCharacter + &quot;=&quot;, currentLine, currentLinePosition);</b>
+<b class="fc">&nbsp;        nextCharacter();</b>
+&nbsp;      } else
+<b class="fc">&nbsp;        t = new Token(TokenKind.GT, currentCharacter, currentLine, currentLinePosition);</b>
+<b class="fc">&nbsp;    } else if (currentCharacter == &#39;|&#39;) {</b>
+<b class="fc">&nbsp;      if (lookAhead() == &#39;|&#39;) {</b>
+<b class="fc">&nbsp;        t = new Token(TokenKind.LOR, currentCharacter + &quot;|&quot;, currentLine, currentLinePosition);</b>
+<b class="fc">&nbsp;        nextCharacter();</b>
+&nbsp;      } else
+<b class="fc">&nbsp;        t = new Token(TokenKind.OR, currentCharacter, currentLine, currentLinePosition);</b>
+<b class="fc">&nbsp;    } else if (currentCharacter == &#39;&amp;&#39;) {</b>
+<b class="fc">&nbsp;      if (lookAhead() == &#39;&amp;&#39;) {</b>
+<b class="fc">&nbsp;        t = new Token(TokenKind.LAND, currentCharacter + &quot;&amp;&quot;, currentLine, currentLinePosition);</b>
+<b class="fc">&nbsp;        nextCharacter();</b>
+&nbsp;      } else
+<b class="fc">&nbsp;        t = new Token(TokenKind.AND, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    else if (currentCharacter == &#39;;&#39;) {</b>
+<b class="fc">&nbsp;      t = new Token(TokenKind.SEMICOLON, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    else if (currentCharacter == &#39;{&#39;) {</b>
+<b class="fc">&nbsp;      t = new Token(TokenKind.OPEN_PARANTHESES, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    else if (currentCharacter == &#39;}&#39;) {</b>
+<b class="fc">&nbsp;      t = new Token(TokenKind.CLOSE_PARANTHESES, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    else if (currentCharacter == &#39;\0&#39;)</b>
+<b class="fc">&nbsp;      t = new Token(TokenKind.EOF, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;    // Integer and word match returns early, because
+&nbsp;
+<b class="fc">&nbsp;    else if (currentCharacter == &#39;0&#39;) {</b>
+<b class="fc">&nbsp;      if (isDigit(lookAhead())) {</b>
+<b class="fc">&nbsp;        throw new LexerError(&quot;Numbers cannot start with 0&quot;, currentLine, currentPosition);</b>
+&nbsp;      }
+<b class="fc">&nbsp;      t = new Token(TokenKind.V_INT, currentCharacter, currentLine, currentLinePosition);</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    else if (isDigit(currentCharacter)) {</b>
+<b class="fc">&nbsp;      return matchInt();</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    else if (isWordStart(currentCharacter)) {</b>
+<b class="fc">&nbsp;      return matchWord();</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      throw new LexerError(&quot;Unknown Token&quot;, currentLine, currentLinePosition);</b>
+&nbsp;    }
+<b class="fc">&nbsp;    nextCharacter();</b>
+<b class="fc">&nbsp;    return t;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  public void nextCharacter() {
+<b class="fc">&nbsp;    currentPosition++;</b>
+<b class="fc">&nbsp;    currentLinePosition++;</b>
+<b class="fc">&nbsp;    if (currentPosition &gt;= input.length)</b>
+<b class="fc">&nbsp;      currentCharacter = &#39;\0&#39;;</b>
+&nbsp;    else {
+<b class="fc">&nbsp;      currentCharacter = input[currentPosition];</b>
+<b class="fc">&nbsp;      if (currentCharacter == &#39;\n&#39;) {</b>
+<b class="fc">&nbsp;        currentLine++;</b>
+<b class="fc">&nbsp;        currentLinePosition = 0;</b>
+<b class="fc">&nbsp;        nextCharacter();</b>
+<b class="fc">&nbsp;      } else if (Character.isWhitespace(currentCharacter)) {</b>
+<b class="fc">&nbsp;        nextCharacter();</b>
+&nbsp;      }
+&nbsp;    }
+&nbsp;  }
+&nbsp;
+&nbsp;  public char lookAhead() {
+<b class="fc">&nbsp;    if (currentPosition + 1 &lt; input.length) {</b>
+<b class="fc">&nbsp;      return input[currentPosition + 1];</b>
+&nbsp;    } else
+<b class="fc">&nbsp;      return &#39;\0&#39;;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  private Token matchInt() throws LexerError {
+<b class="fc">&nbsp;    Token t = new Token(TokenKind.V_INT, &quot;&quot;, currentLine, currentLinePosition);</b>
+&nbsp;    try {
+<b class="fc">&nbsp;      intFsm.nextState(currentCharacter);</b>
+<b class="fc">&nbsp;      t.lexem = t.lexem.concat(String.valueOf(currentCharacter));</b>
+&nbsp;      while (true) {
+<b class="fc">&nbsp;        nextCharacter();</b>
+<b class="fc">&nbsp;        intFsm.nextState(currentCharacter);</b>
+<b class="fc">&nbsp;        if (intFsm.isEndstate())</b>
+<b class="fc">&nbsp;          break;</b>
+<b class="fc">&nbsp;        t.lexem = t.lexem.concat(String.valueOf(currentCharacter));</b>
+&nbsp;      }
+<b class="fc">&nbsp;    } catch (NoTransitionError e) {</b>
+<b class="fc">&nbsp;      throw new LexerError(&quot;Invalid character in int: &lt;&quot; + currentCharacter + &quot;&gt;&quot;,</b>
+&nbsp;          currentLine,
+&nbsp;          currentLinePosition);
+&nbsp;    } finally {
+<b class="fc">&nbsp;      intFsm.reset();</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    return t;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  private Token matchWord() throws LexerError {
+<b class="fc">&nbsp;    Token t = new Token(TokenKind.IDENT, &quot;&quot;, currentLine, currentLinePosition);</b>
+&nbsp;    try {
+<b class="fc">&nbsp;      wordFsm.nextState(currentCharacter);</b>
+<b class="fc">&nbsp;      t.lexem = t.lexem.concat(String.valueOf(currentCharacter));</b>
+<b class="fc">&nbsp;      wordFsm.nextState(lookAhead());</b>
+&nbsp;      while (true) {
+<b class="fc">&nbsp;        nextCharacter();</b>
+<b class="fc">&nbsp;        if (wordFsm.isEndstate())</b>
+<b class="fc">&nbsp;          break;</b>
+<b class="fc">&nbsp;        wordFsm.nextState(currentCharacter);</b>
+<b class="fc">&nbsp;        t.lexem = t.lexem.concat(String.valueOf(currentCharacter));</b>
+<b class="fc">&nbsp;        wordFsm.nextState(lookAhead());</b>
+&nbsp;      }
+<b class="nc">&nbsp;    } catch (NoTransitionError e) {</b>
+<b class="nc">&nbsp;      throw new LexerError(&quot;Invalid character in identifier: &lt;&quot; + currentCharacter + &quot;&gt;&quot;, currentLine,</b>
+&nbsp;          currentLinePosition);
+&nbsp;    } finally {
+<b class="fc">&nbsp;      wordFsm.reset();</b>
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;    if (t.lexem.equals(&quot;if&quot;)) {</b>
+<b class="fc">&nbsp;      t.kind = TokenKind.IF;</b>
+<b class="fc">&nbsp;    } else if (t.lexem.equals(&quot;else&quot;)) {</b>
+<b class="fc">&nbsp;      t.kind = TokenKind.ELSE;</b>
+<b class="fc">&nbsp;    } else if (t.lexem.equals(&quot;while&quot;)) {</b>
+<b class="fc">&nbsp;      t.kind = TokenKind.WHILE;</b>
+<b class="fc">&nbsp;    } else if (t.lexem.equals(&quot;int&quot;)) {</b>
+<b class="fc">&nbsp;      t.kind = TokenKind.INT;</b>
+<b class="fc">&nbsp;    } else if (t.lexem.equals(&quot;bool&quot;)) {</b>
+<b class="fc">&nbsp;      t.kind = TokenKind.BOOL;</b>
+<b class="fc">&nbsp;    } else if (t.lexem.equals(&quot;true&quot;) || t.lexem.equals(&quot;false&quot;)) {</b>
+<b class="fc">&nbsp;      t.kind = TokenKind.V_BOOL;</b>
+&nbsp;    }
+<b class="fc">&nbsp;    return t;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  private boolean isDigit(char currChar) {
+<b class="fc">&nbsp;    return Character.isDigit(currChar);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  private boolean isWordStart(char currChar) {
+<b class="fc">&nbsp;    return WORD_START.contains(String.valueOf(currChar));</b>
+&nbsp;  }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-22 13:49</div>
+</div>
+</body>
+</html>
