@@ -44,7 +44,7 @@ public class Token {
   @Override
   public String toString() {
     if (!this.lexem.equals(""))
-      return String.format("Kind: <%s%s%s>, Lexem: '%s%s%s'", ANSI_RED, this.kind, ANSI_RESET, ANSI_GREEN, this.lexem,
+      return String.format("(Kind: <%s%s%s>; Lexem: '%s%s%s')", ANSI_RED, this.kind, ANSI_RESET, ANSI_GREEN, this.lexem,
           ANSI_RESET);
     else
       return String.format("Kind: <%s%s%s>", ANSI_RED, this.kind, ANSI_RESET);

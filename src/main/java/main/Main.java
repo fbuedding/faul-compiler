@@ -2,6 +2,8 @@ package main;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import org.apache.commons.cli.*;
 
@@ -12,6 +14,7 @@ import error.CompileError;
 import file.Reader;
 import file.Writer;
 import lexer.Lexer;
+import lexer.Token;
 import parser.ParseTree;
 import parser.Parser;
 
@@ -49,7 +52,8 @@ public class Main {
           String code = Reader.readFile(file);
           Lexer l = new Lexer(code);
           try {
-            Parser p = new Parser(l.genTokens());
+            Token[] tokens = l.genTokens();
+            Parser p = new Parser(tokens);
             ParseTree pt = new ParseTree();
             p.program(pt);
             AbstractSyntaxTreeFactory astf = new AbstractSyntaxTreeFactory();
@@ -62,6 +66,9 @@ public class Main {
             Writer.write(f, emitter.getCode().toString());
             if (line.hasOption("d")) {
               System.out.println("Writing parse and abstract syntax tree...");
+              Writer.write(fileName + "_token.txt",
+                  Arrays.stream(tokens).map(el -> el.toString().replaceAll("\u001B\\[[;\\d]*m", ""))
+                      .collect(Collectors.joining(",")));
               Writer.write(fileName + "_parse_tree.txt", pt.toString());
               Writer.write(fileName + "_abstract_syntax_tree.txt", ast.toString());
               System.out.println("Parse and abstract syntax tree written");

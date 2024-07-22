@@ -63,18 +63,16 @@ public class AbstractSyntaxTree {
             if (type.isRetUnknown()) {
               type.setRetType(type);
             }
-            // Check child types, slightly inefficant, since type may be checkt twice
-
           }
         }
-        // checkTypes();
 
         break;
       default:
         for (AbstractSyntaxTree child : children) {
           child.checkTypes();
 
-          // Special function case where only the Return Type is unknow, since the return type is encoded in the symbol 
+          // Special function case where only the Return Type is unknow, since the return
+          // type is encoded in the symbol
           if (type.isRetUnknown() && type.getType() == Types.FUNCTION) {
             type.setRetType(child.type.getType());
           }
