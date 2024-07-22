@@ -70,7 +70,7 @@ public class EmitterTest {
           int a14 = 14;
           int a15 = 15;
         }
-        int a13 = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9;
+        int a13 = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + a10 + a11 + a13;
           """; // */
     Lexer l = new Lexer(i);
     Parser p = new Parser(l.genTokens());

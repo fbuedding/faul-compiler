@@ -74,61 +74,64 @@ label_0:
 		sw $s0, 48($gp)
 # initializing s0 with address 64
 		move $s0, $0
-# unloading s1 and storing in address 52
-		sw $s1, 52($gp)
-		lw $s1, 44($gp)
-# unloading s2 and storing in address 56
-		sw $s2, 56($gp)
-		lw $s2, 48($gp)
-		add $t1, $s1, $s2
+		add $t1, $s2, $s0
+		add $t1, $s1, $t1
 # unloading s3 and storing in address 60
 		sw $s3, 60($gp)
-		lw $s3, 40($gp)
+		lw $s3, 48($gp)
 		add $t1, $s3, $t1
 # unloading s4 and storing in address 16
 		sw $s4, 16($gp)
-		lw $s4, 36($gp)
+		lw $s4, 44($gp)
 		add $t1, $s4, $t1
 # unloading s6 and storing in address 68
 		sw $s6, 68($gp)
-		lw $s6, 32($gp)
+		lw $s6, 40($gp)
 		add $t1, $s6, $t1
 # unloading s7 and storing in address 72
 		sw $s7, 72($gp)
-		lw $s7, 28($gp)
+		lw $s7, 36($gp)
 		add $t1, $s7, $t1
+# unloading s2 and storing in address 56
+		sw $s2, 56($gp)
+		lw $s2, 32($gp)
+		add $t1, $s2, $t1
 # unloading s0 and storing in address 64
 		sw $s0, 64($gp)
-		lw $s0, 24($gp)
+		lw $s0, 28($gp)
 		add $t1, $s0, $t1
-# unloading s1 and storing in address 44
-		sw $s1, 44($gp)
-		lw $s1, 20($gp)
+# unloading s1 and storing in address 52
+		sw $s1, 52($gp)
+		lw $s1, 24($gp)
 		add $t1, $s1, $t1
-# unloading s2 and storing in address 48
-		sw $s2, 48($gp)
-		lw $s2, 16($gp)
-		add $t1, $s2, $t1
+# unloading s3 and storing in address 48
+		sw $s3, 48($gp)
+		lw $s3, 20($gp)
+		add $t1, $s3, $t1
+# unloading s4 and storing in address 44
+		sw $s4, 44($gp)
+		lw $s4, 16($gp)
+		add $t1, $s4, $t1
 # Assgining reg null with address 16
-# unloading s3 and storing in address 40
-		sw $s3, 40($gp)
-		lw $s3, 64($gp)
-		move $s3, $t1
+# unloading s6 and storing in address 40
+		sw $s6, 40($gp)
+		lw $s6, 64($gp)
+		move $s6, $t1
 # unloading all vars
-# unloading s4 and storing in address 36
-		sw $s4, 36($gp)
-# unloading s6 and storing in address 32
-		sw $s6, 32($gp)
-# unloading s7 and storing in address 28
-		sw $s7, 28($gp)
-# unloading s0 and storing in address 24
-		sw $s0, 24($gp)
-# unloading s1 and storing in address 20
-		sw $s1, 20($gp)
-# unloading s2 and storing in address 16
-		sw $s2, 16($gp)
-# unloading s3 and storing in address 64
-		sw $s3, 64($gp)
+# unloading s7 and storing in address 36
+		sw $s7, 36($gp)
+# unloading s2 and storing in address 32
+		sw $s2, 32($gp)
+# unloading s0 and storing in address 28
+		sw $s0, 28($gp)
+# unloading s1 and storing in address 24
+		sw $s1, 24($gp)
+# unloading s3 and storing in address 20
+		sw $s3, 20($gp)
+# unloading s4 and storing in address 16
+		sw $s4, 16($gp)
+# unloading s6 and storing in address 64
+		sw $s6, 64($gp)
 # Exit
 		li $v0, 10
 		syscall
