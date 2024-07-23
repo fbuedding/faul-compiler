@@ -115,6 +115,9 @@ public class AstTest {
 
     try {
       astf.fromParseTree(pt);
+      if (shouldError) {
+        fail("Test should've errored");
+      }
     } catch (TypeError e) {
       if (!shouldError) {
         fail(e);
