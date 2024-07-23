@@ -104,8 +104,8 @@ public class AstTest {
   }
 
   @ParameterizedTest
-  @MethodSource("typeTestCases")
-  public void testTypeChecking(String input, boolean shouldError)
+  @MethodSource("semanticErrorTestCases")
+  public void testSemanticError(String input, boolean shouldError)
       throws IOException, InterruptedException, CompileError {
     Lexer l = new Lexer(input);
     Parser p = new Parser(l.genTokens());
@@ -119,16 +119,31 @@ public class AstTest {
       if (!shouldError) {
         fail(e);
       }
+    } catch (UnknownIdentifierError e) {
+      if (!shouldError) {
+        fail(e);
+      }
+    } catch (IndentifierAlreadyDeclaredError e) {
+      if (!shouldError) {
+        fail(e);
+      }
     }
-
   }
 
-  private static Stream<Arguments> typeTestCases() {
+  private static Stream<Arguments> semanticErrorTestCases() {
     return Stream.of(
         Arguments.of("""
             int i = (5 - 3) * -4 / (2 - 4);
             print(i);
             """, false),
+        Arguments.of("""
+            i = (5 - 3) * -4 / (2 - 4);
+            print(i);
+            """, true),
+        Arguments.of("""
+            int i = (5 - 3) * -4 / (2 - 4);
+            int i = (5 - 3) * -4 / (2 - 4);
+            """, true),
         Arguments.of("""
             int i = (5 - 3) * -4 / (2 - readI());
             print(i);
