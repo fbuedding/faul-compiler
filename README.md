@@ -46,13 +46,22 @@ usage: faul-compiler <file> [options]
 ### Vision
 Es soll erstmal zwei Datentypen geben, integer (int) und boolean (bool).
 
-Damit soll möglich sein einfach Statements zu formulieren:
-```
-    int a = 3 + 5;
-    int d = 3 * a:
-    
-    bool b = true;
-    bool c = !b
+Damit soll möglich sein einfache Statements zu formulieren:
+```c
+int n = readI();
+if(n <= 1) {
+  print(false);
+  exit();
+}
+int i = 2;
+while(i<n){
+  if(n % i == 0){
+    print(false);
+    exit();
+  }
+  i = i +1;
+}
+print(true);
 ```
 Statements werden durch ein Semicolon terminiert.
 
