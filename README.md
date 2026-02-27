@@ -4,6 +4,7 @@
 <!--toc:start-->
 - [Faul-Lang compiler](#faul-lang-compiler)
   - [Usage](#usage)
+  - [Build](#build)
   - [Aufbau](#aufbau)
     - [Vision](#vision)
   - [Sprache](#sprache)
@@ -40,6 +41,21 @@ usage: faul-compiler <file> [options]
  -d,--debug       Create parse tree and abstract sytntax tree
  -h,--help        print this message
  -o,--out <arg>   Output file
+```
+## Build
+### Build the package
+```bash
+chmod +x ./src/test/resources/Mars4_5.jar
+mvn clean package
+```
+
+### Linux/Mac
+```bash
+./target/faul-compiler
+```
+### Windows
+```bash
+java -jar ./target/faul-compiler
 ```
 
 ## Aufbau
