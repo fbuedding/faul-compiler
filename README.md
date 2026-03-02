@@ -113,31 +113,38 @@ Statements are terminated by a semicolon.
 
 Backus-Naur Form (BNF) is used to denote the rules.
 
-More specifically, the syntax defined here is used: [BNF Playground](https://bnfplayground.pauliankline.com/?bnf=%3Cprogram%3E%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Cstatement%3E%2a%0A%3Cstatement%3E%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%22int%22%20%3Cident%3E%20%22%3D%22%20%3Cexpression%3E%20%3Csemi%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%22bool%22%20%3Cident%3E%20%22%3D%22%20%3Cexpression%3E%20%3Csemi%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%22if%22%20%22%28%22%20%3Cexpression%3E%20%22%29%22%20%22%7B%22%20%3Cstatement%3E%2a%20%22%7D%22%20%28%22else%22%20%22%7B%22%20%3Cstatement%3E%2a%20%22%7D%22%29%3F%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%22while%22%20%22%28%22%20%3Cexpression%3E%20%22%29%22%20%22%7B%22%20%3Cstatement%3E%2a%20%22%7D%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%3Cident%3E%20%22%3D%22%20%3Cexpression%3E%20%3Csemi%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%3Cident%3E%20%3Cfunction_call%3E%20%3Csemi%3E%0A%3Cexpression%3E%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Cequality%3E%20%28%20%28%22%26%26%22%20%7C%20%22%7C%7C%22%20%7C%20%22%26%22%20%7C%20%22%7C%22%29%20%3Cexpression%3E%29%3F%0A%3Cequality%3E%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Ccomparision%3E%20%28%28%22%21%3D%22%20%7C%20%22%3D%3D%22%29%20%3Cequality%3E%29%3F%0A%3Ccomparision%3E%20%20%20%20%20%20%20%3A%3A%3D%20%3CarithmeticExpr%3E%20%28%20%28%22%3E%22%20%7C%20%22%3E%3D%22%20%7C%20%22%3C%22%20%7C%20%22%3C%3D%22%29%20%3Ccomparision%3E%29%3F%0A%3CarithmeticExpr%3E%20%20%20%20%3A%3A%3D%20%3Cterm%3E%20%28%28%20%22%2B%22%20%7C%20%22-%22%29%20%3CarithmeticExpr%3E%29%3F%0A%3Cterm%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Cunary%3E%20%28%28%22%2a%22%20%7C%20%22%2F%22%20%7C%20%22%25%22%29%20%3Cterm%3E%29%3F%0A%3Cunary%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%28%22%21%22%20%7C%20%22-%22%29%20%3Cunary%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%3Cprimary%3E%0A%3Cprimary%3E%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Cvbool%3E%20%7C%20%3Cvint%3E%20%7C%20%3Cident%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%22%28%22%20%3Cexpression%3E%20%22%29%22%0A%3Cvbool%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%22true%22%20%7C%20%22false%22%0A%3Cvint%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%5B1-9%5D%20%5B0-9%5D%2a%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%220%22%0A%3Cident%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%28%22_%22%20%7C%20%5Ba-z%5D%29%20%28%22_%22%20%7C%20%5Ba-z%5D%20%7C%20%5B0-9%5D%29%2a%20%28%3Cfunction_call%3E%29%3F%0A%3Cfunction_call%3E%20%20%20%20%20%3A%3A%3D%20%22%28%22%20%28%3Cexpression%3E%20%28%22,%22%20%3Cexpression%3E%29%2a%29%3F%20%22%29%22%0A%3Csemi%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%22%3B%22%2B%0A&name=faul-lang).
+More specifically, the syntax defined here is used: [BNF Playground](https://bnfplayground.pauliankline.com/?bnf=%3Cprogram%3E%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Cows%3E%20%3Cstatement%3E*%0A%3Cstatement%3E%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%22int%22%20%3Cws%3E%20%3Cident%3E%20%3Cows%3E%20%22%3D%22%20%3Cows%3E%20%3Cexpression%3E%20%3Cows%3E%20%3Csemi%3E%20%3Cows%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%22bool%22%20%3Cws%3E%20%3Cident%3E%20%3Cows%3E%20%22%3D%22%20%3Cows%3E%20%3Cexpression%3E%20%3Cows%3E%20%3Csemi%3E%20%3Cows%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%22if%22%20%3Cows%3E%20%22(%22%20%3Cows%3E%20%3Cexpression%3E%20%3Cows%3E%20%22)%22%20%3Cows%3E%20%22%7B%22%20%3Cows%3E%20%3Cstatement%3E*%20%3Cows%3E%20%22%7D%22%20%3Cows%3E%20(%22else%22%20%3Cows%3E%20%22%7B%22%20%3Cows%3E%20%3Cstatement%3E*%20%3Cows%3E%20%22%7D%22%20%3Cows%3E)%3F%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%22while%22%20%3Cows%3E%20%22(%22%20%3Cows%3E%20%3Cexpression%3E%20%3Cows%3E%20%22)%22%20%3Cows%3E%20%22%7B%22%20%3Cows%3E%20%3Cstatement%3E*%20%3Cows%3E%20%22%7D%22%20%3Cows%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%3Cident%3E%20%3Cows%3E%20%22%3D%22%20%3Cows%3E%20%3Cexpression%3E%20%3Cows%3E%20%3Csemi%3E%20%3Cows%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%3Cident%3E%20%3Cows%3E%20%3Cfunction_call%3E%20%3Cows%3E%20%3Csemi%3E%20%3Cows%3E%0A%0A%3Cexpression%3E%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Cequality%3E%20(%20%3Cows%3E%20(%22%26%26%22%20%7C%20%22%7C%7C%22%20%7C%20%22%26%22%20%7C%20%22%7C%22)%20%3Cows%3E%20%3Cexpression%3E%20)%3F%0A%3Cequality%3E%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Ccomparision%3E%20(%20%3Cows%3E%20(%22!%3D%22%20%7C%20%22%3D%3D%22)%20%3Cows%3E%20%3Cequality%3E%20)%3F%0A%3Ccomparision%3E%20%20%20%20%20%20%20%3A%3A%3D%20%3CarithmeticExpr%3E%20(%20%3Cows%3E%20(%22%3E%22%20%7C%20%22%3E%3D%22%20%7C%20%22%3C%22%20%7C%20%22%3C%3D%22)%20%3Cows%3E%20%3Ccomparision%3E%20)%3F%0A%3CarithmeticExpr%3E%20%20%20%20%3A%3A%3D%20%3Cterm%3E%20(%20%3Cows%3E%20(%22%2B%22%20%7C%20%22-%22)%20%3Cows%3E%20%3CarithmeticExpr%3E%20)%3F%0A%3Cterm%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Cunary%3E%20(%20%3Cows%3E%20(%22*%22%20%7C%20%22%2F%22%20%7C%20%22%25%22)%20%3Cows%3E%20%3Cterm%3E%20)%3F%0A%3Cunary%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20(%22!%22%20%7C%20%22-%22)%20%3Cows%3E%20%3Cunary%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%3Cprimary%3E%0A%0A%3Cprimary%3E%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%3Cvbool%3E%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%3Cvint%3E%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%3Cident%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%22(%22%20%3Cows%3E%20%3Cexpression%3E%20%3Cows%3E%20%22)%22%0A%0A%3Cvbool%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%22true%22%20%7C%20%22false%22%0A%3Cvint%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%5B1-9%5D%20%5B0-9%5D*%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7C%20%220%22%0A%3Cident%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20(%22_%22%20%7C%20%5Ba-z%5D)%20(%22_%22%20%7C%20%5Ba-z%5D%20%7C%20%5B0-9%5D)*%20(%3Cows%3E%20%3Cfunction_call%3E)%3F%0A%3Cfunction_call%3E%20%20%20%20%20%3A%3A%3D%20%22(%22%20%3Cows%3E%20(%3Cexpression%3E%20%3Cows%3E%20(%22%2C%22%20%3Cows%3E%20%3Cexpression%3E%20%3Cows%3E)*)%3F%20%22)%22%0A%3Csemi%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20%22%3B%22%20(%3Cows%3E%20%22%3B%22)*%0A%3Cws%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20(%22%20%22%20%7C%20%22%5Ct%22%20%7C%20%22%5Cn%22%20%7C%20%22%5Cr%22)%2B%0A%3Cows%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3A%3A%3D%20(%22%20%22%20%7C%20%22%5Ct%22%20%7C%20%22%5Cn%22%20%7C%20%22%5Cr%22)*&name=faul-lang).
 
 ```
-<program>           ::= <statement>*
-<statement>         ::= "int" <ident> "=" <expression> <semi>
-                      | "bool" <ident> "=" <expression> <semi>
-                      | "if" "(" <expression> ")" "{" <statement>* "}" ("else" "{" <statement>* "}")?
-                      | "while" "(" <expression> ")" "{" <statement>* "}"
-                      | <ident> "=" <expression> <semi>
-                      | <ident> <function_call> <semi>
-<expression>        ::= <equality> ( ("&&" | "||" | "&" | "|") <expression>)?
-<equality>          ::= <comparision> (("!=" | "==") <equality>)?
-<comparision>       ::= <arithmeticExpr> ( (">" | ">=" | "<" | "<=") <comparision>)?
-<arithmeticExpr>    ::= <term> (( "+" | "-") <arithmeticExpr>)?
-<term>              ::= <unary> (("*" | "/" | "%") <term>)?
-<unary>             ::= ("!" | "-") <unary>
+<program>           ::= <ows> <statement>*
+<statement>         ::= "int" <ws> <ident> <ows> "=" <ows> <expression> <ows> <semi> <ows>
+                      | "bool" <ws> <ident> <ows> "=" <ows> <expression> <ows> <semi> <ows>
+                      | "if" <ows> "(" <ows> <expression> <ows> ")" <ows> "{" <ows> <statement>* <ows> "}" <ows> ("else" <ows> "{" <ows> <statement>* <ows> "}" <ows>)?
+                      | "while" <ows> "(" <ows> <expression> <ows> ")" <ows> "{" <ows> <statement>* <ows> "}" <ows>
+                      | <ident> <ows> "=" <ows> <expression> <ows> <semi> <ows>
+                      | <ident> <ows> <function_call> <ows> <semi> <ows>
+
+<expression>        ::= <equality> ( <ows> ("&&" | "||" | "&" | "|") <ows> <expression> )?
+<equality>          ::= <comparision> ( <ows> ("!=" | "==") <ows> <equality> )?
+<comparision>       ::= <arithmeticExpr> ( <ows> (">" | ">=" | "<" | "<=") <ows> <comparision> )?
+<arithmeticExpr>    ::= <term> ( <ows> ("+" | "-") <ows> <arithmeticExpr> )?
+<term>              ::= <unary> ( <ows> ("*" | "/" | "%") <ows> <term> )?
+<unary>             ::= ("!" | "-") <ows> <unary>
                       | <primary>
-<primary>           ::= <vbool> | <vint> | <ident>
-                      | "(" <expression> ")"
+
+<primary>           ::= <vbool> 
+                      | <vint> 
+                      | <ident>
+                      | "(" <ows> <expression> <ows> ")"
+
 <vbool>             ::= "true" | "false"
 <vint>              ::= [1-9] [0-9]*
                       | "0"
-<ident>             ::= ("_" | [a-z]) ("_" | [a-z] | [0-9])* (<function_call>)?
-<function_call>     ::= "(" (<expression> ("," <expression>)*)? ")"
-<semi>              ::= ";"+
+<ident>             ::= ("_" | [a-z]) ("_" | [a-z] | [0-9])* (<ows> <function_call>)?
+<function_call>     ::= "(" <ows> (<expression> <ows> ("," <ows> <expression> <ows>)*)? ")"
+<semi>              ::= ";" (<ows> ";")*
+<ws>                ::= (" " | "\t" | "\n" | "\r")+
+<ows>               ::= (" " | "\t" | "\n" | "\r")*
 
 ```
 
